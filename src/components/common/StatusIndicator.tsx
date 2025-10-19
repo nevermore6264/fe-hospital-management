@@ -9,7 +9,7 @@ import {
 } from "../ui/tooltip";
 import { Wifi, WifiOff, Smartphone, Monitor, Zap } from "lucide-react";
 import { useNetworkStatus, usePWA } from "./PWAHooks";
-import { useNotifications } from "./NotificationSystem";
+import { useNotifications } from "../communication/NotificationSystem";
 
 export function StatusIndicator() {
   const { isOnline, connectionType } = useNetworkStatus();

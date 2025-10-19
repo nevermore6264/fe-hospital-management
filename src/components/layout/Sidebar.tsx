@@ -2,9 +2,9 @@ import { useState } from "react";
 import { cn } from "../ui/utils";
 import { Button } from "../ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { useAuth } from "./AuthContext";
-import { ThemeToggle } from "./ThemeToggle";
-import { NotificationDropdown } from "./NotificationSystem";
+import { useAuth } from "../auth/AuthContext";
+import { ThemeToggle } from "../common/ThemeToggle";
+import { NotificationDropdown } from "../communication/NotificationSystem";
 import {
   Heart,
   LayoutDashboard,
@@ -167,7 +167,7 @@ export function Sidebar({ currentPage, onPageChange }: SidebarProps) {
             <AvatarFallback className="bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300">
               {user?.name
                 ?.split(" ")
-                .map((n) => n[0])
+                .map((n: string) => n[0])
                 .join("")}
             </AvatarFallback>
           </Avatar>
