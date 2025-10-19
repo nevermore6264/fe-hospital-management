@@ -1,105 +1,134 @@
-import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Badge } from './ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
-} from './ui/table';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from './ui/alert-dialog';
-import { Label } from './ui/label';
-import { Textarea } from './ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { 
-  Search, 
-  Plus, 
-  Edit2, 
-  Eye, 
-  Phone, 
-  Mail, 
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Badge } from "../ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "../ui/alert-dialog";
+import { Label } from "../ui/label";
+import { Textarea } from "../ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import {
+  Search,
+  Plus,
+  Edit2,
+  Eye,
+  Phone,
+  Mail,
   MapPin,
   Calendar,
   User,
   Trash2,
-  Edit
-} from 'lucide-react';
-import { Patient } from './types';
+  Edit,
+} from "lucide-react";
+import { Patient } from "./types";
 
 // Mock data
 const mockPatients: Patient[] = [
   {
-    id: '1',
-    name: 'Nguyễn Văn A',
-    email: 'nguyenvana@email.com',
-    phone: '0123456789',
-    dateOfBirth: '1985-03-15',
-    gender: 'male',
-    address: '123 Đường ABC, Quận 1, TP.HCM',
-    emergencyContact: '0987654321',
-    medicalHistory: ['Tiểu đường', 'Cao huyết áp'],
-    allergies: ['Penicillin'],
-    createdAt: '2024-01-15'
+    id: "1",
+    name: "Nguyễn Văn A",
+    email: "nguyenvana@email.com",
+    phone: "0123456789",
+    dateOfBirth: "1985-03-15",
+    gender: "male",
+    address: "123 Đường ABC, Quận 1, TP.HCM",
+    emergencyContact: "0987654321",
+    medicalHistory: ["Tiểu đường", "Cao huyết áp"],
+    allergies: ["Penicillin"],
+    createdAt: "2024-01-15",
   },
   {
-    id: '2',
-    name: 'Trần Thị B',
-    email: 'tranthib@email.com',
-    phone: '0234567890',
-    dateOfBirth: '1990-07-22',
-    gender: 'female',
-    address: '456 Đường XYZ, Quận 3, TP.HCM',
-    emergencyContact: '0876543210',
-    medicalHistory: ['Hen suyễn'],
+    id: "2",
+    name: "Trần Thị B",
+    email: "tranthib@email.com",
+    phone: "0234567890",
+    dateOfBirth: "1990-07-22",
+    gender: "female",
+    address: "456 Đường XYZ, Quận 3, TP.HCM",
+    emergencyContact: "0876543210",
+    medicalHistory: ["Hen suyễn"],
     allergies: [],
-    createdAt: '2024-02-10'
+    createdAt: "2024-02-10",
   },
   {
-    id: '3',
-    name: 'Lê Văn C',
-    email: 'levanc@email.com',
-    phone: '0345678901',
-    dateOfBirth: '1978-12-08',
-    gender: 'male',
-    address: '789 Đường DEF, Quận 5, TP.HCM',
-    emergencyContact: '0765432109',
-    medicalHistory: ['Đau lưng mãn tính'],
-    allergies: ['Aspirin'],
-    createdAt: '2024-01-28'
-  }
+    id: "3",
+    name: "Lê Văn C",
+    email: "levanc@email.com",
+    phone: "0345678901",
+    dateOfBirth: "1978-12-08",
+    gender: "male",
+    address: "789 Đường DEF, Quận 5, TP.HCM",
+    emergencyContact: "0765432109",
+    medicalHistory: ["Đau lưng mãn tính"],
+    allergies: ["Aspirin"],
+    createdAt: "2024-01-28",
+  },
 ];
 
 export function PatientManagement() {
   const [patients, setPatients] = useState<Patient[]>(mockPatients);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [editForm, setEditForm] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    dateOfBirth: '',
-    gender: '',
-    address: '',
-    emergencyContact: '',
-    bloodType: '',
-    allergies: '',
-    medicalHistory: ''
+    name: "",
+    email: "",
+    phone: "",
+    dateOfBirth: "",
+    gender: "",
+    address: "",
+    emergencyContact: "",
+    bloodType: "",
+    allergies: "",
+    medicalHistory: "",
   });
 
-  const filteredPatients = patients.filter(patient =>
-    patient.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    patient.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    patient.phone.includes(searchTerm)
+  const filteredPatients = patients.filter(
+    (patient) =>
+      patient.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      patient.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      patient.phone.includes(searchTerm)
   );
 
   const calculateAge = (dateOfBirth: string) => {
@@ -107,7 +136,10 @@ export function PatientManagement() {
     const birthDate = new Date(dateOfBirth);
     let age = today.getFullYear() - birthDate.getFullYear();
     const monthDiff = today.getMonth() - birthDate.getMonth();
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birthDate.getDate())
+    ) {
       age--;
     }
     return age;
@@ -127,10 +159,10 @@ export function PatientManagement() {
       dateOfBirth: patient.dateOfBirth,
       gender: patient.gender,
       address: patient.address,
-      emergencyContact: patient.emergencyContact || '',
-      bloodType: patient.bloodType || '',
-      allergies: patient.allergies || '',
-      medicalHistory: patient.medicalHistory || ''
+      emergencyContact: patient.emergencyContact || "",
+      bloodType: patient.bloodType || "",
+      allergies: patient.allergies || "",
+      medicalHistory: patient.medicalHistory || "",
     });
     setIsEditDialogOpen(true);
   };
@@ -142,7 +174,7 @@ export function PatientManagement() {
 
   const confirmDeletePatient = () => {
     if (selectedPatient) {
-      setPatients(patients.filter(p => p.id !== selectedPatient.id));
+      setPatients(patients.filter((p) => p.id !== selectedPatient.id));
       setIsDeleteDialogOpen(false);
       setSelectedPatient(null);
     }
@@ -150,11 +182,11 @@ export function PatientManagement() {
 
   const handleUpdatePatient = () => {
     if (selectedPatient) {
-      setPatients(patients.map(p => 
-        p.id === selectedPatient.id 
-          ? { ...p, ...editForm }
-          : p
-      ));
+      setPatients(
+        patients.map((p) =>
+          p.id === selectedPatient.id ? { ...p, ...editForm } : p
+        )
+      );
       setIsEditDialogOpen(false);
       setSelectedPatient(null);
     }
@@ -164,7 +196,9 @@ export function PatientManagement() {
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-semibold text-gray-900">Quản lý Bệnh nhân</h1>
+          <h1 className="text-3xl font-semibold text-gray-900">
+            Quản lý Bệnh nhân
+          </h1>
           <p className="text-gray-600 mt-1">
             Quản lý thông tin và hồ sơ bệnh nhân
           </p>
@@ -223,15 +257,24 @@ export function PatientManagement() {
               </div>
               <div className="col-span-2 space-y-2">
                 <Label htmlFor="medical-history">Tiền sử bệnh</Label>
-                <Textarea id="medical-history" placeholder="Nhập tiền sử bệnh (nếu có)" />
+                <Textarea
+                  id="medical-history"
+                  placeholder="Nhập tiền sử bệnh (nếu có)"
+                />
               </div>
               <div className="col-span-2 space-y-2">
                 <Label htmlFor="allergies">Dị ứng</Label>
-                <Textarea id="allergies" placeholder="Nhập thông tin dị ứng (nếu có)" />
+                <Textarea
+                  id="allergies"
+                  placeholder="Nhập thông tin dị ứng (nếu có)"
+                />
               </div>
             </div>
             <div className="flex justify-end space-x-2">
-              <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
+              <Button
+                variant="outline"
+                onClick={() => setIsAddDialogOpen(false)}
+              >
                 Hủy
               </Button>
               <Button onClick={() => setIsAddDialogOpen(false)}>
@@ -258,9 +301,7 @@ export function PatientManagement() {
                 className="pl-10"
               />
             </div>
-            <Button variant="outline">
-              Lọc
-            </Button>
+            <Button variant="outline">Lọc</Button>
           </div>
         </CardContent>
       </Card>
@@ -296,12 +337,17 @@ export function PatientManagement() {
                     <div className="flex items-center space-x-3">
                       <Avatar>
                         <AvatarFallback>
-                          {patient.name.split(' ').map(n => n[0]).join('')}
+                          {patient.name
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")}
                         </AvatarFallback>
                       </Avatar>
                       <div>
                         <p className="font-medium">{patient.name}</p>
-                        <p className="text-sm text-gray-500">ID: {patient.id}</p>
+                        <p className="text-sm text-gray-500">
+                          ID: {patient.id}
+                        </p>
                       </div>
                     </div>
                   </TableCell>
@@ -317,14 +363,24 @@ export function PatientManagement() {
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell>{calculateAge(patient.dateOfBirth)} tuổi</TableCell>
                   <TableCell>
-                    <Badge variant={patient.gender === 'male' ? 'default' : 'secondary'}>
-                      {patient.gender === 'male' ? 'Nam' : patient.gender === 'female' ? 'Nữ' : 'Khác'}
+                    {calculateAge(patient.dateOfBirth)} tuổi
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      variant={
+                        patient.gender === "male" ? "default" : "secondary"
+                      }
+                    >
+                      {patient.gender === "male"
+                        ? "Nam"
+                        : patient.gender === "female"
+                        ? "Nữ"
+                        : "Khác"}
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    {new Date(patient.createdAt).toLocaleDateString('vi-VN')}
+                    {new Date(patient.createdAt).toLocaleDateString("vi-VN")}
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center space-x-2">
@@ -335,16 +391,16 @@ export function PatientManagement() {
                       >
                         <Eye className="h-4 w-4" />
                       </Button>
-                      <Button 
-                        variant="ghost" 
+                      <Button
+                        variant="ghost"
                         size="sm"
                         onClick={() => handleEditPatient(patient)}
                         className="hover:bg-blue-100 hover:text-blue-700"
                       >
                         <Edit2 className="h-4 w-4" />
                       </Button>
-                      <Button 
-                        variant="ghost" 
+                      <Button
+                        variant="ghost"
                         size="sm"
                         onClick={() => handleDeletePatient(patient)}
                         className="text-red-600 hover:bg-red-100 hover:text-red-700"
@@ -374,18 +430,25 @@ export function PatientManagement() {
               <div className="flex items-center space-x-4">
                 <Avatar className="h-16 w-16">
                   <AvatarFallback className="text-lg">
-                    {selectedPatient.name.split(' ').map(n => n[0]).join('')}
+                    {selectedPatient.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")}
                   </AvatarFallback>
                 </Avatar>
                 <div>
-                  <h3 className="text-xl font-semibold">{selectedPatient.name}</h3>
+                  <h3 className="text-xl font-semibold">
+                    {selectedPatient.name}
+                  </h3>
                   <p className="text-gray-500">ID: {selectedPatient.id}</p>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-6">
                 <div className="space-y-4">
-                  <h4 className="font-medium text-gray-900">Thông tin cơ bản</h4>
+                  <h4 className="font-medium text-gray-900">
+                    Thông tin cơ bản
+                  </h4>
                   <div className="space-y-2">
                     <div className="flex items-center space-x-2">
                       <Mail className="h-4 w-4 text-gray-400" />
@@ -398,15 +461,20 @@ export function PatientManagement() {
                     <div className="flex items-center space-x-2">
                       <Calendar className="h-4 w-4 text-gray-400" />
                       <span className="text-sm">
-                        {new Date(selectedPatient.dateOfBirth).toLocaleDateString('vi-VN')} 
+                        {new Date(
+                          selectedPatient.dateOfBirth
+                        ).toLocaleDateString("vi-VN")}
                         ({calculateAge(selectedPatient.dateOfBirth)} tuổi)
                       </span>
                     </div>
                     <div className="flex items-center space-x-2">
                       <User className="h-4 w-4 text-gray-400" />
                       <span className="text-sm">
-                        {selectedPatient.gender === 'male' ? 'Nam' : 
-                         selectedPatient.gender === 'female' ? 'Nữ' : 'Khác'}
+                        {selectedPatient.gender === "male"
+                          ? "Nam"
+                          : selectedPatient.gender === "female"
+                          ? "Nữ"
+                          : "Khác"}
                       </span>
                     </div>
                     <div className="flex items-start space-x-2">
@@ -420,24 +488,36 @@ export function PatientManagement() {
                   <h4 className="font-medium text-gray-900">Thông tin y tế</h4>
                   <div className="space-y-3">
                     <div>
-                      <p className="text-sm font-medium text-gray-700">Liên hệ khẩn cấp:</p>
-                      <p className="text-sm">{selectedPatient.emergencyContact}</p>
+                      <p className="text-sm font-medium text-gray-700">
+                        Liên hệ khẩn cấp:
+                      </p>
+                      <p className="text-sm">
+                        {selectedPatient.emergencyContact}
+                      </p>
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-700">Tiền sử bệnh:</p>
+                      <p className="text-sm font-medium text-gray-700">
+                        Tiền sử bệnh:
+                      </p>
                       <div className="flex flex-wrap gap-1 mt-1">
-                        {selectedPatient.medicalHistory.map((condition, index) => (
-                          <Badge key={index} variant="outline">
-                            {condition}
-                          </Badge>
-                        ))}
+                        {selectedPatient.medicalHistory.map(
+                          (condition, index) => (
+                            <Badge key={index} variant="outline">
+                              {condition}
+                            </Badge>
+                          )
+                        )}
                         {selectedPatient.medicalHistory.length === 0 && (
-                          <span className="text-sm text-gray-500">Không có</span>
+                          <span className="text-sm text-gray-500">
+                            Không có
+                          </span>
                         )}
                       </div>
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-700">Dị ứng:</p>
+                      <p className="text-sm font-medium text-gray-700">
+                        Dị ứng:
+                      </p>
                       <div className="flex flex-wrap gap-1 mt-1">
                         {selectedPatient.allergies.map((allergy, index) => (
                           <Badge key={index} variant="destructive">
@@ -445,7 +525,9 @@ export function PatientManagement() {
                           </Badge>
                         ))}
                         {selectedPatient.allergies.length === 0 && (
-                          <span className="text-sm text-gray-500">Không có</span>
+                          <span className="text-sm text-gray-500">
+                            Không có
+                          </span>
                         )}
                       </div>
                     </div>
@@ -454,7 +536,10 @@ export function PatientManagement() {
               </div>
 
               <div className="flex justify-end space-x-2">
-                <Button variant="outline" onClick={() => setIsViewDialogOpen(false)}>
+                <Button
+                  variant="outline"
+                  onClick={() => setIsViewDialogOpen(false)}
+                >
                   Đóng
                 </Button>
                 <Button>
@@ -486,7 +571,9 @@ export function PatientManagement() {
                 <Input
                   id="edit-name"
                   value={editForm.name}
-                  onChange={(e) => setEditForm({...editForm, name: e.target.value})}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, name: e.target.value })
+                  }
                 />
               </div>
               <div>
@@ -495,7 +582,9 @@ export function PatientManagement() {
                   id="edit-email"
                   type="email"
                   value={editForm.email}
-                  onChange={(e) => setEditForm({...editForm, email: e.target.value})}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, email: e.target.value })
+                  }
                 />
               </div>
             </div>
@@ -505,7 +594,9 @@ export function PatientManagement() {
                 <Input
                   id="edit-phone"
                   value={editForm.phone}
-                  onChange={(e) => setEditForm({...editForm, phone: e.target.value})}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, phone: e.target.value })
+                  }
                 />
               </div>
               <div>
@@ -514,14 +605,21 @@ export function PatientManagement() {
                   id="edit-dob"
                   type="date"
                   value={editForm.dateOfBirth}
-                  onChange={(e) => setEditForm({...editForm, dateOfBirth: e.target.value})}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, dateOfBirth: e.target.value })
+                  }
                 />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="edit-gender">Giới tính</Label>
-                <Select value={editForm.gender} onValueChange={(value) => setEditForm({...editForm, gender: value})}>
+                <Select
+                  value={editForm.gender}
+                  onValueChange={(value) =>
+                    setEditForm({ ...editForm, gender: value })
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -537,7 +635,12 @@ export function PatientManagement() {
                 <Input
                   id="edit-emergency"
                   value={editForm.emergencyContact}
-                  onChange={(e) => setEditForm({...editForm, emergencyContact: e.target.value})}
+                  onChange={(e) =>
+                    setEditForm({
+                      ...editForm,
+                      emergencyContact: e.target.value,
+                    })
+                  }
                 />
               </div>
             </div>
@@ -547,7 +650,9 @@ export function PatientManagement() {
                 <Input
                   id="edit-blood"
                   value={editForm.bloodType}
-                  onChange={(e) => setEditForm({...editForm, bloodType: e.target.value})}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, bloodType: e.target.value })
+                  }
                 />
               </div>
               <div>
@@ -555,7 +660,9 @@ export function PatientManagement() {
                 <Input
                   id="edit-allergies"
                   value={editForm.allergies}
-                  onChange={(e) => setEditForm({...editForm, allergies: e.target.value})}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, allergies: e.target.value })
+                  }
                   placeholder="Phân cách bằng dấu phẩy"
                 />
               </div>
@@ -565,7 +672,9 @@ export function PatientManagement() {
               <Textarea
                 id="edit-address"
                 value={editForm.address}
-                onChange={(e) => setEditForm({...editForm, address: e.target.value})}
+                onChange={(e) =>
+                  setEditForm({ ...editForm, address: e.target.value })
+                }
                 rows={2}
               />
             </div>
@@ -574,17 +683,25 @@ export function PatientManagement() {
               <Textarea
                 id="edit-history"
                 value={editForm.medicalHistory}
-                onChange={(e) => setEditForm({...editForm, medicalHistory: e.target.value})}
+                onChange={(e) =>
+                  setEditForm({ ...editForm, medicalHistory: e.target.value })
+                }
                 rows={3}
                 placeholder="Phân cách bằng dấu phẩy"
               />
             </div>
           </div>
           <div className="flex justify-end gap-3">
-            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setIsEditDialogOpen(false)}
+            >
               Hủy
             </Button>
-            <Button onClick={handleUpdatePatient} className="bg-blue-600 hover:bg-blue-700">
+            <Button
+              onClick={handleUpdatePatient}
+              className="bg-blue-600 hover:bg-blue-700"
+            >
               Cập nhật
             </Button>
           </div>
@@ -592,7 +709,10 @@ export function PatientManagement() {
       </Dialog>
 
       {/* Delete Patient Dialog */}
-      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+      <AlertDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle className="flex items-center gap-2 text-red-600">
@@ -600,16 +720,18 @@ export function PatientManagement() {
               Xác nhận xóa bệnh nhân
             </AlertDialogTitle>
             <AlertDialogDescription>
-              Bạn có chắc chắn muốn xóa bệnh nhân <strong>{selectedPatient?.name}</strong>?
+              Bạn có chắc chắn muốn xóa bệnh nhân{" "}
+              <strong>{selectedPatient?.name}</strong>?
               <br />
               <span className="text-red-600 mt-2 block">
-                Hành động này không thể hoàn tác và sẽ xóa tất cả dữ liệu liên quan, bao gồm lịch hẹn và hồ sơ bệnh án.
+                Hành động này không thể hoàn tác và sẽ xóa tất cả dữ liệu liên
+                quan, bao gồm lịch hẹn và hồ sơ bệnh án.
               </span>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Hủy</AlertDialogCancel>
-            <AlertDialogAction 
+            <AlertDialogAction
               onClick={confirmDeletePatient}
               className="bg-red-600 hover:bg-red-700"
             >

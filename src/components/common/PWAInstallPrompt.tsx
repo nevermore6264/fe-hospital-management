@@ -1,28 +1,32 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { Download, X } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
-import { Button } from './ui/button';
-import { Card, CardContent } from './ui/card';
+import { useState, useEffect } from "react";
+import { Download, X } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
+import { Button } from "../ui/button";
+import { Card, CardContent } from "../ui/card";
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[];
   readonly userChoice: Promise<{
-    outcome: 'accepted' | 'dismissed';
+    outcome: "accepted" | "dismissed";
     platform: string;
   }>;
   prompt(): Promise<void>;
 }
 
 export function PWAInstallPrompt() {
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [deferredPrompt, setDeferredPrompt] =
+    useState<BeforeInstallPromptEvent | null>(null);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
 
   useEffect(() => {
     // Check if app is already installed
-    if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) {
+    if (
+      window.matchMedia &&
+      window.matchMedia("(display-mode: standalone)").matches
+    ) {
       setIsInstalled(true);
       return;
     }
@@ -31,7 +35,7 @@ export function PWAInstallPrompt() {
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
-      
+
       // Show install prompt after a delay (better UX)
       setTimeout(() => {
         setShowInstallPrompt(true);
@@ -45,12 +49,15 @@ export function PWAInstallPrompt() {
       setDeferredPrompt(null);
     };
 
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    window.addEventListener('appinstalled', handleAppInstalled);
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    window.addEventListener("appinstalled", handleAppInstalled);
 
     return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-      window.removeEventListener('appinstalled', handleAppInstalled);
+      window.removeEventListener(
+        "beforeinstallprompt",
+        handleBeforeInstallPrompt
+      );
+      window.removeEventListener("appinstalled", handleAppInstalled);
     };
   }, []);
 
@@ -60,7 +67,7 @@ export function PWAInstallPrompt() {
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
 
-    if (outcome === 'accepted') {
+    if (outcome === "accepted") {
       setShowInstallPrompt(false);
     }
 
@@ -70,11 +77,11 @@ export function PWAInstallPrompt() {
   const handleDismiss = () => {
     setShowInstallPrompt(false);
     // Don't show again for this session
-    sessionStorage.setItem('pwa-install-dismissed', 'true');
+    sessionStorage.setItem("pwa-install-dismissed", "true");
   };
 
   // Don't show if already installed or dismissed this session
-  if (isInstalled || sessionStorage.getItem('pwa-install-dismissed')) {
+  if (isInstalled || sessionStorage.getItem("pwa-install-dismissed")) {
     return null;
   }
 
@@ -100,7 +107,8 @@ export function PWAInstallPrompt() {
                     Cài đặt ứng dụng
                   </h3>
                   <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
-                    Cài đặt MediCare để truy cập nhanh và nhận thông báo real-time
+                    Cài đặt MediCare để truy cập nhanh và nhận thông báo
+                    real-time
                   </p>
                   <div className="flex items-center gap-2">
                     <Button
@@ -145,14 +153,16 @@ export function IOSInstallPrompt() {
   useEffect(() => {
     // Detect iOS Safari
     const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent);
-    const isStandalone = window.matchMedia && window.matchMedia('(display-mode: standalone)').matches;
+    const isStandalone =
+      window.matchMedia &&
+      window.matchMedia("(display-mode: standalone)").matches;
     const isInWebAppiOS = (window.navigator as any).standalone;
 
     if (isIOSDevice && !isStandalone && !isInWebAppiOS) {
       setIsIOS(true);
       // Show after delay if not dismissed
       setTimeout(() => {
-        if (!sessionStorage.getItem('ios-install-dismissed')) {
+        if (!sessionStorage.getItem("ios-install-dismissed")) {
           setShowIOSPrompt(true);
         }
       }, 10000);
@@ -161,7 +171,7 @@ export function IOSInstallPrompt() {
 
   const handleDismiss = () => {
     setShowIOSPrompt(false);
-    sessionStorage.setItem('ios-install-dismissed', 'true');
+    sessionStorage.setItem("ios-install-dismissed", "true");
   };
 
   if (!isIOS) return null;
@@ -188,8 +198,11 @@ export function IOSInstallPrompt() {
                     Cài đặt ứng dụng trên iOS
                   </h3>
                   <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
-                    Nhấn nút <span className="font-semibold">Chia sẻ</span> ở thanh dưới, 
-                    sau đó chọn <span className="font-semibold">"Thêm vào Màn hình chính"</span>
+                    Nhấn nút <span className="font-semibold">Chia sẻ</span> ở
+                    thanh dưới, sau đó chọn{" "}
+                    <span className="font-semibold">
+                      "Thêm vào Màn hình chính"
+                    </span>
                   </p>
                   <Button
                     size="sm"

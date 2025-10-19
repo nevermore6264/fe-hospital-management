@@ -1,28 +1,28 @@
-import { useState, useRef, useEffect } from 'react';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Badge } from './ui/badge';
-import { Avatar, AvatarFallback } from './ui/avatar';
-import { 
-  MessageCircle, 
-  X, 
-  Send, 
-  Bot, 
-  User, 
+import { useState, useRef, useEffect } from "react";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Badge } from "../ui/badge";
+import { Avatar, AvatarFallback } from "../ui/avatar";
+import {
+  MessageCircle,
+  X,
+  Send,
+  Bot,
+  User,
   Calendar,
   Clock,
   Phone,
   MapPin,
   Stethoscope,
   Heart,
-  Shield
-} from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+  Shield,
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface Message {
   id: string;
-  type: 'user' | 'bot';
+  type: "user" | "bot";
   content: string;
   timestamp: Date;
   options?: string[];
@@ -42,37 +42,40 @@ export function ChatBot({ onBookAppointment }: ChatBotProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
-      id: '1',
-      type: 'bot',
-      content: '👋 Xin chào! Tôi là MediBot, trợ lý ảo của bệnh viện MediCare. Tôi có thể giúp bạn:',
+      id: "1",
+      type: "bot",
+      content:
+        "👋 Xin chào! Tôi là MediBot, trợ lý ảo của bệnh viện MediCare. Tôi có thể giúp bạn:",
       timestamp: new Date(),
       options: [
-        '📅 Đặt lịch khám bệnh',
-        '🏥 Thông tin các khoa',
-        '💰 Bảng giá dịch vụ',
-        '📞 Liên hệ hỗ trợ',
-        '🕐 Giờ làm việc'
-      ]
-    }
+        "📅 Đặt lịch khám bệnh",
+        "🏥 Thông tin các khoa",
+        "💰 Bảng giá dịch vụ",
+        "📞 Liên hệ hỗ trợ",
+        "🕐 Giờ làm việc",
+      ],
+    },
   ]);
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const [currentFlow, setCurrentFlow] = useState<'main' | 'appointment' | 'info'>('main');
+  const [currentFlow, setCurrentFlow] = useState<
+    "main" | "appointment" | "info"
+  >("main");
   const [appointmentStep, setAppointmentStep] = useState(0);
   const [appointmentData, setAppointmentData] = useState({
-    specialty: '',
-    doctor: '',
-    date: '',
-    time: '',
-    patientName: '',
-    phone: ''
+    specialty: "",
+    doctor: "",
+    date: "",
+    time: "",
+    patientName: "",
+    phone: "",
   });
-  
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
@@ -80,57 +83,72 @@ export function ChatBot({ onBookAppointment }: ChatBotProps) {
   }, [messages]);
 
   const specialties = [
-    { id: 'cardiology', name: 'Tim mạch', icon: '❤️' },
-    { id: 'neurology', name: 'Thần kinh', icon: '🧠' },
-    { id: 'orthopedics', name: 'Chấn thương chỉnh hình', icon: '🦴' },
-    { id: 'pediatrics', name: 'Nhi khoa', icon: '👶' },
-    { id: 'dermatology', name: 'Da liễu', icon: '🩹' },
-    { id: 'ophthalmology', name: 'Mắt', icon: '👁️' }
+    { id: "cardiology", name: "Tim mạch", icon: "❤️" },
+    { id: "neurology", name: "Thần kinh", icon: "🧠" },
+    { id: "orthopedics", name: "Chấn thương chỉnh hình", icon: "🦴" },
+    { id: "pediatrics", name: "Nhi khoa", icon: "👶" },
+    { id: "dermatology", name: "Da liễu", icon: "🩹" },
+    { id: "ophthalmology", name: "Mắt", icon: "👁️" },
   ];
 
   const doctors = {
-    cardiology: ['BS. Nguyễn Văn A', 'BS. Trần Thị B', 'BS. Lê Văn C'],
-    neurology: ['BS. Phạm Thị D', 'BS. Hoàng Văn E', 'BS. Đỗ Thị F'],
-    orthopedics: ['BS. Vũ Văn G', 'BS. Ngô Thị H', 'BS. Bùi Văn I'],
-    pediatrics: ['BS. Đặng Thị J', 'BS. Lý Văn K', 'BS. Mai Thị L'],
-    dermatology: ['BS. Phan Văn M', 'BS. Chu Thị N', 'BS. Võ Văn O'],
-    ophthalmology: ['BS. Tô Thị P', 'BS. Lâm Văn Q', 'BS. Hồ Thị R']
+    cardiology: ["BS. Nguyễn Văn A", "BS. Trần Thị B", "BS. Lê Văn C"],
+    neurology: ["BS. Phạm Thị D", "BS. Hoàng Văn E", "BS. Đỗ Thị F"],
+    orthopedics: ["BS. Vũ Văn G", "BS. Ngô Thị H", "BS. Bùi Văn I"],
+    pediatrics: ["BS. Đặng Thị J", "BS. Lý Văn K", "BS. Mai Thị L"],
+    dermatology: ["BS. Phan Văn M", "BS. Chu Thị N", "BS. Võ Văn O"],
+    ophthalmology: ["BS. Tô Thị P", "BS. Lâm Văn Q", "BS. Hồ Thị R"],
   };
 
   const timeSlots = [
-    '08:00', '08:30', '09:00', '09:30', '10:00', '10:30',
-    '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'
+    "08:00",
+    "08:30",
+    "09:00",
+    "09:30",
+    "10:00",
+    "10:30",
+    "14:00",
+    "14:30",
+    "15:00",
+    "15:30",
+    "16:00",
+    "16:30",
   ];
 
-  const addMessage = (content: string, type: 'user' | 'bot', options?: string[], appointmentData?: any) => {
+  const addMessage = (
+    content: string,
+    type: "user" | "bot",
+    options?: string[],
+    appointmentData?: any
+  ) => {
     const newMessage: Message = {
       id: Date.now().toString(),
       type,
       content,
       timestamp: new Date(),
       options,
-      appointmentData
+      appointmentData,
     };
-    setMessages(prev => [...prev, newMessage]);
+    setMessages((prev) => [...prev, newMessage]);
   };
 
   const simulateTyping = async (duration = 1000) => {
     setIsTyping(true);
-    await new Promise(resolve => setTimeout(resolve, duration));
+    await new Promise((resolve) => setTimeout(resolve, duration));
     setIsTyping(false);
   };
 
   const handleSendMessage = async () => {
     if (!inputValue.trim()) return;
 
-    addMessage(inputValue, 'user');
+    addMessage(inputValue, "user");
     const userInput = inputValue.toLowerCase();
-    setInputValue('');
+    setInputValue("");
 
     await simulateTyping();
-    
+
     // Process user input based on current flow
-    if (currentFlow === 'appointment') {
+    if (currentFlow === "appointment") {
       handleAppointmentFlow(userInput);
     } else {
       handleGeneralQuery(userInput);
@@ -138,62 +156,62 @@ export function ChatBot({ onBookAppointment }: ChatBotProps) {
   };
 
   const handleOptionClick = async (option: string) => {
-    addMessage(option, 'user');
+    addMessage(option, "user");
     await simulateTyping();
 
-    if (option.includes('Đặt lịch khám')) {
-      setCurrentFlow('appointment');
+    if (option.includes("Đặt lịch khám")) {
+      setCurrentFlow("appointment");
       setAppointmentStep(1);
       addMessage(
-        '📋 Tuyệt vời! Hãy chọn chuyên khoa bạn muốn khám:',
-        'bot',
-        specialties.map(s => `${s.icon} ${s.name}`)
+        "📋 Tuyệt vời! Hãy chọn chuyên khoa bạn muốn khám:",
+        "bot",
+        specialties.map((s) => `${s.icon} ${s.name}`)
       );
-    } else if (option.includes('Thông tin các khoa')) {
+    } else if (option.includes("Thông tin các khoa")) {
       addMessage(
-        '🏥 **Các chuyên khoa tại MediCare:**\n\n' +
-        specialties.map(s => `${s.icon} **${s.name}**`).join('\n') +
-        '\n\n💡 Chúng tôi có đội ngũ bác sĩ chuyên nghiệp với trang thiết bị hiện đại.',
-        'bot',
-        ['📅 Đặt lịch khám ngay', '💰 Xem bảng giá', '🔙 Quay lại menu chính']
+        "🏥 **Các chuyên khoa tại MediCare:**\n\n" +
+          specialties.map((s) => `${s.icon} **${s.name}**`).join("\n") +
+          "\n\n💡 Chúng tôi có đội ngũ bác sĩ chuyên nghiệp với trang thiết bị hiện đại.",
+        "bot",
+        ["📅 Đặt lịch khám ngay", "💰 Xem bảng giá", "🔙 Quay lại menu chính"]
       );
-    } else if (option.includes('Bảng giá')) {
+    } else if (option.includes("Bảng giá")) {
       addMessage(
-        '💰 **Bảng giá dịch vụ MediCare:**\n\n' +
-        '🔸 Khám tổng quát: 200.000đ\n' +
-        '🔸 Khám chuyên khoa: 300.000đ\n' +
-        '🔸 Siêu âm: 250.000đ\n' +
-        '🔸 Xét nghiệm cơ bản: 150.000đ\n' +
-        '🔸 X-quang: 180.000đ\n\n' +
-        '💡 *Giá có thể thay đổi theo từng trường hợp cụ thể*',
-        'bot',
-        ['📅 Đặt lịch khám', '🏥 Xem thông tin khoa', '🔙 Quay lại menu chính']
+        "💰 **Bảng giá dịch vụ MediCare:**\n\n" +
+          "🔸 Khám tổng quát: 200.000đ\n" +
+          "🔸 Khám chuyên khoa: 300.000đ\n" +
+          "🔸 Siêu âm: 250.000đ\n" +
+          "🔸 Xét nghiệm cơ bản: 150.000đ\n" +
+          "🔸 X-quang: 180.000đ\n\n" +
+          "💡 *Giá có thể thay đổi theo từng trường hợp cụ thể*",
+        "bot",
+        ["📅 Đặt lịch khám", "🏥 Xem thông tin khoa", "🔙 Quay lại menu chính"]
       );
-    } else if (option.includes('Liên hệ hỗ trợ')) {
+    } else if (option.includes("Liên hệ hỗ trợ")) {
       addMessage(
-        '📞 **Thông tin liên hệ:**\n\n' +
-        '☎️ Hotline: 1900-1234\n' +
-        '📧 Email: support@medicare.vn\n' +
-        '📍 Địa chỉ: 123 Đường ABC, Quận 1, TP.HCM\n' +
-        '🌐 Website: medicare.vn\n\n' +
-        '⏰ Hỗ trợ 24/7',
-        'bot',
-        ['📅 Đặt lịch khám', '🔙 Quay lại menu chính']
+        "📞 **Thông tin liên hệ:**\n\n" +
+          "☎️ Hotline: 1900-1234\n" +
+          "📧 Email: support@medicare.vn\n" +
+          "📍 Địa chỉ: 123 Đường ABC, Quận 1, TP.HCM\n" +
+          "🌐 Website: medicare.vn\n\n" +
+          "⏰ Hỗ trợ 24/7",
+        "bot",
+        ["📅 Đặt lịch khám", "🔙 Quay lại menu chính"]
       );
-    } else if (option.includes('Giờ làm việc')) {
+    } else if (option.includes("Giờ làm việc")) {
       addMessage(
-        '🕐 **Giờ làm việc:**\n\n' +
-        '🌅 **Sáng:** 7:00 - 11:30\n' +
-        '🌇 **Chiều:** 13:30 - 17:00\n' +
-        '🌙 **Tối:** 18:00 - 21:00\n\n' +
-        '📅 **Thứ 2 - Chủ nhật**\n' +
-        '🚨 **Cấp cứu 24/7**',
-        'bot',
-        ['📅 Đặt lịch khám', '📞 Liên hệ cấp cứu', '🔙 Quay lại menu chính']
+        "🕐 **Giờ làm việc:**\n\n" +
+          "🌅 **Sáng:** 7:00 - 11:30\n" +
+          "🌇 **Chiều:** 13:30 - 17:00\n" +
+          "🌙 **Tối:** 18:00 - 21:00\n\n" +
+          "📅 **Thứ 2 - Chủ nhật**\n" +
+          "🚨 **Cấp cứu 24/7**",
+        "bot",
+        ["📅 Đặt lịch khám", "📞 Liên hệ cấp cứu", "🔙 Quay lại menu chính"]
       );
-    } else if (option.includes('Quay lại menu chính')) {
+    } else if (option.includes("Quay lại menu chính")) {
       resetToMainMenu();
-    } else if (currentFlow === 'appointment') {
+    } else if (currentFlow === "appointment") {
       handleAppointmentOption(option);
     }
   };
@@ -201,31 +219,36 @@ export function ChatBot({ onBookAppointment }: ChatBotProps) {
   const handleAppointmentOption = async (option: string) => {
     if (appointmentStep === 1) {
       // Chọn chuyên khoa
-      const selectedSpecialty = specialties.find(s => option.includes(s.name));
+      const selectedSpecialty = specialties.find((s) =>
+        option.includes(s.name)
+      );
       if (selectedSpecialty) {
-        setAppointmentData(prev => ({ ...prev, specialty: selectedSpecialty.name }));
+        setAppointmentData((prev) => ({
+          ...prev,
+          specialty: selectedSpecialty.name,
+        }));
         setAppointmentStep(2);
         addMessage(
           `👨‍⚕️ Bạn đã chọn chuyên khoa **${selectedSpecialty.name}**. Vui lòng chọn bác sĩ:`,
-          'bot',
+          "bot",
           doctors[selectedSpecialty.id as keyof typeof doctors]
         );
       }
     } else if (appointmentStep === 2) {
       // Chọn bác sĩ
-      setAppointmentData(prev => ({ ...prev, doctor: option }));
+      setAppointmentData((prev) => ({ ...prev, doctor: option }));
       setAppointmentStep(3);
       addMessage(
         `📅 Bạn đã chọn **${option}**. Vui lòng chọn ngày khám (dd/mm/yyyy):`,
-        'bot'
+        "bot"
       );
     } else if (appointmentStep === 4) {
       // Chọn giờ khám
-      setAppointmentData(prev => ({ ...prev, time: option }));
+      setAppointmentData((prev) => ({ ...prev, time: option }));
       setAppointmentStep(5);
       addMessage(
         `⏰ Bạn đã chọn **${option}**. Vui lòng nhập họ tên của bạn:`,
-        'bot'
+        "bot"
       );
     }
   };
@@ -235,136 +258,132 @@ export function ChatBot({ onBookAppointment }: ChatBotProps) {
       // Nhập ngày
       const dateRegex = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
       if (dateRegex.test(userInput)) {
-        setAppointmentData(prev => ({ ...prev, date: userInput }));
+        setAppointmentData((prev) => ({ ...prev, date: userInput }));
         setAppointmentStep(4);
         addMessage(
           `📅 Ngày khám: **${userInput}**. Vui lòng chọn giờ khám:`,
-          'bot',
+          "bot",
           timeSlots
         );
       } else {
         addMessage(
-          '❌ Định dạng ngày không đúng. Vui lòng nhập theo định dạng dd/mm/yyyy (ví dụ: 15/12/2024):',
-          'bot'
+          "❌ Định dạng ngày không đúng. Vui lòng nhập theo định dạng dd/mm/yyyy (ví dụ: 15/12/2024):",
+          "bot"
         );
       }
     } else if (appointmentStep === 5) {
       // Nhập tên
-      setAppointmentData(prev => ({ ...prev, patientName: userInput }));
+      setAppointmentData((prev) => ({ ...prev, patientName: userInput }));
       setAppointmentStep(6);
       addMessage(
         `👤 Họ tên: **${userInput}**. Vui lòng nhập số điện thoại:`,
-        'bot'
+        "bot"
       );
     } else if (appointmentStep === 6) {
       // Nhập số điện thoại
       const phoneRegex = /^[0-9]{10,11}$/;
-      if (phoneRegex.test(userInput.replace(/\s/g, ''))) {
+      if (phoneRegex.test(userInput.replace(/\s/g, ""))) {
         const finalAppointmentData = { ...appointmentData, phone: userInput };
         setAppointmentData(finalAppointmentData);
-        
+
         addMessage(
           `📋 **Thông tin đặt lịch:**\n\n` +
-          `👤 Họ tên: ${finalAppointmentData.patientName}\n` +
-          `📞 SĐT: ${finalAppointmentData.phone}\n` +
-          `🏥 Chuyên khoa: ${finalAppointmentData.specialty}\n` +
-          `👨‍⚕️ Bác sĩ: ${finalAppointmentData.doctor}\n` +
-          `📅 Ngày: ${finalAppointmentData.date}\n` +
-          `⏰ Giờ: ${finalAppointmentData.time}\n\n` +
-          `✅ Đặt lịch thành công! Bạn sẽ được chuyển đến trang thanh toán.`,
-          'bot',
-          ['💳 Thanh toán ngay', '📝 Đặt lịch khác', '🔙 Quay lại menu chính'],
+            `👤 Họ tên: ${finalAppointmentData.patientName}\n` +
+            `📞 SĐT: ${finalAppointmentData.phone}\n` +
+            `🏥 Chuyên khoa: ${finalAppointmentData.specialty}\n` +
+            `👨‍⚕️ Bác sĩ: ${finalAppointmentData.doctor}\n` +
+            `📅 Ngày: ${finalAppointmentData.date}\n` +
+            `⏰ Giờ: ${finalAppointmentData.time}\n\n` +
+            `✅ Đặt lịch thành công! Bạn sẽ được chuyển đến trang thanh toán.`,
+          "bot",
+          ["💳 Thanh toán ngay", "📝 Đặt lịch khác", "🔙 Quay lại menu chính"],
           finalAppointmentData
         );
-        
+
         // Call the callback after a short delay
         setTimeout(() => {
           onBookAppointment?.(finalAppointmentData);
         }, 2000);
-        
+
         resetAppointmentFlow();
       } else {
         addMessage(
-          '❌ Số điện thoại không hợp lệ. Vui lòng nhập lại (10-11 số):',
-          'bot'
+          "❌ Số điện thoại không hợp lệ. Vui lòng nhập lại (10-11 số):",
+          "bot"
         );
       }
     }
   };
 
   const handleGeneralQuery = (userInput: string) => {
-    if (userInput.includes('đặt lịch') || userInput.includes('khám bệnh')) {
-      setCurrentFlow('appointment');
+    if (userInput.includes("đặt lịch") || userInput.includes("khám bệnh")) {
+      setCurrentFlow("appointment");
       setAppointmentStep(1);
       addMessage(
-        '📋 Tuyệt vời! Hãy chọn chuyên khoa bạn muốn khám:',
-        'bot',
-        specialties.map(s => `${s.icon} ${s.name}`)
+        "📋 Tuyệt vời! Hãy chọn chuyên khoa bạn muốn khám:",
+        "bot",
+        specialties.map((s) => `${s.icon} ${s.name}`)
       );
-    } else if (userInput.includes('giá') || userInput.includes('phí')) {
+    } else if (userInput.includes("giá") || userInput.includes("phí")) {
       addMessage(
-        '💰 **Bảng giá dịch vụ MediCare:**\n\n' +
-        '🔸 Khám tổng quát: 200.000đ\n' +
-        '🔸 Khám chuyên khoa: 300.000đ\n' +
-        '🔸 Siêu âm: 250.000đ\n' +
-        '🔸 Xét nghiệm cơ bản: 150.000đ\n' +
-        '🔸 X-quang: 180.000đ',
-        'bot',
-        ['📅 Đặt lịch khám', '🔙 Quay lại menu chính']
+        "💰 **Bảng giá dịch vụ MediCare:**\n\n" +
+          "🔸 Khám tổng quát: 200.000đ\n" +
+          "🔸 Khám chuyên khoa: 300.000đ\n" +
+          "🔸 Siêu âm: 250.000đ\n" +
+          "🔸 Xét nghiệm cơ bản: 150.000đ\n" +
+          "🔸 X-quang: 180.000đ",
+        "bot",
+        ["📅 Đặt lịch khám", "🔙 Quay lại menu chính"]
       );
-    } else if (userInput.includes('địa chỉ') || userInput.includes('liên hệ')) {
+    } else if (userInput.includes("địa chỉ") || userInput.includes("liên hệ")) {
       addMessage(
-        '📍 **Thông tin liên hệ:**\n\n' +
-        '🏥 123 Đường ABC, Quận 1, TP.HCM\n' +
-        '☎️ Hotline: 1900-1234\n' +
-        '📧 support@medicare.vn',
-        'bot',
-        ['📅 Đặt lịch khám', '🔙 Quay lại menu chính']
+        "📍 **Thông tin liên hệ:**\n\n" +
+          "🏥 123 Đường ABC, Quận 1, TP.HCM\n" +
+          "☎️ Hotline: 1900-1234\n" +
+          "📧 support@medicare.vn",
+        "bot",
+        ["📅 Đặt lịch khám", "🔙 Quay lại menu chính"]
       );
     } else {
       addMessage(
-        '🤔 Xin lỗi, tôi chưa hiểu câu hỏi của bạn. Bạn có thể chọn một trong các tùy chọn sau:',
-        'bot',
+        "🤔 Xin lỗi, tôi chưa hiểu câu hỏi của bạn. Bạn có thể chọn một trong các tùy chọn sau:",
+        "bot",
         [
-          '📅 Đặt lịch khám bệnh',
-          '🏥 Thông tin các khoa',
-          '💰 Bảng giá dịch vụ',
-          '📞 Liên hệ hỗ trợ'
+          "📅 Đặt lịch khám bệnh",
+          "🏥 Thông tin các khoa",
+          "💰 Bảng giá dịch vụ",
+          "📞 Liên hệ hỗ trợ",
         ]
       );
     }
   };
 
   const resetToMainMenu = () => {
-    setCurrentFlow('main');
+    setCurrentFlow("main");
     resetAppointmentFlow();
-    addMessage(
-      '🏠 Quay lại menu chính. Tôi có thể giúp bạn:',
-      'bot',
-      [
-        '📅 Đặt lịch khám bệnh',
-        '🏥 Thông tin các khoa',
-        '💰 Bảng giá dịch vụ',
-        '📞 Liên hệ hỗ trợ',
-        '🕐 Giờ làm việc'
-      ]
-    );
+    addMessage("🏠 Quay lại menu chính. Tôi có thể giúp bạn:", "bot", [
+      "📅 Đặt lịch khám bệnh",
+      "🏥 Thông tin các khoa",
+      "💰 Bảng giá dịch vụ",
+      "📞 Liên hệ hỗ trợ",
+      "🕐 Giờ làm việc",
+    ]);
   };
 
   const resetAppointmentFlow = () => {
     setAppointmentStep(0);
     setAppointmentData({
-      specialty: '',
-      doctor: '',
-      date: '',
-      time: '',
-      patientName: '',
-      phone: ''
+      specialty: "",
+      doctor: "",
+      date: "",
+      time: "",
+      patientName: "",
+      phone: "",
     });
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleSendMessage();
     }
   };
@@ -389,7 +408,7 @@ export function ChatBot({ onBookAppointment }: ChatBotProps) {
             <MessageCircle className="h-8 w-8 text-white group-hover:scale-110 transition-transform" />
           </motion.div>
         </Button>
-        
+
         {/* Notification Badge */}
         <motion.div
           className="absolute -top-2 -right-2 h-6 w-6 bg-red-500 rounded-full flex items-center justify-center"
@@ -444,27 +463,44 @@ export function ChatBot({ onBookAppointment }: ChatBotProps) {
                       key={message.id}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
+                      className={`flex ${
+                        message.type === "user"
+                          ? "justify-end"
+                          : "justify-start"
+                      }`}
                     >
-                      <div className={`flex items-start gap-2 max-w-[85%] ${message.type === 'user' ? 'flex-row-reverse' : ''}`}>
+                      <div
+                        className={`flex items-start gap-2 max-w-[85%] ${
+                          message.type === "user" ? "flex-row-reverse" : ""
+                        }`}
+                      >
                         <Avatar className="h-8 w-8 flex-shrink-0">
-                          <AvatarFallback className={message.type === 'user' ? 'bg-blue-100' : 'bg-cyan-100'}>
-                            {message.type === 'user' ? 
-                              <User className="h-4 w-4 text-blue-600" /> : 
-                              <Bot className="h-4 w-4 text-cyan-600" />
+                          <AvatarFallback
+                            className={
+                              message.type === "user"
+                                ? "bg-blue-100"
+                                : "bg-cyan-100"
                             }
+                          >
+                            {message.type === "user" ? (
+                              <User className="h-4 w-4 text-blue-600" />
+                            ) : (
+                              <Bot className="h-4 w-4 text-cyan-600" />
+                            )}
                           </AvatarFallback>
                         </Avatar>
-                        
-                        <div className={`rounded-lg p-3 ${
-                          message.type === 'user' 
-                            ? 'bg-blue-600 text-white' 
-                            : 'bg-gray-100 text-gray-800'
-                        }`}>
+
+                        <div
+                          className={`rounded-lg p-3 ${
+                            message.type === "user"
+                              ? "bg-blue-600 text-white"
+                              : "bg-gray-100 text-gray-800"
+                          }`}
+                        >
                           <div className="whitespace-pre-line text-sm">
                             {message.content}
                           </div>
-                          
+
                           {message.options && (
                             <div className="mt-3 space-y-1">
                               {message.options.map((option, index) => (
@@ -502,14 +538,20 @@ export function ChatBot({ onBookAppointment }: ChatBotProps) {
                       <div className="bg-gray-100 rounded-lg p-3">
                         <div className="flex space-x-1">
                           <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                          <div
+                            className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                            style={{ animationDelay: "0.1s" }}
+                          ></div>
+                          <div
+                            className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                            style={{ animationDelay: "0.2s" }}
+                          ></div>
                         </div>
                       </div>
                     </div>
                   </motion.div>
                 )}
-                
+
                 <div ref={messagesEndRef} />
               </CardContent>
 
@@ -524,7 +566,7 @@ export function ChatBot({ onBookAppointment }: ChatBotProps) {
                     placeholder="Nhập tin nhắn..."
                     className="flex-1"
                   />
-                  <Button 
+                  <Button
                     onClick={handleSendMessage}
                     disabled={!inputValue.trim()}
                     className="bg-blue-600 hover:bg-blue-700 px-3"

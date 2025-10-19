@@ -1,20 +1,39 @@
-import { useState } from 'react';
-import { Button } from './ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Badge } from './ui/badge';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
-import { Avatar, AvatarFallback } from './ui/avatar';
-import { Textarea } from './ui/textarea';
-import { Calendar } from './ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
-import { Progress } from './ui/progress';
-import { format } from 'date-fns';
-import { vi } from 'date-fns/locale';
-import { 
+import { useState } from "react";
+import { Button } from "../ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { Badge } from "../ui/badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { Avatar, AvatarFallback } from "../ui/avatar";
+import { Textarea } from "../ui/textarea";
+import { Calendar } from "../ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Progress } from "../ui/progress";
+import { format } from "date-fns";
+import { vi } from "date-fns/locale";
+import {
   Wrench,
   Calendar as CalendarIcon,
   Plus,
@@ -37,8 +56,8 @@ import {
   Thermometer,
   Heart,
   Monitor,
-  Stethoscope
-} from 'lucide-react';
+  Stethoscope,
+} from "lucide-react";
 
 interface Equipment {
   id: string;
@@ -49,13 +68,13 @@ interface Equipment {
   serialNumber: string;
   location: string;
   department: string;
-  status: 'active' | 'maintenance' | 'broken' | 'inactive';
+  status: "active" | "maintenance" | "broken" | "inactive";
   purchaseDate: string;
   warrantyExpiry: string;
   lastMaintenance: string;
   nextMaintenance: string;
   cost: number;
-  condition: 'excellent' | 'good' | 'fair' | 'poor';
+  condition: "excellent" | "good" | "fair" | "poor";
   batteryLevel?: number;
   isConnected?: boolean;
   temperature?: number;
@@ -64,157 +83,159 @@ interface Equipment {
 interface MaintenanceRecord {
   id: string;
   equipmentId: string;
-  type: 'preventive' | 'corrective' | 'emergency';
+  type: "preventive" | "corrective" | "emergency";
   date: string;
   technician: string;
   description: string;
   cost: number;
   partsReplaced: string[];
-  status: 'scheduled' | 'in-progress' | 'completed' | 'cancelled';
+  status: "scheduled" | "in-progress" | "completed" | "cancelled";
   nextDue?: string;
 }
 
 const mockEquipment: Equipment[] = [
   {
-    id: '1',
-    name: 'Máy X-quang di động',
-    type: 'Imaging',
-    model: 'MobileArt Evolution',
-    manufacturer: 'Shimadzu',
-    serialNumber: 'XR-2024-001',
-    location: 'Phòng X-quang 1',
-    department: 'Chẩn đoán hình ảnh',
-    status: 'active',
-    purchaseDate: '2023-01-15',
-    warrantyExpiry: '2026-01-15',
-    lastMaintenance: '2024-01-10',
-    nextMaintenance: '2024-04-10',
+    id: "1",
+    name: "Máy X-quang di động",
+    type: "Imaging",
+    model: "MobileArt Evolution",
+    manufacturer: "Shimadzu",
+    serialNumber: "XR-2024-001",
+    location: "Phòng X-quang 1",
+    department: "Chẩn đoán hình ảnh",
+    status: "active",
+    purchaseDate: "2023-01-15",
+    warrantyExpiry: "2026-01-15",
+    lastMaintenance: "2024-01-10",
+    nextMaintenance: "2024-04-10",
     cost: 850000000,
-    condition: 'excellent',
+    condition: "excellent",
     batteryLevel: 85,
-    isConnected: true
+    isConnected: true,
   },
   {
-    id: '2',
-    name: 'Máy siêu âm tim',
-    type: 'Ultrasound',
-    model: 'EPIQ CVx',
-    manufacturer: 'Philips',
-    serialNumber: 'US-2024-002',
-    location: 'Phòng khám Tim mạch',
-    department: 'Tim mạch',
-    status: 'active',
-    purchaseDate: '2023-03-20',
-    warrantyExpiry: '2026-03-20',
-    lastMaintenance: '2024-01-05',
-    nextMaintenance: '2024-07-05',
+    id: "2",
+    name: "Máy siêu âm tim",
+    type: "Ultrasound",
+    model: "EPIQ CVx",
+    manufacturer: "Philips",
+    serialNumber: "US-2024-002",
+    location: "Phòng khám Tim mạch",
+    department: "Tim mạch",
+    status: "active",
+    purchaseDate: "2023-03-20",
+    warrantyExpiry: "2026-03-20",
+    lastMaintenance: "2024-01-05",
+    nextMaintenance: "2024-07-05",
     cost: 1200000000,
-    condition: 'good',
+    condition: "good",
     batteryLevel: 92,
     isConnected: true,
-    temperature: 23.5
+    temperature: 23.5,
   },
   {
-    id: '3',
-    name: 'Máy thở ICU',
-    type: 'Ventilator',
-    model: 'SERVO-i',
-    manufacturer: 'Maquet',
-    serialNumber: 'VT-2024-003',
-    location: 'ICU - Giường 5',
-    department: 'Hồi sức cấp cứu',
-    status: 'maintenance',
-    purchaseDate: '2022-08-10',
-    warrantyExpiry: '2025-08-10',
-    lastMaintenance: '2024-01-12',
-    nextMaintenance: '2024-02-12',
+    id: "3",
+    name: "Máy thở ICU",
+    type: "Ventilator",
+    model: "SERVO-i",
+    manufacturer: "Maquet",
+    serialNumber: "VT-2024-003",
+    location: "ICU - Giường 5",
+    department: "Hồi sức cấp cứu",
+    status: "maintenance",
+    purchaseDate: "2022-08-10",
+    warrantyExpiry: "2025-08-10",
+    lastMaintenance: "2024-01-12",
+    nextMaintenance: "2024-02-12",
     cost: 750000000,
-    condition: 'good',
-    isConnected: false
+    condition: "good",
+    isConnected: false,
   },
   {
-    id: '4',
-    name: 'Máy ECG 12 kênh',
-    type: 'Monitoring',
-    model: 'MAC 2000',
-    manufacturer: 'GE Healthcare',
-    serialNumber: 'ECG-2024-004',
-    location: 'Phòng khám nội',
-    department: 'Nội khoa',
-    status: 'broken',
-    purchaseDate: '2021-12-01',
-    warrantyExpiry: '2024-12-01',
-    lastMaintenance: '2023-11-15',
-    nextMaintenance: '2024-05-15',
+    id: "4",
+    name: "Máy ECG 12 kênh",
+    type: "Monitoring",
+    model: "MAC 2000",
+    manufacturer: "GE Healthcare",
+    serialNumber: "ECG-2024-004",
+    location: "Phòng khám nội",
+    department: "Nội khoa",
+    status: "broken",
+    purchaseDate: "2021-12-01",
+    warrantyExpiry: "2024-12-01",
+    lastMaintenance: "2023-11-15",
+    nextMaintenance: "2024-05-15",
     cost: 45000000,
-    condition: 'poor',
+    condition: "poor",
     batteryLevel: 15,
-    isConnected: false
-  }
+    isConnected: false,
+  },
 ];
 
 const mockMaintenanceRecords: MaintenanceRecord[] = [
   {
-    id: '1',
-    equipmentId: '1',
-    type: 'preventive',
-    date: '2024-01-10',
-    technician: 'Nguyễn Văn Tâm',
-    description: 'Bảo dưỡng định kỳ, kiểm tra hệ thống',
+    id: "1",
+    equipmentId: "1",
+    type: "preventive",
+    date: "2024-01-10",
+    technician: "Nguyễn Văn Tâm",
+    description: "Bảo dưỡng định kỳ, kiểm tra hệ thống",
     cost: 2500000,
-    partsReplaced: ['Bóng đèn X-ray', 'Dây cáp'],
-    status: 'completed',
-    nextDue: '2024-04-10'
+    partsReplaced: ["Bóng đèn X-ray", "Dây cáp"],
+    status: "completed",
+    nextDue: "2024-04-10",
   },
   {
-    id: '2',
-    equipmentId: '3',
-    type: 'corrective',
-    date: '2024-01-12',
-    technician: 'Trần Thị Hoa',
-    description: 'Sửa chữa cảm biến áp suất',
+    id: "2",
+    equipmentId: "3",
+    type: "corrective",
+    date: "2024-01-12",
+    technician: "Trần Thị Hoa",
+    description: "Sửa chữa cảm biến áp suất",
     cost: 8500000,
-    partsReplaced: ['Cảm biến áp suất', 'O-ring'],
-    status: 'in-progress'
+    partsReplaced: ["Cảm biến áp suất", "O-ring"],
+    status: "in-progress",
   },
   {
-    id: '3',
-    equipmentId: '4',
-    type: 'emergency',
-    date: '2024-01-14',
-    technician: 'Lê Văn Dũng',
-    description: 'Máy không khởi động được',
+    id: "3",
+    equipmentId: "4",
+    type: "emergency",
+    date: "2024-01-14",
+    technician: "Lê Văn Dũng",
+    description: "Máy không khởi động được",
     cost: 0,
     partsReplaced: [],
-    status: 'scheduled'
-  }
+    status: "scheduled",
+  },
 ];
 
 export function EquipmentManagement() {
-  const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(null);
+  const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(
+    null
+  );
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isMaintenanceDialogOpen, setIsMaintenanceDialogOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterStatus, setFilterStatus] = useState<string>("all");
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'active':
+      case "active":
         return <CheckCircle className="h-4 w-4 text-green-600" />;
-      case 'maintenance':
+      case "maintenance":
         return <Wrench className="h-4 w-4 text-yellow-600" />;
-      case 'broken':
+      case "broken":
         return <XCircle className="h-4 w-4 text-red-600" />;
-      case 'inactive':
+      case "inactive":
         return <Clock className="h-4 w-4 text-gray-600" />;
-      case 'completed':
+      case "completed":
         return <CheckCircle className="h-4 w-4 text-green-600" />;
-      case 'in-progress':
+      case "in-progress":
         return <Activity className="h-4 w-4 text-blue-600" />;
-      case 'scheduled':
+      case "scheduled":
         return <Clock className="h-4 w-4 text-yellow-600" />;
-      case 'cancelled':
+      case "cancelled":
         return <XCircle className="h-4 w-4 text-red-600" />;
       default:
         return <Clock className="h-4 w-4 text-gray-600" />;
@@ -223,55 +244,57 @@ export function EquipmentManagement() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active':
-        return 'bg-green-100 text-green-800';
-      case 'maintenance':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'broken':
-        return 'bg-red-100 text-red-800';
-      case 'inactive':
-        return 'bg-gray-100 text-gray-800';
-      case 'completed':
-        return 'bg-green-100 text-green-800';
-      case 'in-progress':
-        return 'bg-blue-100 text-blue-800';
-      case 'scheduled':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'cancelled':
-        return 'bg-red-100 text-red-800';
-      case 'excellent':
-        return 'bg-green-100 text-green-800';
-      case 'good':
-        return 'bg-blue-100 text-blue-800';
-      case 'fair':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'poor':
-        return 'bg-red-100 text-red-800';
+      case "active":
+        return "bg-green-100 text-green-800";
+      case "maintenance":
+        return "bg-yellow-100 text-yellow-800";
+      case "broken":
+        return "bg-red-100 text-red-800";
+      case "inactive":
+        return "bg-gray-100 text-gray-800";
+      case "completed":
+        return "bg-green-100 text-green-800";
+      case "in-progress":
+        return "bg-blue-100 text-blue-800";
+      case "scheduled":
+        return "bg-yellow-100 text-yellow-800";
+      case "cancelled":
+        return "bg-red-100 text-red-800";
+      case "excellent":
+        return "bg-green-100 text-green-800";
+      case "good":
+        return "bg-blue-100 text-blue-800";
+      case "fair":
+        return "bg-yellow-100 text-yellow-800";
+      case "poor":
+        return "bg-red-100 text-red-800";
       default:
-        return 'bg-gray-100 text-gray-800';
+        return "bg-gray-100 text-gray-800";
     }
   };
 
   const getEquipmentIcon = (type: string) => {
     switch (type.toLowerCase()) {
-      case 'imaging':
+      case "imaging":
         return <Monitor className="h-8 w-8 text-blue-600" />;
-      case 'ultrasound':
+      case "ultrasound":
         return <Heart className="h-8 w-8 text-red-600" />;
-      case 'ventilator':
+      case "ventilator":
         return <Zap className="h-8 w-8 text-purple-600" />;
-      case 'monitoring':
+      case "monitoring":
         return <Activity className="h-8 w-8 text-green-600" />;
       default:
         return <Stethoscope className="h-8 w-8 text-gray-600" />;
     }
   };
 
-  const filteredEquipment = mockEquipment.filter(equipment => {
-    const matchesSearch = equipment.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         equipment.manufacturer.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         equipment.location.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter = filterStatus === 'all' || equipment.status === filterStatus;
+  const filteredEquipment = mockEquipment.filter((equipment) => {
+    const matchesSearch =
+      equipment.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      equipment.manufacturer.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      equipment.location.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesFilter =
+      filterStatus === "all" || equipment.status === filterStatus;
     return matchesSearch && matchesFilter;
   });
 
@@ -280,7 +303,9 @@ export function EquipmentManagement() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-semibold text-gray-900 dark:text-white">Quản lý Thiết bị</h1>
+          <h1 className="text-3xl font-semibold text-gray-900 dark:text-white">
+            Quản lý Thiết bị
+          </h1>
           <p className="text-gray-600 dark:text-gray-300 mt-1">
             Quản lý thiết bị y tế và lịch bảo dưỡng
           </p>
@@ -320,7 +345,9 @@ export function EquipmentManagement() {
                       <SelectValue placeholder="Chọn loại" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="imaging">Chẩn đoán hình ảnh</SelectItem>
+                      <SelectItem value="imaging">
+                        Chẩn đoán hình ảnh
+                      </SelectItem>
                       <SelectItem value="ultrasound">Siêu âm</SelectItem>
                       <SelectItem value="ventilator">Máy thở</SelectItem>
                       <SelectItem value="monitoring">Theo dõi</SelectItem>
@@ -353,7 +380,9 @@ export function EquipmentManagement() {
                     <SelectContent>
                       <SelectItem value="cardiology">Tim mạch</SelectItem>
                       <SelectItem value="neurology">Thần kinh</SelectItem>
-                      <SelectItem value="radiology">Chẩn đoán hình ảnh</SelectItem>
+                      <SelectItem value="radiology">
+                        Chẩn đoán hình ảnh
+                      </SelectItem>
                       <SelectItem value="icu">Hồi sức cấp cứu</SelectItem>
                       <SelectItem value="emergency">Cấp cứu</SelectItem>
                     </SelectContent>
@@ -365,7 +394,10 @@ export function EquipmentManagement() {
                 </div>
               </div>
               <div className="flex justify-end gap-3 pt-4">
-                <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
+                <Button
+                  variant="outline"
+                  onClick={() => setIsAddDialogOpen(false)}
+                >
                   Hủy
                 </Button>
                 <Button className="bg-blue-600 hover:bg-blue-700">
@@ -381,44 +413,62 @@ export function EquipmentManagement() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card className="bg-white/80 backdrop-blur-sm border-green-200">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">Hoạt động bình thường</CardTitle>
+            <CardTitle className="text-sm font-medium text-gray-600">
+              Hoạt động bình thường
+            </CardTitle>
             <CheckCircle className="h-4 w-4 text-green-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-gray-900 dark:text-white">156</div>
+            <div className="text-2xl font-bold text-gray-900 dark:text-white">
+              156
+            </div>
             <p className="text-xs text-green-600 mt-1">+5 từ tuần trước</p>
           </CardContent>
         </Card>
 
         <Card className="bg-white/80 backdrop-blur-sm border-yellow-200">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">Đang bảo dưỡng</CardTitle>
+            <CardTitle className="text-sm font-medium text-gray-600">
+              Đang bảo dưỡng
+            </CardTitle>
             <Wrench className="h-4 w-4 text-yellow-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-gray-900 dark:text-white">8</div>
-            <p className="text-xs text-yellow-600 mt-1">3 định kỳ, 5 sửa chữa</p>
+            <div className="text-2xl font-bold text-gray-900 dark:text-white">
+              8
+            </div>
+            <p className="text-xs text-yellow-600 mt-1">
+              3 định kỳ, 5 sửa chữa
+            </p>
           </CardContent>
         </Card>
 
         <Card className="bg-white/80 backdrop-blur-sm border-red-200">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">Hỏng hóc</CardTitle>
+            <CardTitle className="text-sm font-medium text-gray-600">
+              Hỏng hóc
+            </CardTitle>
             <XCircle className="h-4 w-4 text-red-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-gray-900 dark:text-white">3</div>
+            <div className="text-2xl font-bold text-gray-900 dark:text-white">
+              3
+            </div>
             <p className="text-xs text-red-600 mt-1">Cần sửa chữa khẩn cấp</p>
           </CardContent>
         </Card>
 
         <Card className="bg-white/80 backdrop-blur-sm border-blue-200">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">Tổng giá trị</CardTitle>
+            <CardTitle className="text-sm font-medium text-gray-600">
+              Tổng giá trị
+            </CardTitle>
             <Settings className="h-4 w-4 text-blue-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-gray-900 dark:text-white">₫15.2B</div>
+            <div className="text-2xl font-bold text-gray-900 dark:text-white">
+              ₫15.2B
+            </div>
             <p className="text-xs text-blue-600 mt-1">Tài sản thiết bị</p>
           </CardContent>
         </Card>
@@ -476,10 +526,12 @@ export function EquipmentManagement() {
                 <CardContent>
                   <div className="space-y-4">
                     {filteredEquipment.map((equipment) => (
-                      <div 
+                      <div
                         key={equipment.id}
                         className={`p-4 border border-gray-200 rounded-lg cursor-pointer transition-all ${
-                          selectedEquipment?.id === equipment.id ? 'bg-blue-50 border-blue-300' : 'hover:bg-gray-50'
+                          selectedEquipment?.id === equipment.id
+                            ? "bg-blue-50 border-blue-300"
+                            : "hover:bg-gray-50"
                         }`}
                         onClick={() => setSelectedEquipment(equipment)}
                       >
@@ -489,14 +541,28 @@ export function EquipmentManagement() {
                               {getEquipmentIcon(equipment.type)}
                             </div>
                             <div className="flex-1">
-                              <h3 className="font-semibold text-gray-900">{equipment.name}</h3>
-                              <p className="text-sm text-gray-600">{equipment.manufacturer} - {equipment.model}</p>
-                              <p className="text-xs text-gray-500">{equipment.location}</p>
+                              <h3 className="font-semibold text-gray-900">
+                                {equipment.name}
+                              </h3>
+                              <p className="text-sm text-gray-600">
+                                {equipment.manufacturer} - {equipment.model}
+                              </p>
+                              <p className="text-xs text-gray-500">
+                                {equipment.location}
+                              </p>
                               <div className="flex items-center gap-2 mt-2">
-                                <Badge className={getStatusColor(equipment.condition)}>
-                                  {equipment.condition === 'excellent' ? 'Tuyệt vời' :
-                                   equipment.condition === 'good' ? 'Tốt' :
-                                   equipment.condition === 'fair' ? 'Khá' : 'Kém'}
+                                <Badge
+                                  className={getStatusColor(
+                                    equipment.condition
+                                  )}
+                                >
+                                  {equipment.condition === "excellent"
+                                    ? "Tuyệt vời"
+                                    : equipment.condition === "good"
+                                    ? "Tốt"
+                                    : equipment.condition === "fair"
+                                    ? "Khá"
+                                    : "Kém"}
                                 </Badge>
                                 {equipment.batteryLevel && (
                                   <div className="flex items-center gap-1 text-xs text-gray-600">
@@ -504,11 +570,12 @@ export function EquipmentManagement() {
                                     {equipment.batteryLevel}%
                                   </div>
                                 )}
-                                {equipment.isConnected !== undefined && (
-                                  equipment.isConnected ? 
-                                    <Wifi className="h-3 w-3 text-green-600" /> :
+                                {equipment.isConnected !== undefined &&
+                                  (equipment.isConnected ? (
+                                    <Wifi className="h-3 w-3 text-green-600" />
+                                  ) : (
                                     <WifiOff className="h-3 w-3 text-red-600" />
-                                )}
+                                  ))}
                                 {equipment.temperature && (
                                   <div className="flex items-center gap-1 text-xs text-gray-600">
                                     <Thermometer className="h-3 w-3" />
@@ -521,9 +588,13 @@ export function EquipmentManagement() {
                           <div className="flex items-center gap-2">
                             {getStatusIcon(equipment.status)}
                             <Badge className={getStatusColor(equipment.status)}>
-                              {equipment.status === 'active' ? 'Hoạt động' :
-                               equipment.status === 'maintenance' ? 'Bảo dưỡng' :
-                               equipment.status === 'broken' ? 'Hỏng hóc' : 'Không hoạt động'}
+                              {equipment.status === "active"
+                                ? "Hoạt động"
+                                : equipment.status === "maintenance"
+                                ? "Bảo dưỡng"
+                                : equipment.status === "broken"
+                                ? "Hỏng hóc"
+                                : "Không hoạt động"}
                             </Badge>
                           </div>
                         </div>
@@ -546,51 +617,93 @@ export function EquipmentManagement() {
                       <div className="p-3 bg-gray-100 rounded-full w-fit mx-auto mb-3">
                         {getEquipmentIcon(selectedEquipment.type)}
                       </div>
-                      <h3 className="font-semibold text-lg">{selectedEquipment.name}</h3>
-                      <p className="text-sm text-gray-600">{selectedEquipment.manufacturer}</p>
-                      <Badge className={getStatusColor(selectedEquipment.status)}>
-                        {selectedEquipment.status === 'active' ? 'Hoạt động' :
-                         selectedEquipment.status === 'maintenance' ? 'Bảo dưỡng' :
-                         selectedEquipment.status === 'broken' ? 'Hỏng hóc' : 'Không hoạt động'}
+                      <h3 className="font-semibold text-lg">
+                        {selectedEquipment.name}
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        {selectedEquipment.manufacturer}
+                      </p>
+                      <Badge
+                        className={getStatusColor(selectedEquipment.status)}
+                      >
+                        {selectedEquipment.status === "active"
+                          ? "Hoạt động"
+                          : selectedEquipment.status === "maintenance"
+                          ? "Bảo dưỡng"
+                          : selectedEquipment.status === "broken"
+                          ? "Hỏng hóc"
+                          : "Không hoạt động"}
                       </Badge>
                     </div>
 
                     <div className="space-y-3 border-t pt-4">
                       <div className="flex justify-between">
                         <span className="text-sm text-gray-600">Model:</span>
-                        <span className="text-sm font-medium">{selectedEquipment.model}</span>
+                        <span className="text-sm font-medium">
+                          {selectedEquipment.model}
+                        </span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-sm text-gray-600">Số serial:</span>
-                        <span className="text-sm font-medium">{selectedEquipment.serialNumber}</span>
+                        <span className="text-sm text-gray-600">
+                          Số serial:
+                        </span>
+                        <span className="text-sm font-medium">
+                          {selectedEquipment.serialNumber}
+                        </span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-sm text-gray-600">Vị trí:</span>
-                        <span className="text-sm font-medium">{selectedEquipment.location}</span>
+                        <span className="text-sm font-medium">
+                          {selectedEquipment.location}
+                        </span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-sm text-gray-600">Khoa/phòng:</span>
-                        <span className="text-sm font-medium">{selectedEquipment.department}</span>
+                        <span className="text-sm text-gray-600">
+                          Khoa/phòng:
+                        </span>
+                        <span className="text-sm font-medium">
+                          {selectedEquipment.department}
+                        </span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-sm text-gray-600">Tình trạng:</span>
-                        <Badge className={getStatusColor(selectedEquipment.condition)}>
-                          {selectedEquipment.condition === 'excellent' ? 'Tuyệt vời' :
-                           selectedEquipment.condition === 'good' ? 'Tốt' :
-                           selectedEquipment.condition === 'fair' ? 'Khá' : 'Kém'}
+                        <span className="text-sm text-gray-600">
+                          Tình trạng:
+                        </span>
+                        <Badge
+                          className={getStatusColor(
+                            selectedEquipment.condition
+                          )}
+                        >
+                          {selectedEquipment.condition === "excellent"
+                            ? "Tuyệt vời"
+                            : selectedEquipment.condition === "good"
+                            ? "Tốt"
+                            : selectedEquipment.condition === "fair"
+                            ? "Khá"
+                            : "Kém"}
                         </Badge>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-sm text-gray-600">Bảo dưỡng cuối:</span>
-                        <span className="text-sm font-medium">{selectedEquipment.lastMaintenance}</span>
+                        <span className="text-sm text-gray-600">
+                          Bảo dưỡng cuối:
+                        </span>
+                        <span className="text-sm font-medium">
+                          {selectedEquipment.lastMaintenance}
+                        </span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-sm text-gray-600">Bảo dưỡng tiếp:</span>
-                        <span className="text-sm font-medium text-yellow-600">{selectedEquipment.nextMaintenance}</span>
+                        <span className="text-sm text-gray-600">
+                          Bảo dưỡng tiếp:
+                        </span>
+                        <span className="text-sm font-medium text-yellow-600">
+                          {selectedEquipment.nextMaintenance}
+                        </span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-sm text-gray-600">Giá trị:</span>
-                        <span className="text-sm font-medium">₫{(selectedEquipment.cost / 1000000).toFixed(1)}M</span>
+                        <span className="text-sm font-medium">
+                          ₫{(selectedEquipment.cost / 1000000).toFixed(1)}M
+                        </span>
                       </div>
                     </div>
 
@@ -600,12 +713,18 @@ export function EquipmentManagement() {
                           <span>Pin:</span>
                           <span>{selectedEquipment.batteryLevel}%</span>
                         </div>
-                        <Progress value={selectedEquipment.batteryLevel} className="h-2" />
+                        <Progress
+                          value={selectedEquipment.batteryLevel}
+                          className="h-2"
+                        />
                       </div>
                     )}
 
                     <div className="flex flex-col gap-2 pt-4">
-                      <Button size="sm" className="bg-green-600 hover:bg-green-700">
+                      <Button
+                        size="sm"
+                        className="bg-green-600 hover:bg-green-700"
+                      >
                         <Wrench className="h-4 w-4 mr-2" />
                         Lên lịch bảo dưỡng
                       </Button>
@@ -613,7 +732,11 @@ export function EquipmentManagement() {
                         <Edit3 className="h-4 w-4 mr-2" />
                         Chỉnh sửa
                       </Button>
-                      <Button size="sm" variant="outline" className="text-red-600">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="text-red-600"
+                      >
                         <Trash2 className="h-4 w-4 mr-2" />
                         Xóa
                       </Button>
@@ -634,7 +757,10 @@ export function EquipmentManagement() {
         <TabsContent value="maintenance" className="space-y-6">
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-semibold">Lịch bảo dưỡng</h2>
-            <Dialog open={isMaintenanceDialogOpen} onOpenChange={setIsMaintenanceDialogOpen}>
+            <Dialog
+              open={isMaintenanceDialogOpen}
+              onOpenChange={setIsMaintenanceDialogOpen}
+            >
               <DialogTrigger asChild>
                 <Button className="gap-2">
                   <Plus className="h-4 w-4" />
@@ -668,7 +794,9 @@ export function EquipmentManagement() {
                         <SelectValue placeholder="Chọn loại" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="preventive">Bảo dưỡng định kỳ</SelectItem>
+                        <SelectItem value="preventive">
+                          Bảo dưỡng định kỳ
+                        </SelectItem>
                         <SelectItem value="corrective">Sửa chữa</SelectItem>
                         <SelectItem value="emergency">Khẩn cấp</SelectItem>
                       </SelectContent>
@@ -678,9 +806,14 @@ export function EquipmentManagement() {
                     <Label>Ngày thực hiện</Label>
                     <Popover>
                       <PopoverTrigger asChild>
-                        <Button variant="outline" className="w-full justify-start text-left">
+                        <Button
+                          variant="outline"
+                          className="w-full justify-start text-left"
+                        >
                           <CalendarIcon className="mr-2 h-4 w-4" />
-                          {selectedDate ? format(selectedDate, 'dd/MM/yyyy', { locale: vi }) : 'Chọn ngày'}
+                          {selectedDate
+                            ? format(selectedDate, "dd/MM/yyyy", { locale: vi })
+                            : "Chọn ngày"}
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent className="w-auto p-0">
@@ -703,7 +836,10 @@ export function EquipmentManagement() {
                   </div>
                 </div>
                 <div className="flex justify-end gap-3">
-                  <Button variant="outline" onClick={() => setIsMaintenanceDialogOpen(false)}>
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsMaintenanceDialogOpen(false)}
+                  >
                     Hủy
                   </Button>
                   <Button>Tạo lịch</Button>
@@ -719,9 +855,14 @@ export function EquipmentManagement() {
             <CardContent>
               <div className="space-y-3">
                 {mockMaintenanceRecords.map((record) => {
-                  const equipment = mockEquipment.find(e => e.id === record.equipmentId);
+                  const equipment = mockEquipment.find(
+                    (e) => e.id === record.equipmentId
+                  );
                   return (
-                    <div key={record.id} className="p-4 border border-gray-200 rounded-lg">
+                    <div
+                      key={record.id}
+                      className="p-4 border border-gray-200 rounded-lg"
+                    >
                       <div className="flex items-start justify-between">
                         <div className="flex items-start gap-3">
                           <div className="p-2 bg-blue-100 rounded-lg">
@@ -729,33 +870,45 @@ export function EquipmentManagement() {
                           </div>
                           <div>
                             <h3 className="font-medium">{equipment?.name}</h3>
-                            <p className="text-sm text-gray-600">{record.description}</p>
+                            <p className="text-sm text-gray-600">
+                              {record.description}
+                            </p>
                             <p className="text-xs text-gray-500 mt-1">
                               Kỹ thuật viên: {record.technician} • {record.date}
                             </p>
                             {record.partsReplaced.length > 0 && (
                               <p className="text-xs text-gray-500">
-                                Thay thế: {record.partsReplaced.join(', ')}
+                                Thay thế: {record.partsReplaced.join(", ")}
                               </p>
                             )}
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
                           <Badge className={getStatusColor(record.type)}>
-                            {record.type === 'preventive' ? 'Định kỳ' :
-                             record.type === 'corrective' ? 'Sửa chữa' : 'Khẩn cấp'}
+                            {record.type === "preventive"
+                              ? "Định kỳ"
+                              : record.type === "corrective"
+                              ? "Sửa chữa"
+                              : "Khẩn cấp"}
                           </Badge>
                           <Badge className={getStatusColor(record.status)}>
-                            {record.status === 'completed' ? 'Hoàn thành' :
-                             record.status === 'in-progress' ? 'Đang thực hiện' :
-                             record.status === 'scheduled' ? 'Đã lên lịch' : 'Đã hủy'}
+                            {record.status === "completed"
+                              ? "Hoàn thành"
+                              : record.status === "in-progress"
+                              ? "Đang thực hiện"
+                              : record.status === "scheduled"
+                              ? "Đã lên lịch"
+                              : "Đã hủy"}
                           </Badge>
                         </div>
                       </div>
                       {record.cost > 0 && (
                         <div className="mt-3 pt-3 border-t">
                           <p className="text-sm text-gray-600">
-                            Chi phí: <span className="font-medium">₫{record.cost.toLocaleString()}</span>
+                            Chi phí:{" "}
+                            <span className="font-medium">
+                              ₫{record.cost.toLocaleString()}
+                            </span>
                           </p>
                         </div>
                       )}
@@ -804,7 +957,9 @@ export function EquipmentManagement() {
                 <div className="space-y-3">
                   <div className="flex items-center gap-2 p-2 bg-red-50 rounded-lg">
                     <AlertTriangle className="h-4 w-4 text-red-600" />
-                    <span className="text-sm">3 thiết bị cần sửa chữa khẩn cấp</span>
+                    <span className="text-sm">
+                      3 thiết bị cần sửa chữa khẩn cấp
+                    </span>
                   </div>
                   <div className="flex items-center gap-2 p-2 bg-yellow-50 rounded-lg">
                     <Clock className="h-4 w-4 text-yellow-600" />
@@ -812,7 +967,9 @@ export function EquipmentManagement() {
                   </div>
                   <div className="flex items-center gap-2 p-2 bg-blue-50 rounded-lg">
                     <Wrench className="h-4 w-4 text-blue-600" />
-                    <span className="text-sm">12 thiết bị cần bảo dưỡng định kỳ</span>
+                    <span className="text-sm">
+                      12 thiết bị cần bảo dưỡng định kỳ
+                    </span>
                   </div>
                 </div>
               </CardContent>

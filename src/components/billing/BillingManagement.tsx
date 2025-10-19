@@ -1,16 +1,42 @@
-import { useState } from 'react';
-import { Button } from './ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
-import { Input } from './ui/input';
-import { Badge } from './ui/badge';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
-import { Label } from './ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
-import { Textarea } from './ui/textarea';
-import { 
-  Search, 
-  Plus, 
+import { useState } from "react";
+import { Button } from "../ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import { Input } from "../ui/input";
+import { Badge } from "../ui/badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
+import { Label } from "../ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
+import { Textarea } from "../ui/textarea";
+import {
+  Search,
+  Plus,
   Download,
   DollarSign,
   TrendingUp,
@@ -21,8 +47,8 @@ import {
   CreditCard,
   Receipt,
   FileText,
-  Calendar
-} from 'lucide-react';
+  Calendar,
+} from "lucide-react";
 
 interface Invoice {
   id: string;
@@ -32,8 +58,8 @@ interface Invoice {
   services: string[];
   totalAmount: number;
   paidAmount: number;
-  status: 'paid' | 'pending' | 'overdue' | 'partial';
-  paymentMethod?: 'cash' | 'card' | 'transfer' | 'insurance';
+  status: "paid" | "pending" | "overdue" | "partial";
+  paymentMethod?: "cash" | "card" | "transfer" | "insurance";
   createdDate: string;
   dueDate: string;
   paidDate?: string;
@@ -42,95 +68,97 @@ interface Invoice {
 
 const mockInvoices: Invoice[] = [
   {
-    id: 'INV-001',
-    patientName: 'Nguyễn Văn A',
-    patientId: 'P001',
-    doctorName: 'Dr. Trần Thị B',
-    services: ['Khám tổng quát', 'Xét nghiệm máu', 'Chụp X-quang'],
+    id: "INV-001",
+    patientName: "Nguyễn Văn A",
+    patientId: "P001",
+    doctorName: "Dr. Trần Thị B",
+    services: ["Khám tổng quát", "Xét nghiệm máu", "Chụp X-quang"],
     totalAmount: 850000,
     paidAmount: 850000,
-    status: 'paid',
-    paymentMethod: 'card',
-    createdDate: '2024-01-15',
-    dueDate: '2024-01-22',
-    paidDate: '2024-01-16'
+    status: "paid",
+    paymentMethod: "card",
+    createdDate: "2024-01-15",
+    dueDate: "2024-01-22",
+    paidDate: "2024-01-16",
   },
   {
-    id: 'INV-002',
-    patientName: 'Lê Thị C',
-    patientId: 'P002',
-    doctorName: 'Dr. Nguyễn Văn D',
-    services: ['Khám chuyên khoa', 'Siêu âm'],
+    id: "INV-002",
+    patientName: "Lê Thị C",
+    patientId: "P002",
+    doctorName: "Dr. Nguyễn Văn D",
+    services: ["Khám chuyên khoa", "Siêu âm"],
     totalAmount: 1200000,
     paidAmount: 600000,
-    status: 'partial',
-    paymentMethod: 'cash',
-    createdDate: '2024-01-18',
-    dueDate: '2024-01-25'
+    status: "partial",
+    paymentMethod: "cash",
+    createdDate: "2024-01-18",
+    dueDate: "2024-01-25",
   },
   {
-    id: 'INV-003',
-    patientName: 'Phạm Văn E',
-    patientId: 'P003',
-    doctorName: 'Dr. Hoàng Thị F',
-    services: ['Khám tim mạch', 'Điện tâm đồ'],
+    id: "INV-003",
+    patientName: "Phạm Văn E",
+    patientId: "P003",
+    doctorName: "Dr. Hoàng Thị F",
+    services: ["Khám tim mạch", "Điện tâm đồ"],
     totalAmount: 950000,
     paidAmount: 0,
-    status: 'overdue',
-    createdDate: '2024-01-10',
-    dueDate: '2024-01-17'
-  }
+    status: "overdue",
+    createdDate: "2024-01-10",
+    dueDate: "2024-01-17",
+  },
 ];
 
 const statusColors = {
-  paid: 'bg-green-100 text-green-800',
-  pending: 'bg-yellow-100 text-yellow-800',
-  overdue: 'bg-red-100 text-red-800',
-  partial: 'bg-blue-100 text-blue-800'
+  paid: "bg-green-100 text-green-800",
+  pending: "bg-yellow-100 text-yellow-800",
+  overdue: "bg-red-100 text-red-800",
+  partial: "bg-blue-100 text-blue-800",
 };
 
 const statusIcons = {
   paid: CheckCircle,
   pending: Clock,
   overdue: XCircle,
-  partial: AlertCircle
+  partial: AlertCircle,
 };
 
 const paymentMethodColors = {
-  cash: 'bg-green-100 text-green-800',
-  card: 'bg-blue-100 text-blue-800',
-  transfer: 'bg-purple-100 text-purple-800',
-  insurance: 'bg-orange-100 text-orange-800'
+  cash: "bg-green-100 text-green-800",
+  card: "bg-blue-100 text-blue-800",
+  transfer: "bg-purple-100 text-purple-800",
+  insurance: "bg-orange-100 text-orange-800",
 };
 
 export function BillingManagement() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
   const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
 
-  const filteredInvoices = mockInvoices.filter(invoice => {
-    const matchesSearch = invoice.patientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         invoice.id.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = selectedStatus === 'all' || invoice.status === selectedStatus;
-    
+  const filteredInvoices = mockInvoices.filter((invoice) => {
+    const matchesSearch =
+      invoice.patientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      invoice.id.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus =
+      selectedStatus === "all" || invoice.status === selectedStatus;
+
     return matchesSearch && matchesStatus;
   });
 
   const stats = {
     totalRevenue: mockInvoices.reduce((sum, inv) => sum + inv.paidAmount, 0),
     pendingAmount: mockInvoices
-      .filter(inv => inv.status === 'pending' || inv.status === 'partial')
+      .filter((inv) => inv.status === "pending" || inv.status === "partial")
       .reduce((sum, inv) => sum + (inv.totalAmount - inv.paidAmount), 0),
-    overdueCount: mockInvoices.filter(inv => inv.status === 'overdue').length,
-    todayRevenue: 2450000
+    overdueCount: mockInvoices.filter((inv) => inv.status === "overdue").length,
+    todayRevenue: 2450000,
   };
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('vi-VN', {
-      style: 'currency',
-      currency: 'VND'
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
     }).format(amount);
   };
 
@@ -139,15 +167,22 @@ export function BillingManagement() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-semibold text-gray-900">Quản lý Thanh toán</h1>
-          <p className="text-gray-600 mt-1">Theo dõi hóa đơn và thanh toán của bệnh viện</p>
+          <h1 className="text-3xl font-semibold text-gray-900">
+            Quản lý Thanh toán
+          </h1>
+          <p className="text-gray-600 mt-1">
+            Theo dõi hóa đơn và thanh toán của bệnh viện
+          </p>
         </div>
         <div className="flex gap-3">
           <Button variant="outline" className="gap-2">
             <Download className="h-4 w-4" />
             Xuất báo cáo
           </Button>
-          <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+          <Dialog
+            open={isCreateDialogOpen}
+            onOpenChange={setIsCreateDialogOpen}
+          >
             <DialogTrigger asChild>
               <Button className="gap-2 bg-blue-600 hover:bg-blue-700">
                 <Plus className="h-4 w-4" />
@@ -170,7 +205,9 @@ export function BillingManagement() {
                         <SelectValue placeholder="Chọn bệnh nhân" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="P001">Nguyễn Văn A (P001)</SelectItem>
+                        <SelectItem value="P001">
+                          Nguyễn Văn A (P001)
+                        </SelectItem>
                         <SelectItem value="P002">Lê Thị C (P002)</SelectItem>
                         <SelectItem value="P003">Phạm Văn E (P003)</SelectItem>
                       </SelectContent>
@@ -190,21 +227,30 @@ export function BillingManagement() {
                     </Select>
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label>Dịch vụ</Label>
                   <div className="space-y-2">
                     <div className="flex items-center gap-4">
                       <Input placeholder="Tên dịch vụ" className="flex-1" />
-                      <Input placeholder="Giá tiền" type="number" className="w-32" />
-                      <Button variant="outline" size="sm">Thêm</Button>
+                      <Input
+                        placeholder="Giá tiền"
+                        type="number"
+                        className="w-32"
+                      />
+                      <Button variant="outline" size="sm">
+                        Thêm
+                      </Button>
                     </div>
                   </div>
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="notes">Ghi chú</Label>
-                  <Textarea id="notes" placeholder="Ghi chú thêm về hóa đơn..." />
+                  <Textarea
+                    id="notes"
+                    placeholder="Ghi chú thêm về hóa đơn..."
+                  />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
@@ -219,7 +265,10 @@ export function BillingManagement() {
                 </div>
               </div>
               <div className="flex justify-end gap-3">
-                <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
+                <Button
+                  variant="outline"
+                  onClick={() => setIsCreateDialogOpen(false)}
+                >
                   Hủy
                 </Button>
                 <Button className="bg-blue-600 hover:bg-blue-700">
@@ -235,44 +284,62 @@ export function BillingManagement() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card className="bg-white/80 backdrop-blur-sm border-green-200">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">Doanh thu tổng</CardTitle>
+            <CardTitle className="text-sm font-medium text-gray-600">
+              Doanh thu tổng
+            </CardTitle>
             <DollarSign className="h-4 w-4 text-green-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-gray-900">{formatCurrency(stats.totalRevenue)}</div>
-            <p className="text-xs text-green-600 mt-1">+15% so với tháng trước</p>
+            <div className="text-2xl font-bold text-gray-900">
+              {formatCurrency(stats.totalRevenue)}
+            </div>
+            <p className="text-xs text-green-600 mt-1">
+              +15% so với tháng trước
+            </p>
           </CardContent>
         </Card>
 
         <Card className="bg-white/80 backdrop-blur-sm border-blue-200">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">Doanh thu hôm nay</CardTitle>
+            <CardTitle className="text-sm font-medium text-gray-600">
+              Doanh thu hôm nay
+            </CardTitle>
             <TrendingUp className="h-4 w-4 text-blue-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-gray-900">{formatCurrency(stats.todayRevenue)}</div>
+            <div className="text-2xl font-bold text-gray-900">
+              {formatCurrency(stats.todayRevenue)}
+            </div>
             <p className="text-xs text-blue-600 mt-1">+8% so với hôm qua</p>
           </CardContent>
         </Card>
 
         <Card className="bg-white/80 backdrop-blur-sm border-yellow-200">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">Chờ thanh toán</CardTitle>
+            <CardTitle className="text-sm font-medium text-gray-600">
+              Chờ thanh toán
+            </CardTitle>
             <Clock className="h-4 w-4 text-yellow-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-gray-900">{formatCurrency(stats.pendingAmount)}</div>
+            <div className="text-2xl font-bold text-gray-900">
+              {formatCurrency(stats.pendingAmount)}
+            </div>
             <p className="text-xs text-yellow-600 mt-1">Cần thu</p>
           </CardContent>
         </Card>
 
         <Card className="bg-white/80 backdrop-blur-sm border-red-200">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">Quá hạn</CardTitle>
+            <CardTitle className="text-sm font-medium text-gray-600">
+              Quá hạn
+            </CardTitle>
             <XCircle className="h-4 w-4 text-red-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-gray-900">{stats.overdueCount}</div>
+            <div className="text-2xl font-bold text-gray-900">
+              {stats.overdueCount}
+            </div>
             <p className="text-xs text-red-600 mt-1">Hóa đơn</p>
           </CardContent>
         </Card>
@@ -337,37 +404,57 @@ export function BillingManagement() {
                       </TableCell>
                       <TableCell>
                         <div>
-                          <p className="font-medium text-gray-900">{invoice.patientName}</p>
-                          <p className="text-sm text-gray-500">{invoice.patientId}</p>
+                          <p className="font-medium text-gray-900">
+                            {invoice.patientName}
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            {invoice.patientId}
+                          </p>
                         </div>
                       </TableCell>
-                      <TableCell className="text-gray-600">{invoice.doctorName}</TableCell>
+                      <TableCell className="text-gray-600">
+                        {invoice.doctorName}
+                      </TableCell>
                       <TableCell>
                         <div className="max-w-32">
-                          <p className="text-sm truncate">{invoice.services.join(', ')}</p>
-                          <p className="text-xs text-gray-500">{invoice.services.length} dịch vụ</p>
+                          <p className="text-sm truncate">
+                            {invoice.services.join(", ")}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {invoice.services.length} dịch vụ
+                          </p>
                         </div>
                       </TableCell>
-                      <TableCell className="font-medium">{formatCurrency(invoice.totalAmount)}</TableCell>
+                      <TableCell className="font-medium">
+                        {formatCurrency(invoice.totalAmount)}
+                      </TableCell>
                       <TableCell className="font-medium text-green-600">
                         {formatCurrency(invoice.paidAmount)}
                       </TableCell>
                       <TableCell>
-                        <Badge className={`${statusColors[invoice.status]} flex items-center gap-1 w-fit`}>
+                        <Badge
+                          className={`${
+                            statusColors[invoice.status]
+                          } flex items-center gap-1 w-fit`}
+                        >
                           <StatusIcon className="h-3 w-3" />
-                          {invoice.status === 'paid' ? 'Đã thanh toán' :
-                           invoice.status === 'pending' ? 'Chờ thanh toán' :
-                           invoice.status === 'overdue' ? 'Quá hạn' : 'Một phần'}
+                          {invoice.status === "paid"
+                            ? "Đã thanh toán"
+                            : invoice.status === "pending"
+                            ? "Chờ thanh toán"
+                            : invoice.status === "overdue"
+                            ? "Quá hạn"
+                            : "Một phần"}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-gray-600">
-                        {new Date(invoice.dueDate).toLocaleDateString('vi-VN')}
+                        {new Date(invoice.dueDate).toLocaleDateString("vi-VN")}
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
-                          {invoice.status !== 'paid' && (
-                            <Button 
-                              variant="outline" 
+                          {invoice.status !== "paid" && (
+                            <Button
+                              variant="outline"
                               size="sm"
                               onClick={() => {
                                 setSelectedInvoice(invoice);
@@ -411,28 +498,38 @@ export function BillingManagement() {
               <div className="bg-gray-50 p-4 rounded-lg">
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div>Bệnh nhân:</div>
-                  <div className="font-medium">{selectedInvoice.patientName}</div>
+                  <div className="font-medium">
+                    {selectedInvoice.patientName}
+                  </div>
                   <div>Tổng tiền:</div>
-                  <div className="font-medium">{formatCurrency(selectedInvoice.totalAmount)}</div>
+                  <div className="font-medium">
+                    {formatCurrency(selectedInvoice.totalAmount)}
+                  </div>
                   <div>Đã thanh toán:</div>
-                  <div className="font-medium text-green-600">{formatCurrency(selectedInvoice.paidAmount)}</div>
+                  <div className="font-medium text-green-600">
+                    {formatCurrency(selectedInvoice.paidAmount)}
+                  </div>
                   <div>Còn lại:</div>
                   <div className="font-medium text-red-600">
-                    {formatCurrency(selectedInvoice.totalAmount - selectedInvoice.paidAmount)}
+                    {formatCurrency(
+                      selectedInvoice.totalAmount - selectedInvoice.paidAmount
+                    )}
                   </div>
                 </div>
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="paymentAmount">Số tiền thanh toán</Label>
-                <Input 
-                  id="paymentAmount" 
-                  type="number" 
+                <Input
+                  id="paymentAmount"
+                  type="number"
                   placeholder="Nhập số tiền"
-                  defaultValue={selectedInvoice.totalAmount - selectedInvoice.paidAmount}
+                  defaultValue={
+                    selectedInvoice.totalAmount - selectedInvoice.paidAmount
+                  }
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="paymentMethod">Phương thức thanh toán</Label>
                 <Select>
@@ -447,15 +544,21 @@ export function BillingManagement() {
                   </SelectContent>
                 </Select>
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="paymentNotes">Ghi chú</Label>
-                <Textarea id="paymentNotes" placeholder="Ghi chú về thanh toán..." />
+                <Textarea
+                  id="paymentNotes"
+                  placeholder="Ghi chú về thanh toán..."
+                />
               </div>
             </div>
           )}
           <div className="flex justify-end gap-3">
-            <Button variant="outline" onClick={() => setIsPaymentDialogOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setIsPaymentDialogOpen(false)}
+            >
               Hủy
             </Button>
             <Button className="bg-green-600 hover:bg-green-700">

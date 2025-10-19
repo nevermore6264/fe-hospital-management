@@ -1,36 +1,36 @@
-import { useState } from 'react';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
-import { Textarea } from './ui/textarea';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { 
-  MapPin, 
-  Phone, 
-  Mail, 
-  Clock, 
+import { useState } from "react";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Textarea } from "../ui/textarea";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import {
+  MapPin,
+  Phone,
+  Mail,
+  Clock,
   Send,
   Facebook,
   MessageCircle,
   Instagram,
   Youtube,
-  CheckCircle
-} from 'lucide-react';
-import { motion } from 'motion/react';
-import { toast } from 'sonner';
+  CheckCircle,
+} from "lucide-react";
+import { motion } from "motion/react";
+import { toast } from "sonner";
 
 export function ContactSection() {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    subject: '',
-    message: ''
+    name: "",
+    email: "",
+    phone: "",
+    subject: "",
+    message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -38,15 +38,17 @@ export function ContactSection() {
     setIsSubmitting(true);
 
     // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    toast.success('Tin nhắn đã được gửi thành công! Chúng tôi sẽ phản hồi trong 24h.');
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    toast.success(
+      "Tin nhắn đã được gửi thành công! Chúng tôi sẽ phản hồi trong 24h."
+    );
     setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      subject: '',
-      message: ''
+      name: "",
+      email: "",
+      phone: "",
+      subject: "",
+      message: "",
     });
     setIsSubmitting(false);
   };
@@ -54,51 +56,65 @@ export function ContactSection() {
   const contactInfo = [
     {
       icon: Phone,
-      title: 'Điện thoại',
-      details: [
-        'Tổng đài: 1900-1234'
-      ],
-      color: 'text-blue-600'
+      title: "Điện thoại",
+      details: ["Tổng đài: 1900-1234"],
+      color: "text-blue-600",
     },
     {
       icon: Mail,
-      title: 'Email',
-      details: [
-        'info@medicare.vn'
-      ],
-      color: 'text-cyan-600'
+      title: "Email",
+      details: ["info@medicare.vn"],
+      color: "text-cyan-600",
     },
     {
       icon: MapPin,
-      title: 'Địa chỉ',
+      title: "Địa chỉ",
       details: [
-        '123 Đường ABC, Phường 1',
-        'Quận 1, TP. Hồ Chí Minh',
-        'Việt Nam'
+        "123 Đường ABC, Phường 1",
+        "Quận 1, TP. Hồ Chí Minh",
+        "Việt Nam",
       ],
-      color: 'text-green-600'
+      color: "text-green-600",
     },
     {
       icon: Clock,
-      title: 'Giờ làm việc',
+      title: "Giờ làm việc",
       details: [
-        'Thứ 2 - Chủ nhật: 7:00 - 21:00',
-        'Cấp cứu: 24/7',
-        'Hỗ trợ online: 24/7'
+        "Thứ 2 - Chủ nhật: 7:00 - 21:00",
+        "Cấp cứu: 24/7",
+        "Hỗ trợ online: 24/7",
       ],
-      color: 'text-purple-600'
-    }
+      color: "text-purple-600",
+    },
   ];
 
   const socialLinks = [
-    { icon: Facebook, name: 'Facebook', href: '#', color: 'hover:text-blue-600' },
-    { icon: MessageCircle, name: 'Zalo', href: '#', color: 'hover:text-blue-500' },
-    { icon: Instagram, name: 'Instagram', href: '#', color: 'hover:text-pink-600' },
-    { icon: Youtube, name: 'YouTube', href: '#', color: 'hover:text-red-600' }
+    {
+      icon: Facebook,
+      name: "Facebook",
+      href: "#",
+      color: "hover:text-blue-600",
+    },
+    {
+      icon: MessageCircle,
+      name: "Zalo",
+      href: "#",
+      color: "hover:text-blue-500",
+    },
+    {
+      icon: Instagram,
+      name: "Instagram",
+      href: "#",
+      color: "hover:text-pink-600",
+    },
+    { icon: Youtube, name: "YouTube", href: "#", color: "hover:text-red-600" },
   ];
 
   return (
-    <section id="contact" className="py-20 bg-gradient-to-br from-blue-50 via-cyan-50 to-white relative overflow-hidden">
+    <section
+      id="contact"
+      className="py-20 bg-gradient-to-br from-blue-50 via-cyan-50 to-white relative overflow-hidden"
+    >
       {/* Background Decoration */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-100 rounded-full opacity-20 animate-float-1"></div>
@@ -119,7 +135,8 @@ export function ContactSection() {
             Liên hệ với chúng tôi
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Chúng tôi luôn sẵn sàng hỗ trợ bạn 24/7. Hãy liên hệ với chúng tôi qua bất kỳ kênh nào thuận tiện nhất.
+            Chúng tôi luôn sẵn sàng hỗ trợ bạn 24/7. Hãy liên hệ với chúng tôi
+            qua bất kỳ kênh nào thuận tiện nhất.
           </p>
         </motion.div>
 
@@ -143,11 +160,15 @@ export function ContactSection() {
                 <Card className="hover:shadow-lg transition-all duration-300 border-0 bg-white/70 backdrop-blur-sm">
                   <CardContent className="p-6">
                     <div className="flex items-start gap-4">
-                      <div className={`p-3 rounded-lg bg-gray-50 ${item.color}`}>
+                      <div
+                        className={`p-3 rounded-lg bg-gray-50 ${item.color}`}
+                      >
                         <item.icon className="h-6 w-6" />
                       </div>
                       <div className="flex-1">
-                        <h3 className="font-semibold text-gray-800 mb-2">{item.title}</h3>
+                        <h3 className="font-semibold text-gray-800 mb-2">
+                          {item.title}
+                        </h3>
                         <div className="space-y-1">
                           {item.details.map((detail, idx) => (
                             <p key={idx} className="text-gray-600 text-sm">
@@ -171,7 +192,9 @@ export function ContactSection() {
             >
               <Card className="border-0 bg-white/70 backdrop-blur-sm">
                 <CardContent className="p-6">
-                  <h3 className="font-semibold text-gray-800 mb-4">Kết nối với chúng tôi</h3>
+                  <h3 className="font-semibold text-gray-800 mb-4">
+                    Kết nối với chúng tôi
+                  </h3>
                   <div className="flex gap-4">
                     {socialLinks.map((social, index) => (
                       <motion.a
@@ -200,33 +223,47 @@ export function ContactSection() {
           >
             <Card className="border-0 bg-white/70 backdrop-blur-sm shadow-xl">
               <CardHeader>
-                <CardTitle className="text-2xl text-blue-600">Gửi tin nhắn cho chúng tôi</CardTitle>
-                <p className="text-gray-600">Chúng tôi sẽ phản hồi trong vòng 24 giờ</p>
+                <CardTitle className="text-2xl text-blue-600">
+                  Gửi tin nhắn cho chúng tôi
+                </CardTitle>
+                <p className="text-gray-600">
+                  Chúng tôi sẽ phản hồi trong vòng 24 giờ
+                </p>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <Label htmlFor="name" className="text-sm font-medium text-gray-700">
+                      <Label
+                        htmlFor="name"
+                        className="text-sm font-medium text-gray-700"
+                      >
                         Họ và tên *
                       </Label>
                       <Input
                         id="name"
                         value={formData.name}
-                        onChange={(e) => handleInputChange('name', e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("name", e.target.value)
+                        }
                         placeholder="Nhập họ và tên của bạn"
                         required
                         className="h-11 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="phone" className="text-sm font-medium text-gray-700">
+                      <Label
+                        htmlFor="phone"
+                        className="text-sm font-medium text-gray-700"
+                      >
                         Số điện thoại *
                       </Label>
                       <Input
                         id="phone"
                         value={formData.phone}
-                        onChange={(e) => handleInputChange('phone', e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("phone", e.target.value)
+                        }
                         placeholder="0901 234 567"
                         required
                         className="h-11 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
@@ -236,27 +273,37 @@ export function ContactSection() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+                      <Label
+                        htmlFor="email"
+                        className="text-sm font-medium text-gray-700"
+                      >
                         Email *
                       </Label>
                       <Input
                         id="email"
                         type="email"
                         value={formData.email}
-                        onChange={(e) => handleInputChange('email', e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("email", e.target.value)
+                        }
                         placeholder="example@email.com"
                         required
                         className="h-11 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="subject" className="text-sm font-medium text-gray-700">
+                      <Label
+                        htmlFor="subject"
+                        className="text-sm font-medium text-gray-700"
+                      >
                         Chủ đề
                       </Label>
                       <Input
                         id="subject"
                         value={formData.subject}
-                        onChange={(e) => handleInputChange('subject', e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("subject", e.target.value)
+                        }
                         placeholder="Chủ đề tin nhắn"
                         className="h-11 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
                       />
@@ -264,13 +311,18 @@ export function ContactSection() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="message" className="text-sm font-medium text-gray-700">
+                    <Label
+                      htmlFor="message"
+                      className="text-sm font-medium text-gray-700"
+                    >
                       Tin nhắn *
                     </Label>
                     <Textarea
                       id="message"
                       value={formData.message}
-                      onChange={(e) => handleInputChange('message', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("message", e.target.value)
+                      }
                       placeholder="Nhập nội dung tin nhắn của bạn..."
                       required
                       rows={6}
@@ -281,7 +333,8 @@ export function ContactSection() {
                   <div className="flex items-center gap-2 p-4 bg-blue-50 rounded-lg">
                     <CheckCircle className="h-5 w-5 text-blue-600" />
                     <p className="text-sm text-blue-700">
-                      Thông tin của bạn được bảo mật theo chính sách bảo mật của MediCare
+                      Thông tin của bạn được bảo mật theo chính sách bảo mật của
+                      MediCare
                     </p>
                   </div>
 
@@ -322,7 +375,8 @@ export function ContactSection() {
                 Vị trí bệnh viện
               </CardTitle>
               <p className="text-gray-600">
-                <strong>Bệnh viện MediCare</strong><br />
+                <strong>Bệnh viện MediCare</strong>
+                <br />
                 123 Đường ABC, Phường 1, Quận 1<br />
                 TP. Hồ Chí Minh, Việt Nam
               </p>
@@ -343,14 +397,23 @@ export function ContactSection() {
                   <div className="bg-white/95 backdrop-blur-sm rounded-lg p-4 shadow-lg">
                     <div className="flex items-center justify-between">
                       <div>
-                        <h3 className="font-semibold text-gray-800">Bệnh viện MediCare</h3>
-                        <p className="text-sm text-gray-600">123 Đường ABC, Quận 1</p>
+                        <h3 className="font-semibold text-gray-800">
+                          Bệnh viện MediCare
+                        </h3>
+                        <p className="text-sm text-gray-600">
+                          123 Đường ABC, Quận 1
+                        </p>
                       </div>
-                      <Button 
-                        variant="outline" 
+                      <Button
+                        variant="outline"
                         size="sm"
                         className="bg-blue-600 text-white border-blue-600 hover:bg-blue-700 hover:border-blue-700"
-                        onClick={() => window.open('https://maps.google.com?q=123+Đường+ABC,+Quận+1,+TP.HCM', '_blank')}
+                        onClick={() =>
+                          window.open(
+                            "https://maps.google.com?q=123+Đường+ABC,+Quận+1,+TP.HCM",
+                            "_blank"
+                          )
+                        }
                       >
                         Xem trên Google Maps
                       </Button>
@@ -381,13 +444,17 @@ export function ContactSection() {
                     <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                       <Phone className="h-8 w-8 text-blue-600" />
                     </div>
-                    <h3 className="font-semibold text-lg mb-2 text-gray-800">Gọi ngay</h3>
-                    <p className="text-gray-600 text-sm mb-4">Hỗ trợ 24/7, tư vấn miễn phí</p>
+                    <h3 className="font-semibold text-lg mb-2 text-gray-800">
+                      Gọi ngay
+                    </h3>
+                    <p className="text-gray-600 text-sm mb-4">
+                      Hỗ trợ 24/7, tư vấn miễn phí
+                    </p>
                   </div>
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     className="w-full bg-blue-600 text-white border-blue-600 hover:bg-blue-700 hover:border-blue-700"
-                    onClick={() => window.open('tel:19001234')}
+                    onClick={() => window.open("tel:19001234")}
                   >
                     1900-1234
                   </Button>
@@ -402,11 +469,15 @@ export function ContactSection() {
                     <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                       <MessageCircle className="h-8 w-8 text-green-600" />
                     </div>
-                    <h3 className="font-semibold text-lg mb-2 text-gray-800">Chat Zalo</h3>
-                    <p className="text-gray-600 text-sm mb-4">Tư vấn trực tuyến nhanh chóng</p>
+                    <h3 className="font-semibold text-lg mb-2 text-gray-800">
+                      Chat Zalo
+                    </h3>
+                    <p className="text-gray-600 text-sm mb-4">
+                      Tư vấn trực tuyến nhanh chóng
+                    </p>
                   </div>
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     className="w-full bg-green-600 text-white border-green-600 hover:bg-green-700 hover:border-green-700"
                   >
                     Chat ngay
@@ -422,13 +493,17 @@ export function ContactSection() {
                     <div className="w-16 h-16 bg-cyan-100 rounded-full flex items-center justify-center mx-auto mb-4">
                       <Mail className="h-8 w-8 text-cyan-600" />
                     </div>
-                    <h3 className="font-semibold text-lg mb-2 text-gray-800">Gửi email</h3>
-                    <p className="text-gray-600 text-sm mb-4">Phản hồi trong vòng 24 giờ</p>
+                    <h3 className="font-semibold text-lg mb-2 text-gray-800">
+                      Gửi email
+                    </h3>
+                    <p className="text-gray-600 text-sm mb-4">
+                      Phản hồi trong vòng 24 giờ
+                    </p>
                   </div>
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     className="w-full bg-cyan-600 text-white border-cyan-600 hover:bg-cyan-700 hover:border-cyan-700"
-                    onClick={() => window.open('mailto:info@medicare.vn')}
+                    onClick={() => window.open("mailto:info@medicare.vn")}
                   >
                     info@medicare.vn
                   </Button>

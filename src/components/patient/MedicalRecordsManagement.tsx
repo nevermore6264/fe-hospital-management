@@ -1,21 +1,56 @@
-import { useState } from 'react';
-import { Button } from './ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
-import { Input } from './ui/input';
-import { Badge } from './ui/badge';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from './ui/alert-dialog';
-import { Label } from './ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
-import { Textarea } from './ui/textarea';
-import { 
-  Search, 
-  Plus, 
-  Edit, 
-  Trash2, 
-  Filter, 
+import { useState } from "react";
+import { Button } from "../ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import { Input } from "../ui/input";
+import { Badge } from "../ui/badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "../ui/alert-dialog";
+import { Label } from "../ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
+import { Textarea } from "../ui/textarea";
+import {
+  Search,
+  Plus,
+  Edit,
+  Trash2,
+  Filter,
   Download,
   FileText,
   Calendar,
@@ -24,8 +59,8 @@ import {
   Activity,
   Stethoscope,
   ClipboardList,
-  Eye
-} from 'lucide-react';
+  Eye,
+} from "lucide-react";
 
 interface VitalSigns {
   bloodPressure: string;
@@ -45,7 +80,7 @@ interface MedicalRecord {
   doctorId: string;
   doctorName: string;
   date: string;
-  visitType: 'consultation' | 'followup' | 'emergency' | 'routine';
+  visitType: "consultation" | "followup" | "emergency" | "routine";
   chiefComplaint: string;
   presentIllness: string;
   pastMedicalHistory: string;
@@ -56,136 +91,144 @@ interface MedicalRecord {
   medications: string;
   notes: string;
   nextAppointment?: string;
-  status: 'active' | 'completed' | 'pending';
+  status: "active" | "completed" | "pending";
 }
 
 const mockMedicalRecords: MedicalRecord[] = [
   {
-    id: 'MR001',
-    patientId: 'PAT001',
-    patientName: 'Nguyễn Thị Lan',
+    id: "MR001",
+    patientId: "PAT001",
+    patientName: "Nguyễn Thị Lan",
     patientAge: 35,
-    patientGender: 'Nữ',
-    doctorId: 'DOC001',
-    doctorName: 'Dr. Trần Văn Minh',
-    date: '2024-01-20',
-    visitType: 'consultation',
-    chiefComplaint: 'Đau họng, sốt nhẹ',
-    presentIllness: 'Bệnh nhân than phiền đau họng kéo dài 3 ngày, kèm sốt nhẹ 37.5°C. Không ho, không khó nuốt.',
-    pastMedicalHistory: 'Không có tiền sử bệnh lý đáng chú ý',
-    physicalExamination: 'Họng đỏ, amiđan sưng nhẹ. Hạch cổ không sờ thấy.',
+    patientGender: "Nữ",
+    doctorId: "DOC001",
+    doctorName: "Dr. Trần Văn Minh",
+    date: "2024-01-20",
+    visitType: "consultation",
+    chiefComplaint: "Đau họng, sốt nhẹ",
+    presentIllness:
+      "Bệnh nhân than phiền đau họng kéo dài 3 ngày, kèm sốt nhẹ 37.5°C. Không ho, không khó nuốt.",
+    pastMedicalHistory: "Không có tiền sử bệnh lý đáng chú ý",
+    physicalExamination: "Họng đỏ, amiđan sưng nhẹ. Hạch cổ không sờ thấy.",
     vitalSigns: {
-      bloodPressure: '120/80',
-      heartRate: '72',
-      temperature: '37.5',
-      weight: '58',
-      height: '160',
-      respiratoryRate: '18'
+      bloodPressure: "120/80",
+      heartRate: "72",
+      temperature: "37.5",
+      weight: "58",
+      height: "160",
+      respiratoryRate: "18",
     },
-    diagnosis: 'Viêm họng cấp tính',
-    treatment: 'Kháng sinh, hạ sốt, súc miệng nước muối',
-    medications: 'Amoxicillin 500mg x 3 lần/ngày x 7 ngày, Paracetamol 500mg khi cần',
-    notes: 'Tái khám sau 1 tuần nếu không khỏi',
-    nextAppointment: '2024-01-27',
-    status: 'active'
+    diagnosis: "Viêm họng cấp tính",
+    treatment: "Kháng sinh, hạ sốt, súc miệng nước muối",
+    medications:
+      "Amoxicillin 500mg x 3 lần/ngày x 7 ngày, Paracetamol 500mg khi cần",
+    notes: "Tái khám sau 1 tuần nếu không khỏi",
+    nextAppointment: "2024-01-27",
+    status: "active",
   },
   {
-    id: 'MR002',
-    patientId: 'PAT002',
-    patientName: 'Lê Văn Hùng',
+    id: "MR002",
+    patientId: "PAT002",
+    patientName: "Lê Văn Hùng",
     patientAge: 45,
-    patientGender: 'Nam',
-    doctorId: 'DOC002',
-    doctorName: 'Dr. Phạm Thị Mai',
-    date: '2024-01-19',
-    visitType: 'followup',
-    chiefComplaint: 'Kiểm tra huyết áp định kỳ',
-    presentIllness: 'Bệnh nhân có tiền sử tăng huyết áp, đang điều trị thuốc. Đến khám định kỳ.',
-    pastMedicalHistory: 'Tăng huyết áp từ năm 2020, đái tháo đường type 2 từ năm 2022',
-    physicalExamination: 'Tim đều, phổi trong, gan lách không to',
+    patientGender: "Nam",
+    doctorId: "DOC002",
+    doctorName: "Dr. Phạm Thị Mai",
+    date: "2024-01-19",
+    visitType: "followup",
+    chiefComplaint: "Kiểm tra huyết áp định kỳ",
+    presentIllness:
+      "Bệnh nhân có tiền sử tăng huyết áp, đang điều trị thuốc. Đến khám định kỳ.",
+    pastMedicalHistory:
+      "Tăng huyết áp từ năm 2020, đái tháo đường type 2 từ năm 2022",
+    physicalExamination: "Tim đều, phổi trong, gan lách không to",
     vitalSigns: {
-      bloodPressure: '140/90',
-      heartRate: '78',
-      temperature: '36.8',
-      weight: '75',
-      height: '170',
-      respiratoryRate: '16'
+      bloodPressure: "140/90",
+      heartRate: "78",
+      temperature: "36.8",
+      weight: "75",
+      height: "170",
+      respiratoryRate: "16",
     },
-    diagnosis: 'Tăng huyết áp độ II, đái tháo đường type 2',
-    treatment: 'Điều chỉnh liều thuốc hạ áp, kiểm soát đường huyết',
-    medications: 'Amlodipine 10mg x 1 lần/ngày, Metformin 500mg x 2 lần/ngày',
-    notes: 'Bệnh nhân cần kiểm soát chế độ ăn, tập thể dục đều đặn',
-    nextAppointment: '2024-02-19',
-    status: 'completed'
+    diagnosis: "Tăng huyết áp độ II, đái tháo đường type 2",
+    treatment: "Điều chỉnh liều thuốc hạ áp, kiểm soát đường huyết",
+    medications: "Amlodipine 10mg x 1 lần/ngày, Metformin 500mg x 2 lần/ngày",
+    notes: "Bệnh nhân cần kiểm soát chế độ ăn, tập thể dục đều đặn",
+    nextAppointment: "2024-02-19",
+    status: "completed",
   },
   {
-    id: 'MR003',
-    patientId: 'PAT003',
-    patientName: 'Trần Thị Hoa',
+    id: "MR003",
+    patientId: "PAT003",
+    patientName: "Trần Thị Hoa",
     patientAge: 28,
-    patientGender: 'Nữ',
-    doctorId: 'DOC001',
-    doctorName: 'Dr. Trần Văn Minh',
-    date: '2024-01-18',
-    visitType: 'routine',
-    chiefComplaint: 'Khám sức khỏe định kỳ',
-    presentIllness: 'Bệnh nhân khỏe mạnh, đến khám sức khỏe tổng quát định kỳ',
-    pastMedicalHistory: 'Không có tiền sử bệnh lý',
-    physicalExamination: 'Toàn thân bình thường, không phát hiện bất thường',
+    patientGender: "Nữ",
+    doctorId: "DOC001",
+    doctorName: "Dr. Trần Văn Minh",
+    date: "2024-01-18",
+    visitType: "routine",
+    chiefComplaint: "Khám sức khỏe định kỳ",
+    presentIllness: "Bệnh nhân khỏe mạnh, đến khám sức khỏe tổng quát định kỳ",
+    pastMedicalHistory: "Không có tiền sử bệnh lý",
+    physicalExamination: "Toàn thân bình thường, không phát hiện bất thường",
     vitalSigns: {
-      bloodPressure: '110/70',
-      heartRate: '68',
-      temperature: '36.5',
-      weight: '52',
-      height: '158',
-      respiratoryRate: '16'
+      bloodPressure: "110/70",
+      heartRate: "68",
+      temperature: "36.5",
+      weight: "52",
+      height: "158",
+      respiratoryRate: "16",
     },
-    diagnosis: 'Sức khỏe bình thường',
-    treatment: 'Không cần điều trị',
-    medications: 'Không có',
-    notes: 'Khuyên bệnh nhân duy trì lối sống lành mạnh',
-    status: 'completed'
-  }
+    diagnosis: "Sức khỏe bình thường",
+    treatment: "Không cần điều trị",
+    medications: "Không có",
+    notes: "Khuyên bệnh nhân duy trì lối sống lành mạnh",
+    status: "completed",
+  },
 ];
 
 export function MedicalRecordsManagement() {
   const [records, setRecords] = useState<MedicalRecord[]>(mockMedicalRecords);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [visitTypeFilter, setVisitTypeFilter] = useState<string>('all');
-  const [selectedRecord, setSelectedRecord] = useState<MedicalRecord | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [visitTypeFilter, setVisitTypeFilter] = useState<string>("all");
+  const [selectedRecord, setSelectedRecord] = useState<MedicalRecord | null>(
+    null
+  );
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [editingRecord, setEditingRecord] = useState<MedicalRecord | null>(null);
+  const [editingRecord, setEditingRecord] = useState<MedicalRecord | null>(
+    null
+  );
 
   const handleAddRecord = () => {
     setEditingRecord({
-      id: '',
-      patientId: '',
-      patientName: '',
+      id: "",
+      patientId: "",
+      patientName: "",
       patientAge: 0,
-      patientGender: '',
-      doctorId: '',
-      doctorName: '',
-      date: new Date().toISOString().split('T')[0],
-      visitType: 'consultation',
-      chiefCompliant: '',
-      presentIllness: '',
-      pastMedicalHistory: '',
-      physicalExamination: '',
+      patientGender: "",
+      doctorId: "",
+      doctorName: "",
+      date: new Date().toISOString().split("T")[0],
+      visitType: "consultation",
+      chiefCompliant: "",
+      presentIllness: "",
+      pastMedicalHistory: "",
+      physicalExamination: "",
       vitalSigns: {
-        bloodPressure: '',
-        heartRate: '',
-        temperature: '',
-        weight: '',
-        height: '',
-        respiratoryRate: ''
+        bloodPressure: "",
+        heartRate: "",
+        temperature: "",
+        weight: "",
+        height: "",
+        respiratoryRate: "",
       },
-      diagnosis: '',
-      treatment: '',
-      medications: '',
-      notes: '',
-      status: 'pending'
+      diagnosis: "",
+      treatment: "",
+      medications: "",
+      notes: "",
+      status: "pending",
     } as MedicalRecord);
     setIsDialogOpen(true);
   };
@@ -199,11 +242,13 @@ export function MedicalRecordsManagement() {
     if (!editingRecord) return;
 
     if (editingRecord.id) {
-      setRecords(records.map(r => r.id === editingRecord.id ? editingRecord : r));
+      setRecords(
+        records.map((r) => (r.id === editingRecord.id ? editingRecord : r))
+      );
     } else {
       const newRecord = {
         ...editingRecord,
-        id: `MR${String(records.length + 1).padStart(3, '0')}`
+        id: `MR${String(records.length + 1).padStart(3, "0")}`,
       };
       setRecords([...records, newRecord]);
     }
@@ -214,33 +259,36 @@ export function MedicalRecordsManagement() {
 
   const handleDeleteRecord = () => {
     if (selectedRecord) {
-      setRecords(records.filter(r => r.id !== selectedRecord.id));
+      setRecords(records.filter((r) => r.id !== selectedRecord.id));
       setIsDeleteDialogOpen(false);
       setSelectedRecord(null);
     }
   };
 
-  const filteredRecords = records.filter(record => {
-    const matchesSearch = record.patientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         record.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         record.diagnosis.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || record.status === statusFilter;
-    const matchesVisitType = visitTypeFilter === 'all' || record.visitType === visitTypeFilter;
-    
+  const filteredRecords = records.filter((record) => {
+    const matchesSearch =
+      record.patientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      record.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      record.diagnosis.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus =
+      statusFilter === "all" || record.status === statusFilter;
+    const matchesVisitType =
+      visitTypeFilter === "all" || record.visitType === visitTypeFilter;
+
     return matchesSearch && matchesStatus && matchesVisitType;
   });
 
   const getStatusBadge = (status: string) => {
     const statusStyles = {
-      active: 'bg-green-100 text-green-800 hover:bg-green-200',
-      completed: 'bg-blue-100 text-blue-800 hover:bg-blue-200',
-      pending: 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200'
+      active: "bg-green-100 text-green-800 hover:bg-green-200",
+      completed: "bg-blue-100 text-blue-800 hover:bg-blue-200",
+      pending: "bg-yellow-100 text-yellow-800 hover:bg-yellow-200",
     };
 
     const statusLabels = {
-      active: 'Đang điều trị',
-      completed: 'Hoàn thành',
-      pending: 'Chờ xử lý'
+      active: "Đang điều trị",
+      completed: "Hoàn thành",
+      pending: "Chờ xử lý",
     };
 
     return (
@@ -252,21 +300,23 @@ export function MedicalRecordsManagement() {
 
   const getVisitTypeBadge = (visitType: string) => {
     const visitTypeStyles = {
-      consultation: 'bg-primary/10 text-primary hover:bg-primary/20',
-      followup: 'bg-orange-100 text-orange-800 hover:bg-orange-200',
-      emergency: 'bg-red-100 text-red-800 hover:bg-red-200',
-      routine: 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+      consultation: "bg-primary/10 text-primary hover:bg-primary/20",
+      followup: "bg-orange-100 text-orange-800 hover:bg-orange-200",
+      emergency: "bg-red-100 text-red-800 hover:bg-red-200",
+      routine: "bg-gray-100 text-gray-800 hover:bg-gray-200",
     };
 
     const visitTypeLabels = {
-      consultation: 'Khám bệnh',
-      followup: 'Tái khám',
-      emergency: 'Cấp cứu',
-      routine: 'Định kỳ'
+      consultation: "Khám bệnh",
+      followup: "Tái khám",
+      emergency: "Cấp cứu",
+      routine: "Định kỳ",
     };
 
     return (
-      <Badge className={visitTypeStyles[visitType as keyof typeof visitTypeStyles]}>
+      <Badge
+        className={visitTypeStyles[visitType as keyof typeof visitTypeStyles]}
+      >
         {visitTypeLabels[visitType as keyof typeof visitTypeLabels]}
       </Badge>
     );
@@ -279,9 +329,14 @@ export function MedicalRecordsManagement() {
         <div className="flex justify-between items-center mb-6">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Hồ sơ Bệnh án</h1>
-            <p className="text-gray-600 mt-1">Quản lý hồ sơ bệnh án và thông tin khám bệnh</p>
+            <p className="text-gray-600 mt-1">
+              Quản lý hồ sơ bệnh án và thông tin khám bệnh
+            </p>
           </div>
-          <Button onClick={handleAddRecord} className="bg-primary hover:bg-primary/90">
+          <Button
+            onClick={handleAddRecord}
+            className="bg-primary hover:bg-primary/90"
+          >
             <Plus className="w-4 h-4 mr-2" />
             Tạo hồ sơ mới
           </Button>
@@ -306,7 +361,9 @@ export function MedicalRecordsManagement() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-green-100">Đang điều trị</p>
-                  <p className="text-2xl font-bold">{records.filter(r => r.status === 'active').length}</p>
+                  <p className="text-2xl font-bold">
+                    {records.filter((r) => r.status === "active").length}
+                  </p>
                 </div>
                 <Activity className="w-8 h-8 text-green-200" />
               </div>
@@ -318,7 +375,9 @@ export function MedicalRecordsManagement() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-purple-100">Hoàn thành</p>
-                  <p className="text-2xl font-bold">{records.filter(r => r.status === 'completed').length}</p>
+                  <p className="text-2xl font-bold">
+                    {records.filter((r) => r.status === "completed").length}
+                  </p>
                 </div>
                 <ClipboardList className="w-8 h-8 text-purple-200" />
               </div>
@@ -330,7 +389,9 @@ export function MedicalRecordsManagement() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-orange-100">Chờ xử lý</p>
-                  <p className="text-2xl font-bold">{records.filter(r => r.status === 'pending').length}</p>
+                  <p className="text-2xl font-bold">
+                    {records.filter((r) => r.status === "pending").length}
+                  </p>
                 </div>
                 <Heart className="w-8 h-8 text-orange-200" />
               </div>
@@ -362,7 +423,10 @@ export function MedicalRecordsManagement() {
                   <SelectItem value="pending">Chờ xử lý</SelectItem>
                 </SelectContent>
               </Select>
-              <Select value={visitTypeFilter} onValueChange={setVisitTypeFilter}>
+              <Select
+                value={visitTypeFilter}
+                onValueChange={setVisitTypeFilter}
+              >
                 <SelectTrigger className="w-full md:w-[180px]">
                   <SelectValue placeholder="Loại khám" />
                 </SelectTrigger>
@@ -405,13 +469,15 @@ export function MedicalRecordsManagement() {
                     <TableCell>
                       <div>
                         <div className="font-medium">{record.patientName}</div>
-                        <div className="text-sm text-gray-500">{record.patientAge} tuổi - {record.patientGender}</div>
+                        <div className="text-sm text-gray-500">
+                          {record.patientAge} tuổi - {record.patientGender}
+                        </div>
                       </div>
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <Calendar className="w-4 h-4 text-gray-400" />
-                        {new Date(record.date).toLocaleDateString('vi-VN')}
+                        {new Date(record.date).toLocaleDateString("vi-VN")}
                       </div>
                     </TableCell>
                     <TableCell>{getVisitTypeBadge(record.visitType)}</TableCell>
@@ -464,15 +530,21 @@ export function MedicalRecordsManagement() {
 
         {/* View Record Dialog */}
         {selectedRecord && (
-          <Dialog open={!!selectedRecord && !isDeleteDialogOpen} onOpenChange={() => setSelectedRecord(null)}>
+          <Dialog
+            open={!!selectedRecord && !isDeleteDialogOpen}
+            onOpenChange={() => setSelectedRecord(null)}
+          >
             <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
-                <DialogTitle>Chi tiết hồ sơ bệnh án - {selectedRecord.id}</DialogTitle>
+                <DialogTitle>
+                  Chi tiết hồ sơ bệnh án - {selectedRecord.id}
+                </DialogTitle>
                 <DialogDescription>
-                  Thông tin chi tiết về lần khám bệnh của {selectedRecord.patientName}
+                  Thông tin chi tiết về lần khám bệnh của{" "}
+                  {selectedRecord.patientName}
                 </DialogDescription>
               </DialogHeader>
-              
+
               <Tabs defaultValue="general" className="w-full">
                 <TabsList className="grid w-full grid-cols-4">
                   <TabsTrigger value="general">Thông tin chung</TabsTrigger>
@@ -480,105 +552,146 @@ export function MedicalRecordsManagement() {
                   <TabsTrigger value="vitals">Sinh hiệu</TabsTrigger>
                   <TabsTrigger value="treatment">Điều trị</TabsTrigger>
                 </TabsList>
-                
+
                 <TabsContent value="general" className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <Label>Bệnh nhân</Label>
-                      <p className="text-sm bg-gray-50 p-2 rounded">{selectedRecord.patientName}</p>
+                      <p className="text-sm bg-gray-50 p-2 rounded">
+                        {selectedRecord.patientName}
+                      </p>
                     </div>
                     <div>
                       <Label>Tuổi - Giới tính</Label>
-                      <p className="text-sm bg-gray-50 p-2 rounded">{selectedRecord.patientAge} tuổi - {selectedRecord.patientGender}</p>
+                      <p className="text-sm bg-gray-50 p-2 rounded">
+                        {selectedRecord.patientAge} tuổi -{" "}
+                        {selectedRecord.patientGender}
+                      </p>
                     </div>
                     <div>
                       <Label>Bác sĩ</Label>
-                      <p className="text-sm bg-gray-50 p-2 rounded">{selectedRecord.doctorName}</p>
+                      <p className="text-sm bg-gray-50 p-2 rounded">
+                        {selectedRecord.doctorName}
+                      </p>
                     </div>
                     <div>
                       <Label>Ngày khám</Label>
-                      <p className="text-sm bg-gray-50 p-2 rounded">{new Date(selectedRecord.date).toLocaleDateString('vi-VN')}</p>
+                      <p className="text-sm bg-gray-50 p-2 rounded">
+                        {new Date(selectedRecord.date).toLocaleDateString(
+                          "vi-VN"
+                        )}
+                      </p>
                     </div>
                   </div>
-                  
+
                   <div>
                     <Label>Lý do khám bệnh</Label>
-                    <p className="text-sm bg-gray-50 p-3 rounded mt-1">{selectedRecord.chiefComplaint}</p>
+                    <p className="text-sm bg-gray-50 p-3 rounded mt-1">
+                      {selectedRecord.chiefComplaint}
+                    </p>
                   </div>
-                  
+
                   <div>
                     <Label>Tiền sử bệnh</Label>
-                    <p className="text-sm bg-gray-50 p-3 rounded mt-1">{selectedRecord.pastMedicalHistory}</p>
+                    <p className="text-sm bg-gray-50 p-3 rounded mt-1">
+                      {selectedRecord.pastMedicalHistory}
+                    </p>
                   </div>
                 </TabsContent>
-                
+
                 <TabsContent value="examination" className="space-y-4">
                   <div>
                     <Label>Bệnh sử hiện tại</Label>
-                    <p className="text-sm bg-gray-50 p-3 rounded mt-1">{selectedRecord.presentIllness}</p>
+                    <p className="text-sm bg-gray-50 p-3 rounded mt-1">
+                      {selectedRecord.presentIllness}
+                    </p>
                   </div>
-                  
+
                   <div>
                     <Label>Khám thể lực</Label>
-                    <p className="text-sm bg-gray-50 p-3 rounded mt-1">{selectedRecord.physicalExamination}</p>
+                    <p className="text-sm bg-gray-50 p-3 rounded mt-1">
+                      {selectedRecord.physicalExamination}
+                    </p>
                   </div>
-                  
+
                   <div>
                     <Label>Chẩn đoán</Label>
-                    <p className="text-sm bg-gray-50 p-3 rounded mt-1">{selectedRecord.diagnosis}</p>
+                    <p className="text-sm bg-gray-50 p-3 rounded mt-1">
+                      {selectedRecord.diagnosis}
+                    </p>
                   </div>
                 </TabsContent>
-                
+
                 <TabsContent value="vitals" className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <Label>Huyết áp</Label>
-                      <p className="text-sm bg-gray-50 p-2 rounded">{selectedRecord.vitalSigns.bloodPressure} mmHg</p>
+                      <p className="text-sm bg-gray-50 p-2 rounded">
+                        {selectedRecord.vitalSigns.bloodPressure} mmHg
+                      </p>
                     </div>
                     <div>
                       <Label>Nhịp tim</Label>
-                      <p className="text-sm bg-gray-50 p-2 rounded">{selectedRecord.vitalSigns.heartRate} lần/phút</p>
+                      <p className="text-sm bg-gray-50 p-2 rounded">
+                        {selectedRecord.vitalSigns.heartRate} lần/phút
+                      </p>
                     </div>
                     <div>
                       <Label>Nhiệt độ</Label>
-                      <p className="text-sm bg-gray-50 p-2 rounded">{selectedRecord.vitalSigns.temperature}°C</p>
+                      <p className="text-sm bg-gray-50 p-2 rounded">
+                        {selectedRecord.vitalSigns.temperature}°C
+                      </p>
                     </div>
                     <div>
                       <Label>Nhịp thở</Label>
-                      <p className="text-sm bg-gray-50 p-2 rounded">{selectedRecord.vitalSigns.respiratoryRate} lần/phút</p>
+                      <p className="text-sm bg-gray-50 p-2 rounded">
+                        {selectedRecord.vitalSigns.respiratoryRate} lần/phút
+                      </p>
                     </div>
                     <div>
                       <Label>Cân nặng</Label>
-                      <p className="text-sm bg-gray-50 p-2 rounded">{selectedRecord.vitalSigns.weight} kg</p>
+                      <p className="text-sm bg-gray-50 p-2 rounded">
+                        {selectedRecord.vitalSigns.weight} kg
+                      </p>
                     </div>
                     <div>
                       <Label>Chiều cao</Label>
-                      <p className="text-sm bg-gray-50 p-2 rounded">{selectedRecord.vitalSigns.height} cm</p>
+                      <p className="text-sm bg-gray-50 p-2 rounded">
+                        {selectedRecord.vitalSigns.height} cm
+                      </p>
                     </div>
                   </div>
                 </TabsContent>
-                
+
                 <TabsContent value="treatment" className="space-y-4">
                   <div>
                     <Label>Điều trị</Label>
-                    <p className="text-sm bg-gray-50 p-3 rounded mt-1">{selectedRecord.treatment}</p>
+                    <p className="text-sm bg-gray-50 p-3 rounded mt-1">
+                      {selectedRecord.treatment}
+                    </p>
                   </div>
-                  
+
                   <div>
                     <Label>Thuốc kê đơn</Label>
-                    <p className="text-sm bg-gray-50 p-3 rounded mt-1">{selectedRecord.medications}</p>
+                    <p className="text-sm bg-gray-50 p-3 rounded mt-1">
+                      {selectedRecord.medications}
+                    </p>
                   </div>
-                  
+
                   <div>
                     <Label>Ghi chú</Label>
-                    <p className="text-sm bg-gray-50 p-3 rounded mt-1">{selectedRecord.notes}</p>
+                    <p className="text-sm bg-gray-50 p-3 rounded mt-1">
+                      {selectedRecord.notes}
+                    </p>
                   </div>
-                  
+
                   {selectedRecord.nextAppointment && (
                     <div>
                       <Label>Lịch tái khám</Label>
                       <p className="text-sm bg-gray-50 p-2 rounded mt-1">
-                        {new Date(selectedRecord.nextAppointment).toLocaleDateString('vi-VN')}
+                        {new Date(
+                          selectedRecord.nextAppointment
+                        ).toLocaleDateString("vi-VN")}
                       </p>
                     </div>
                   )}
@@ -593,10 +706,14 @@ export function MedicalRecordsManagement() {
           <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
-                {editingRecord?.id ? 'Chỉnh sửa hồ sơ bệnh án' : 'Tạo hồ sơ bệnh án mới'}
+                {editingRecord?.id
+                  ? "Chỉnh sửa hồ sơ bệnh án"
+                  : "Tạo hồ sơ bệnh án mới"}
               </DialogTitle>
               <DialogDescription>
-                {editingRecord?.id ? 'Cập nhật thông tin hồ sơ bệnh án' : 'Nhập thông tin để tạo hồ sơ bệnh án mới'}
+                {editingRecord?.id
+                  ? "Cập nhật thông tin hồ sơ bệnh án"
+                  : "Nhập thông tin để tạo hồ sơ bệnh án mới"}
               </DialogDescription>
             </DialogHeader>
 
@@ -616,7 +733,12 @@ export function MedicalRecordsManagement() {
                       <Input
                         id="patientName"
                         value={editingRecord.patientName}
-                        onChange={(e) => setEditingRecord({ ...editingRecord, patientName: e.target.value })}
+                        onChange={(e) =>
+                          setEditingRecord({
+                            ...editingRecord,
+                            patientName: e.target.value,
+                          })
+                        }
                         placeholder="Nhập tên bệnh nhân"
                       />
                     </div>
@@ -626,7 +748,12 @@ export function MedicalRecordsManagement() {
                         id="patientAge"
                         type="number"
                         value={editingRecord.patientAge}
-                        onChange={(e) => setEditingRecord({ ...editingRecord, patientAge: parseInt(e.target.value) })}
+                        onChange={(e) =>
+                          setEditingRecord({
+                            ...editingRecord,
+                            patientAge: parseInt(e.target.value),
+                          })
+                        }
                         placeholder="Nhập tuổi"
                       />
                     </div>
@@ -634,7 +761,12 @@ export function MedicalRecordsManagement() {
                       <Label htmlFor="patientGender">Giới tính *</Label>
                       <Select
                         value={editingRecord.patientGender}
-                        onValueChange={(value) => setEditingRecord({ ...editingRecord, patientGender: value })}
+                        onValueChange={(value) =>
+                          setEditingRecord({
+                            ...editingRecord,
+                            patientGender: value,
+                          })
+                        }
                       >
                         <SelectTrigger>
                           <SelectValue placeholder="Chọn giới tính" />
@@ -650,7 +782,12 @@ export function MedicalRecordsManagement() {
                       <Input
                         id="doctorName"
                         value={editingRecord.doctorName}
-                        onChange={(e) => setEditingRecord({ ...editingRecord, doctorName: e.target.value })}
+                        onChange={(e) =>
+                          setEditingRecord({
+                            ...editingRecord,
+                            doctorName: e.target.value,
+                          })
+                        }
                         placeholder="Nhập tên bác sĩ"
                       />
                     </div>
@@ -660,20 +797,32 @@ export function MedicalRecordsManagement() {
                         id="date"
                         type="date"
                         value={editingRecord.date}
-                        onChange={(e) => setEditingRecord({ ...editingRecord, date: e.target.value })}
+                        onChange={(e) =>
+                          setEditingRecord({
+                            ...editingRecord,
+                            date: e.target.value,
+                          })
+                        }
                       />
                     </div>
                     <div>
                       <Label htmlFor="visitType">Loại khám</Label>
                       <Select
                         value={editingRecord.visitType}
-                        onValueChange={(value: any) => setEditingRecord({ ...editingRecord, visitType: value })}
+                        onValueChange={(value: any) =>
+                          setEditingRecord({
+                            ...editingRecord,
+                            visitType: value,
+                          })
+                        }
                       >
                         <SelectTrigger>
                           <SelectValue placeholder="Chọn loại khám" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="consultation">Khám bệnh</SelectItem>
+                          <SelectItem value="consultation">
+                            Khám bệnh
+                          </SelectItem>
                           <SelectItem value="followup">Tái khám</SelectItem>
                           <SelectItem value="emergency">Cấp cứu</SelectItem>
                           <SelectItem value="routine">Định kỳ</SelectItem>
@@ -687,7 +836,12 @@ export function MedicalRecordsManagement() {
                     <Textarea
                       id="chiefComplaint"
                       value={editingRecord.chiefComplaint}
-                      onChange={(e) => setEditingRecord({ ...editingRecord, chiefComplaint: e.target.value })}
+                      onChange={(e) =>
+                        setEditingRecord({
+                          ...editingRecord,
+                          chiefComplaint: e.target.value,
+                        })
+                      }
                       placeholder="Nhập lý do khám bệnh"
                       rows={3}
                     />
@@ -700,7 +854,12 @@ export function MedicalRecordsManagement() {
                     <Textarea
                       id="presentIllness"
                       value={editingRecord.presentIllness}
-                      onChange={(e) => setEditingRecord({ ...editingRecord, presentIllness: e.target.value })}
+                      onChange={(e) =>
+                        setEditingRecord({
+                          ...editingRecord,
+                          presentIllness: e.target.value,
+                        })
+                      }
                       placeholder="Mô tả tình trạng bệnh hiện tại"
                       rows={3}
                     />
@@ -711,7 +870,12 @@ export function MedicalRecordsManagement() {
                     <Textarea
                       id="pastMedicalHistory"
                       value={editingRecord.pastMedicalHistory}
-                      onChange={(e) => setEditingRecord({ ...editingRecord, pastMedicalHistory: e.target.value })}
+                      onChange={(e) =>
+                        setEditingRecord({
+                          ...editingRecord,
+                          pastMedicalHistory: e.target.value,
+                        })
+                      }
                       placeholder="Nhập tiền sử bệnh"
                       rows={3}
                     />
@@ -722,7 +886,12 @@ export function MedicalRecordsManagement() {
                     <Textarea
                       id="physicalExamination"
                       value={editingRecord.physicalExamination}
-                      onChange={(e) => setEditingRecord({ ...editingRecord, physicalExamination: e.target.value })}
+                      onChange={(e) =>
+                        setEditingRecord({
+                          ...editingRecord,
+                          physicalExamination: e.target.value,
+                        })
+                      }
                       placeholder="Kết quả khám thể lực"
                       rows={3}
                     />
@@ -733,7 +902,12 @@ export function MedicalRecordsManagement() {
                     <Textarea
                       id="diagnosis"
                       value={editingRecord.diagnosis}
-                      onChange={(e) => setEditingRecord({ ...editingRecord, diagnosis: e.target.value })}
+                      onChange={(e) =>
+                        setEditingRecord({
+                          ...editingRecord,
+                          diagnosis: e.target.value,
+                        })
+                      }
                       placeholder="Nhập chẩn đoán"
                       rows={2}
                     />
@@ -747,10 +921,15 @@ export function MedicalRecordsManagement() {
                       <Input
                         id="bloodPressure"
                         value={editingRecord.vitalSigns.bloodPressure}
-                        onChange={(e) => setEditingRecord({
-                          ...editingRecord,
-                          vitalSigns: { ...editingRecord.vitalSigns, bloodPressure: e.target.value }
-                        })}
+                        onChange={(e) =>
+                          setEditingRecord({
+                            ...editingRecord,
+                            vitalSigns: {
+                              ...editingRecord.vitalSigns,
+                              bloodPressure: e.target.value,
+                            },
+                          })
+                        }
                         placeholder="VD: 120/80"
                       />
                     </div>
@@ -759,10 +938,15 @@ export function MedicalRecordsManagement() {
                       <Input
                         id="heartRate"
                         value={editingRecord.vitalSigns.heartRate}
-                        onChange={(e) => setEditingRecord({
-                          ...editingRecord,
-                          vitalSigns: { ...editingRecord.vitalSigns, heartRate: e.target.value }
-                        })}
+                        onChange={(e) =>
+                          setEditingRecord({
+                            ...editingRecord,
+                            vitalSigns: {
+                              ...editingRecord.vitalSigns,
+                              heartRate: e.target.value,
+                            },
+                          })
+                        }
                         placeholder="VD: 72"
                       />
                     </div>
@@ -771,22 +955,34 @@ export function MedicalRecordsManagement() {
                       <Input
                         id="temperature"
                         value={editingRecord.vitalSigns.temperature}
-                        onChange={(e) => setEditingRecord({
-                          ...editingRecord,
-                          vitalSigns: { ...editingRecord.vitalSigns, temperature: e.target.value }
-                        })}
+                        onChange={(e) =>
+                          setEditingRecord({
+                            ...editingRecord,
+                            vitalSigns: {
+                              ...editingRecord.vitalSigns,
+                              temperature: e.target.value,
+                            },
+                          })
+                        }
                         placeholder="VD: 36.5"
                       />
                     </div>
                     <div>
-                      <Label htmlFor="respiratoryRate">Nhịp thở (lần/phút)</Label>
+                      <Label htmlFor="respiratoryRate">
+                        Nhịp thở (lần/phút)
+                      </Label>
                       <Input
                         id="respiratoryRate"
                         value={editingRecord.vitalSigns.respiratoryRate}
-                        onChange={(e) => setEditingRecord({
-                          ...editingRecord,
-                          vitalSigns: { ...editingRecord.vitalSigns, respiratoryRate: e.target.value }
-                        })}
+                        onChange={(e) =>
+                          setEditingRecord({
+                            ...editingRecord,
+                            vitalSigns: {
+                              ...editingRecord.vitalSigns,
+                              respiratoryRate: e.target.value,
+                            },
+                          })
+                        }
                         placeholder="VD: 18"
                       />
                     </div>
@@ -795,10 +991,15 @@ export function MedicalRecordsManagement() {
                       <Input
                         id="weight"
                         value={editingRecord.vitalSigns.weight}
-                        onChange={(e) => setEditingRecord({
-                          ...editingRecord,
-                          vitalSigns: { ...editingRecord.vitalSigns, weight: e.target.value }
-                        })}
+                        onChange={(e) =>
+                          setEditingRecord({
+                            ...editingRecord,
+                            vitalSigns: {
+                              ...editingRecord.vitalSigns,
+                              weight: e.target.value,
+                            },
+                          })
+                        }
                         placeholder="VD: 65"
                       />
                     </div>
@@ -807,10 +1008,15 @@ export function MedicalRecordsManagement() {
                       <Input
                         id="height"
                         value={editingRecord.vitalSigns.height}
-                        onChange={(e) => setEditingRecord({
-                          ...editingRecord,
-                          vitalSigns: { ...editingRecord.vitalSigns, height: e.target.value }
-                        })}
+                        onChange={(e) =>
+                          setEditingRecord({
+                            ...editingRecord,
+                            vitalSigns: {
+                              ...editingRecord.vitalSigns,
+                              height: e.target.value,
+                            },
+                          })
+                        }
                         placeholder="VD: 165"
                       />
                     </div>
@@ -823,7 +1029,12 @@ export function MedicalRecordsManagement() {
                     <Textarea
                       id="treatment"
                       value={editingRecord.treatment}
-                      onChange={(e) => setEditingRecord({ ...editingRecord, treatment: e.target.value })}
+                      onChange={(e) =>
+                        setEditingRecord({
+                          ...editingRecord,
+                          treatment: e.target.value,
+                        })
+                      }
                       placeholder="Nhập phương pháp điều trị"
                       rows={3}
                     />
@@ -834,7 +1045,12 @@ export function MedicalRecordsManagement() {
                     <Textarea
                       id="medications"
                       value={editingRecord.medications}
-                      onChange={(e) => setEditingRecord({ ...editingRecord, medications: e.target.value })}
+                      onChange={(e) =>
+                        setEditingRecord({
+                          ...editingRecord,
+                          medications: e.target.value,
+                        })
+                      }
                       placeholder="Nhập danh sách thuốc và liều dùng"
                       rows={3}
                     />
@@ -845,7 +1061,12 @@ export function MedicalRecordsManagement() {
                     <Textarea
                       id="notes"
                       value={editingRecord.notes}
-                      onChange={(e) => setEditingRecord({ ...editingRecord, notes: e.target.value })}
+                      onChange={(e) =>
+                        setEditingRecord({
+                          ...editingRecord,
+                          notes: e.target.value,
+                        })
+                      }
                       placeholder="Nhập ghi chú thêm"
                       rows={3}
                     />
@@ -857,15 +1078,22 @@ export function MedicalRecordsManagement() {
                       <Input
                         id="nextAppointment"
                         type="date"
-                        value={editingRecord.nextAppointment || ''}
-                        onChange={(e) => setEditingRecord({ ...editingRecord, nextAppointment: e.target.value })}
+                        value={editingRecord.nextAppointment || ""}
+                        onChange={(e) =>
+                          setEditingRecord({
+                            ...editingRecord,
+                            nextAppointment: e.target.value,
+                          })
+                        }
                       />
                     </div>
                     <div>
                       <Label htmlFor="status">Trạng thái</Label>
                       <Select
                         value={editingRecord.status}
-                        onValueChange={(value: any) => setEditingRecord({ ...editingRecord, status: value })}
+                        onValueChange={(value: any) =>
+                          setEditingRecord({ ...editingRecord, status: value })
+                        }
                       >
                         <SelectTrigger>
                           <SelectValue placeholder="Chọn trạng thái" />
@@ -886,25 +1114,35 @@ export function MedicalRecordsManagement() {
               <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
                 Hủy
               </Button>
-              <Button onClick={handleSaveRecord} className="bg-primary hover:bg-primary/90">
-                {editingRecord?.id ? 'Cập nhật' : 'Tạo mới'}
+              <Button
+                onClick={handleSaveRecord}
+                className="bg-primary hover:bg-primary/90"
+              >
+                {editingRecord?.id ? "Cập nhật" : "Tạo mới"}
               </Button>
             </div>
           </DialogContent>
         </Dialog>
 
         {/* Delete Confirmation Dialog */}
-        <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialog
+          open={isDeleteDialogOpen}
+          onOpenChange={setIsDeleteDialogOpen}
+        >
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>Xác nhận xóa</AlertDialogTitle>
               <AlertDialogDescription>
-                Bạn có chắc chắn muốn xóa hồ sơ bệnh án này? Hành động này không thể hoàn tác.
+                Bạn có chắc chắn muốn xóa hồ sơ bệnh án này? Hành động này không
+                thể hoàn tác.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Hủy</AlertDialogCancel>
-              <AlertDialogAction onClick={handleDeleteRecord} className="bg-red-600 hover:bg-red-700">
+              <AlertDialogAction
+                onClick={handleDeleteRecord}
+                className="bg-red-600 hover:bg-red-700"
+              >
                 Xóa
               </AlertDialogAction>
             </AlertDialogFooter>

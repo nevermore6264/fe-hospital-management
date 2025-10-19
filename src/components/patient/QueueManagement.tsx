@@ -1,21 +1,56 @@
-import { useState } from 'react';
-import { Button } from './ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
-import { Input } from './ui/input';
-import { Badge } from './ui/badge';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from './ui/alert-dialog';
-import { Label } from './ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
-import { Textarea } from './ui/textarea';
-import { 
-  Search, 
-  Plus, 
-  Edit, 
-  Trash2, 
-  Filter, 
+import { useState } from "react";
+import { Button } from "../ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import { Input } from "../ui/input";
+import { Badge } from "../ui/badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "../ui/alert-dialog";
+import { Label } from "../ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
+import { Textarea } from "../ui/textarea";
+import {
+  Search,
+  Plus,
+  Edit,
+  Trash2,
+  Filter,
   Download,
   Clock,
   User,
@@ -32,8 +67,8 @@ import {
   AlertCircle,
   XCircle,
   UserCheck,
-  Eye
-} from 'lucide-react';
+  Eye,
+} from "lucide-react";
 
 interface QueueItem {
   id: string;
@@ -48,9 +83,15 @@ interface QueueItem {
   doctorName: string;
   department: string;
   room: string;
-  visitType: 'scheduled' | 'walkin' | 'emergency';
-  priority: 'low' | 'normal' | 'high' | 'urgent';
-  status: 'waiting' | 'called' | 'in-progress' | 'completed' | 'no-show' | 'cancelled';
+  visitType: "scheduled" | "walkin" | "emergency";
+  priority: "low" | "normal" | "high" | "urgent";
+  status:
+    | "waiting"
+    | "called"
+    | "in-progress"
+    | "completed"
+    | "no-show"
+    | "cancelled";
   checkedInAt: string;
   calledAt?: string;
   estimatedWaitTime: number; // in minutes
@@ -59,218 +100,224 @@ interface QueueItem {
 
 const mockQueueData: QueueItem[] = [
   {
-    id: 'Q001',
+    id: "Q001",
     queueNumber: 1,
-    patientId: 'PAT001',
-    patientName: 'Nguyễn Thị Lan',
-    patientPhone: '0912345678',
+    patientId: "PAT001",
+    patientName: "Nguyễn Thị Lan",
+    patientPhone: "0912345678",
     patientAge: 35,
-    appointmentId: 'APT001',
-    appointmentTime: '08:00',
-    doctorId: 'DOC001',
-    doctorName: 'Dr. Trần Văn Minh',
-    department: 'Nội khoa',
-    room: 'Phòng khám 1',
-    visitType: 'scheduled',
-    priority: 'normal',
-    status: 'in-progress',
-    checkedInAt: '2024-01-22T07:45:00',
-    calledAt: '2024-01-22T08:05:00',
+    appointmentId: "APT001",
+    appointmentTime: "08:00",
+    doctorId: "DOC001",
+    doctorName: "Dr. Trần Văn Minh",
+    department: "Nội khoa",
+    room: "Phòng khám 1",
+    visitType: "scheduled",
+    priority: "normal",
+    status: "in-progress",
+    checkedInAt: "2024-01-22T07:45:00",
+    calledAt: "2024-01-22T08:05:00",
     estimatedWaitTime: 0,
-    notes: 'Tái khám viêm họng'
+    notes: "Tái khám viêm họng",
   },
   {
-    id: 'Q002',
+    id: "Q002",
     queueNumber: 2,
-    patientId: 'PAT002',
-    patientName: 'Lê Văn Hùng',
-    patientPhone: '0987654321',
+    patientId: "PAT002",
+    patientName: "Lê Văn Hùng",
+    patientPhone: "0987654321",
     patientAge: 45,
-    appointmentId: 'APT002',
-    appointmentTime: '08:30',
-    doctorId: 'DOC001',
-    doctorName: 'Dr. Trần Văn Minh',
-    department: 'Nội khoa',
-    room: 'Phòng khám 1',
-    visitType: 'scheduled',
-    priority: 'high',
-    status: 'called',
-    checkedInAt: '2024-01-22T08:15:00',
-    calledAt: '2024-01-22T08:35:00',
+    appointmentId: "APT002",
+    appointmentTime: "08:30",
+    doctorId: "DOC001",
+    doctorName: "Dr. Trần Văn Minh",
+    department: "Nội khoa",
+    room: "Phòng khám 1",
+    visitType: "scheduled",
+    priority: "high",
+    status: "called",
+    checkedInAt: "2024-01-22T08:15:00",
+    calledAt: "2024-01-22T08:35:00",
     estimatedWaitTime: 5,
-    notes: 'Khám định kỳ huyết áp'
+    notes: "Khám định kỳ huyết áp",
   },
   {
-    id: 'Q003',
+    id: "Q003",
     queueNumber: 3,
-    patientId: 'PAT003',
-    patientName: 'Trần Thị Hoa',
-    patientPhone: '0123456789',
+    patientId: "PAT003",
+    patientName: "Trần Thị Hoa",
+    patientPhone: "0123456789",
     patientAge: 28,
-    appointmentTime: '09:00',
-    doctorId: 'DOC001',
-    doctorName: 'Dr. Trần Văn Minh',
-    department: 'Nội khoa',
-    room: 'Phòng khám 1',
-    visitType: 'scheduled',
-    priority: 'normal',
-    status: 'waiting',
-    checkedInAt: '2024-01-22T08:30:00',
+    appointmentTime: "09:00",
+    doctorId: "DOC001",
+    doctorName: "Dr. Trần Văn Minh",
+    department: "Nội khoa",
+    room: "Phòng khám 1",
+    visitType: "scheduled",
+    priority: "normal",
+    status: "waiting",
+    checkedInAt: "2024-01-22T08:30:00",
     estimatedWaitTime: 15,
-    notes: 'Khám sức khỏe định kỳ'
+    notes: "Khám sức khỏe định kỳ",
   },
   {
-    id: 'Q004',
+    id: "Q004",
     queueNumber: 4,
-    patientId: 'PAT004',
-    patientName: 'Phạm Văn Nam',
-    patientPhone: '0908123456',
+    patientId: "PAT004",
+    patientName: "Phạm Văn Nam",
+    patientPhone: "0908123456",
     patientAge: 52,
-    doctorId: 'DOC002',
-    doctorName: 'Dr. Phạm Thị Mai',
-    department: 'Tim mạch',
-    room: 'Phòng khám 2',
-    visitType: 'walkin',
-    priority: 'urgent',
-    status: 'waiting',
-    checkedInAt: '2024-01-22T08:40:00',
+    doctorId: "DOC002",
+    doctorName: "Dr. Phạm Thị Mai",
+    department: "Tim mạch",
+    room: "Phòng khám 2",
+    visitType: "walkin",
+    priority: "urgent",
+    status: "waiting",
+    checkedInAt: "2024-01-22T08:40:00",
     estimatedWaitTime: 10,
-    notes: 'Đau ngực cấp tính'
+    notes: "Đau ngực cấp tính",
   },
   {
-    id: 'Q005',
+    id: "Q005",
     queueNumber: 5,
-    patientId: 'PAT005',
-    patientName: 'Hoàng Thị Mai',
-    patientPhone: '0945678901',
+    patientId: "PAT005",
+    patientName: "Hoàng Thị Mai",
+    patientPhone: "0945678901",
     patientAge: 33,
-    appointmentId: 'APT005',
-    appointmentTime: '09:30',
-    doctorId: 'DOC003',
-    doctorName: 'Dr. Lê Văn Dũng',
-    department: 'Sản phụ khoa',
-    room: 'Phòng khám 3',
-    visitType: 'scheduled',
-    priority: 'normal',
-    status: 'waiting',
-    checkedInAt: '2024-01-22T09:00:00',
+    appointmentId: "APT005",
+    appointmentTime: "09:30",
+    doctorId: "DOC003",
+    doctorName: "Dr. Lê Văn Dũng",
+    department: "Sản phụ khoa",
+    room: "Phòng khám 3",
+    visitType: "scheduled",
+    priority: "normal",
+    status: "waiting",
+    checkedInAt: "2024-01-22T09:00:00",
     estimatedWaitTime: 25,
-    notes: 'Khám thai định kỳ'
+    notes: "Khám thai định kỳ",
   },
   {
-    id: 'Q006',
+    id: "Q006",
     queueNumber: 6,
-    patientId: 'PAT006',
-    patientName: 'Đỗ Văn Quân',
-    patientPhone: '0967890123',
+    patientId: "PAT006",
+    patientName: "Đỗ Văn Quân",
+    patientPhone: "0967890123",
     patientAge: 60,
-    doctorId: 'DOC001',
-    doctorName: 'Dr. Trần Văn Minh',
-    department: 'Nội khoa',
-    room: 'Phòng khám 1',
-    visitType: 'emergency',
-    priority: 'urgent',
-    status: 'waiting',
-    checkedInAt: '2024-01-22T09:15:00',
+    doctorId: "DOC001",
+    doctorName: "Dr. Trần Văn Minh",
+    department: "Nội khoa",
+    room: "Phòng khám 1",
+    visitType: "emergency",
+    priority: "urgent",
+    status: "waiting",
+    checkedInAt: "2024-01-22T09:15:00",
     estimatedWaitTime: 5,
-    notes: 'Cấp cứu - khó thở'
-  }
+    notes: "Cấp cứu - khó thở",
+  },
 ];
 
 export function QueueManagement() {
   const [queueItems, setQueueItems] = useState<QueueItem[]>(mockQueueData);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [priorityFilter, setPriorityFilter] = useState<string>('all');
-  const [departmentFilter, setDepartmentFilter] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [priorityFilter, setPriorityFilter] = useState<string>("all");
+  const [departmentFilter, setDepartmentFilter] = useState<string>("all");
   const [selectedItem, setSelectedItem] = useState<QueueItem | null>(null);
   const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
-  const [confirmAction, setConfirmAction] = useState<'call' | 'complete' | 'cancel' | 'noshow' | null>(null);
+  const [confirmAction, setConfirmAction] = useState<
+    "call" | "complete" | "cancel" | "noshow" | null
+  >(null);
   const [editingItem, setEditingItem] = useState<QueueItem | null>(null);
 
   const handleCallNext = (item: QueueItem) => {
-    const updatedItems = queueItems.map(qi => 
-      qi.id === item.id 
-        ? { ...qi, status: 'called' as const, calledAt: new Date().toISOString() }
+    const updatedItems = queueItems.map((qi) =>
+      qi.id === item.id
+        ? {
+            ...qi,
+            status: "called" as const,
+            calledAt: new Date().toISOString(),
+          }
         : qi
     );
     setQueueItems(updatedItems);
   };
 
   const handleCompleteVisit = (item: QueueItem) => {
-    const updatedItems = queueItems.map(qi => 
-      qi.id === item.id 
-        ? { ...qi, status: 'completed' as const }
-        : qi
+    const updatedItems = queueItems.map((qi) =>
+      qi.id === item.id ? { ...qi, status: "completed" as const } : qi
     );
     setQueueItems(updatedItems);
   };
 
   const handleNoShow = (item: QueueItem) => {
-    const updatedItems = queueItems.map(qi => 
-      qi.id === item.id 
-        ? { ...qi, status: 'no-show' as const }
-        : qi
+    const updatedItems = queueItems.map((qi) =>
+      qi.id === item.id ? { ...qi, status: "no-show" as const } : qi
     );
     setQueueItems(updatedItems);
   };
 
   const handleCancelVisit = (item: QueueItem) => {
-    const updatedItems = queueItems.map(qi => 
-      qi.id === item.id 
-        ? { ...qi, status: 'cancelled' as const }
-        : qi
+    const updatedItems = queueItems.map((qi) =>
+      qi.id === item.id ? { ...qi, status: "cancelled" as const } : qi
     );
     setQueueItems(updatedItems);
   };
 
   const handleMoveUp = (item: QueueItem) => {
-    const currentIndex = queueItems.findIndex(qi => qi.id === item.id);
+    const currentIndex = queueItems.findIndex((qi) => qi.id === item.id);
     if (currentIndex > 0) {
       const newItems = [...queueItems];
-      [newItems[currentIndex], newItems[currentIndex - 1]] = [newItems[currentIndex - 1], newItems[currentIndex]];
-      
+      [newItems[currentIndex], newItems[currentIndex - 1]] = [
+        newItems[currentIndex - 1],
+        newItems[currentIndex],
+      ];
+
       // Update queue numbers
       newItems[currentIndex].queueNumber = currentIndex + 1;
       newItems[currentIndex - 1].queueNumber = currentIndex;
-      
+
       setQueueItems(newItems);
     }
   };
 
   const handleMoveDown = (item: QueueItem) => {
-    const currentIndex = queueItems.findIndex(qi => qi.id === item.id);
+    const currentIndex = queueItems.findIndex((qi) => qi.id === item.id);
     if (currentIndex < queueItems.length - 1) {
       const newItems = [...queueItems];
-      [newItems[currentIndex], newItems[currentIndex + 1]] = [newItems[currentIndex + 1], newItems[currentIndex]];
-      
+      [newItems[currentIndex], newItems[currentIndex + 1]] = [
+        newItems[currentIndex + 1],
+        newItems[currentIndex],
+      ];
+
       // Update queue numbers
       newItems[currentIndex].queueNumber = currentIndex + 1;
       newItems[currentIndex + 1].queueNumber = currentIndex + 2;
-      
+
       setQueueItems(newItems);
     }
   };
 
   const handleAddToQueue = () => {
     setEditingItem({
-      id: '',
+      id: "",
       queueNumber: queueItems.length + 1,
-      patientId: '',
-      patientName: '',
-      patientPhone: '',
+      patientId: "",
+      patientName: "",
+      patientPhone: "",
       patientAge: 0,
-      doctorId: '',
-      doctorName: '',
-      department: '',
-      room: '',
-      visitType: 'walkin',
-      priority: 'normal',
-      status: 'waiting',
+      doctorId: "",
+      doctorName: "",
+      department: "",
+      room: "",
+      visitType: "walkin",
+      priority: "normal",
+      status: "waiting",
       checkedInAt: new Date().toISOString(),
-      estimatedWaitTime: 0
+      estimatedWaitTime: 0,
     } as QueueItem);
     setIsAddDialogOpen(true);
   };
@@ -279,11 +326,13 @@ export function QueueManagement() {
     if (!editingItem) return;
 
     if (editingItem.id) {
-      setQueueItems(items => items.map(item => item.id === editingItem.id ? editingItem : item));
+      setQueueItems((items) =>
+        items.map((item) => (item.id === editingItem.id ? editingItem : item))
+      );
     } else {
       const newItem = {
         ...editingItem,
-        id: `Q${String(queueItems.length + 1).padStart(3, '0')}`
+        id: `Q${String(queueItems.length + 1).padStart(3, "0")}`,
       };
       setQueueItems([...queueItems, newItem]);
     }
@@ -296,16 +345,16 @@ export function QueueManagement() {
     if (!selectedItem || !confirmAction) return;
 
     switch (confirmAction) {
-      case 'call':
+      case "call":
         handleCallNext(selectedItem);
         break;
-      case 'complete':
+      case "complete":
         handleCompleteVisit(selectedItem);
         break;
-      case 'cancel':
+      case "cancel":
         handleCancelVisit(selectedItem);
         break;
-      case 'noshow':
+      case "noshow":
         handleNoShow(selectedItem);
         break;
     }
@@ -315,34 +364,40 @@ export function QueueManagement() {
     setSelectedItem(null);
   };
 
-  const filteredItems = queueItems.filter(item => {
-    const matchesSearch = item.patientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         item.queueNumber.toString().includes(searchTerm) ||
-                         item.doctorName.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || item.status === statusFilter;
-    const matchesPriority = priorityFilter === 'all' || item.priority === priorityFilter;
-    const matchesDepartment = departmentFilter === 'all' || item.department === departmentFilter;
-    
-    return matchesSearch && matchesStatus && matchesPriority && matchesDepartment;
+  const filteredItems = queueItems.filter((item) => {
+    const matchesSearch =
+      item.patientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.queueNumber.toString().includes(searchTerm) ||
+      item.doctorName.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus =
+      statusFilter === "all" || item.status === statusFilter;
+    const matchesPriority =
+      priorityFilter === "all" || item.priority === priorityFilter;
+    const matchesDepartment =
+      departmentFilter === "all" || item.department === departmentFilter;
+
+    return (
+      matchesSearch && matchesStatus && matchesPriority && matchesDepartment
+    );
   });
 
   const getStatusBadge = (status: string) => {
     const statusStyles = {
-      waiting: 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200',
-      called: 'bg-blue-100 text-blue-800 hover:bg-blue-200',
-      'in-progress': 'bg-green-100 text-green-800 hover:bg-green-200',
-      completed: 'bg-gray-100 text-gray-800 hover:bg-gray-200',
-      'no-show': 'bg-orange-100 text-orange-800 hover:bg-orange-200',
-      cancelled: 'bg-red-100 text-red-800 hover:bg-red-200'
+      waiting: "bg-yellow-100 text-yellow-800 hover:bg-yellow-200",
+      called: "bg-blue-100 text-blue-800 hover:bg-blue-200",
+      "in-progress": "bg-green-100 text-green-800 hover:bg-green-200",
+      completed: "bg-gray-100 text-gray-800 hover:bg-gray-200",
+      "no-show": "bg-orange-100 text-orange-800 hover:bg-orange-200",
+      cancelled: "bg-red-100 text-red-800 hover:bg-red-200",
     };
 
     const statusLabels = {
-      waiting: 'Đang chờ',
-      called: 'Đã gọi',
-      'in-progress': 'Đang khám',
-      completed: 'Hoàn thành',
-      'no-show': 'Vắng mặt',
-      cancelled: 'Đã hủy'
+      waiting: "Đang chờ",
+      called: "Đã gọi",
+      "in-progress": "Đang khám",
+      completed: "Hoàn thành",
+      "no-show": "Vắng mặt",
+      cancelled: "Đã hủy",
     };
 
     return (
@@ -354,21 +409,23 @@ export function QueueManagement() {
 
   const getPriorityBadge = (priority: string) => {
     const priorityStyles = {
-      low: 'bg-gray-100 text-gray-800 hover:bg-gray-200',
-      normal: 'bg-blue-100 text-blue-800 hover:bg-blue-200',
-      high: 'bg-orange-100 text-orange-800 hover:bg-orange-200',
-      urgent: 'bg-red-100 text-red-800 hover:bg-red-200'
+      low: "bg-gray-100 text-gray-800 hover:bg-gray-200",
+      normal: "bg-blue-100 text-blue-800 hover:bg-blue-200",
+      high: "bg-orange-100 text-orange-800 hover:bg-orange-200",
+      urgent: "bg-red-100 text-red-800 hover:bg-red-200",
     };
 
     const priorityLabels = {
-      low: 'Thấp',
-      normal: 'Bình thường',
-      high: 'Cao',
-      urgent: 'Khẩn cấp'
+      low: "Thấp",
+      normal: "Bình thường",
+      high: "Cao",
+      urgent: "Khẩn cấp",
     };
 
     return (
-      <Badge className={priorityStyles[priority as keyof typeof priorityStyles]}>
+      <Badge
+        className={priorityStyles[priority as keyof typeof priorityStyles]}
+      >
         {priorityLabels[priority as keyof typeof priorityLabels]}
       </Badge>
     );
@@ -376,19 +433,21 @@ export function QueueManagement() {
 
   const getVisitTypeBadge = (visitType: string) => {
     const visitTypeStyles = {
-      scheduled: 'bg-primary/10 text-primary hover:bg-primary/20',
-      walkin: 'bg-purple-100 text-purple-800 hover:bg-purple-200',
-      emergency: 'bg-red-100 text-red-800 hover:bg-red-200'
+      scheduled: "bg-primary/10 text-primary hover:bg-primary/20",
+      walkin: "bg-purple-100 text-purple-800 hover:bg-purple-200",
+      emergency: "bg-red-100 text-red-800 hover:bg-red-200",
     };
 
     const visitTypeLabels = {
-      scheduled: 'Đã hẹn',
-      walkin: 'Đến thẳng',
-      emergency: 'Cấp cứu'
+      scheduled: "Đã hẹn",
+      walkin: "Đến thẳng",
+      emergency: "Cấp cứu",
     };
 
     return (
-      <Badge className={visitTypeStyles[visitType as keyof typeof visitTypeStyles]}>
+      <Badge
+        className={visitTypeStyles[visitType as keyof typeof visitTypeStyles]}
+      >
         {visitTypeLabels[visitType as keyof typeof visitTypeLabels]}
       </Badge>
     );
@@ -397,11 +456,17 @@ export function QueueManagement() {
   const getQueueStats = () => {
     return {
       total: queueItems.length,
-      waiting: queueItems.filter(item => item.status === 'waiting').length,
-      called: queueItems.filter(item => item.status === 'called').length,
-      inProgress: queueItems.filter(item => item.status === 'in-progress').length,
-      completed: queueItems.filter(item => item.status === 'completed').length,
-      avgWaitTime: Math.round(queueItems.reduce((acc, item) => acc + item.estimatedWaitTime, 0) / queueItems.length) || 0
+      waiting: queueItems.filter((item) => item.status === "waiting").length,
+      called: queueItems.filter((item) => item.status === "called").length,
+      inProgress: queueItems.filter((item) => item.status === "in-progress")
+        .length,
+      completed: queueItems.filter((item) => item.status === "completed")
+        .length,
+      avgWaitTime:
+        Math.round(
+          queueItems.reduce((acc, item) => acc + item.estimatedWaitTime, 0) /
+            queueItems.length
+        ) || 0,
     };
   };
 
@@ -413,10 +478,17 @@ export function QueueManagement() {
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Quản lý Hàng đợi</h1>
-            <p className="text-gray-600 mt-1">Quản lý và điều phối hàng đợi bệnh nhân</p>
+            <h1 className="text-3xl font-bold text-gray-900">
+              Quản lý Hàng đợi
+            </h1>
+            <p className="text-gray-600 mt-1">
+              Quản lý và điều phối hàng đợi bệnh nhân
+            </p>
           </div>
-          <Button onClick={handleAddToQueue} className="bg-primary hover:bg-primary/90">
+          <Button
+            onClick={handleAddToQueue}
+            className="bg-primary hover:bg-primary/90"
+          >
             <Plus className="w-4 h-4 mr-2" />
             Thêm vào hàng đợi
           </Button>
@@ -536,7 +608,10 @@ export function QueueManagement() {
                   <SelectItem value="low">Thấp</SelectItem>
                 </SelectContent>
               </Select>
-              <Select value={departmentFilter} onValueChange={setDepartmentFilter}>
+              <Select
+                value={departmentFilter}
+                onValueChange={setDepartmentFilter}
+              >
                 <SelectTrigger className="w-full md:w-[140px]">
                   <SelectValue placeholder="Khoa" />
                 </SelectTrigger>
@@ -580,13 +655,17 @@ export function QueueManagement() {
                     <TableCell className="font-bold text-lg">
                       <div className="flex items-center gap-2">
                         {item.queueNumber}
-                        {item.priority === 'urgent' && <AlertCircle className="w-4 h-4 text-red-500" />}
+                        {item.priority === "urgent" && (
+                          <AlertCircle className="w-4 h-4 text-red-500" />
+                        )}
                       </div>
                     </TableCell>
                     <TableCell>
                       <div>
                         <div className="font-medium">{item.patientName}</div>
-                        <div className="text-sm text-gray-500">{item.patientAge} tuổi • {item.patientPhone}</div>
+                        <div className="text-sm text-gray-500">
+                          {item.patientAge} tuổi • {item.patientPhone}
+                        </div>
                       </div>
                     </TableCell>
                     <TableCell>
@@ -635,15 +714,15 @@ export function QueueManagement() {
                         >
                           <Eye className="w-4 h-4" />
                         </Button>
-                        
-                        {item.status === 'waiting' && (
+
+                        {item.status === "waiting" && (
                           <>
                             <Button
                               variant="ghost"
                               size="sm"
                               onClick={() => {
                                 setSelectedItem(item);
-                                setConfirmAction('call');
+                                setConfirmAction("call");
                                 setIsConfirmDialogOpen(true);
                               }}
                               className="text-blue-600 hover:text-blue-700"
@@ -668,14 +747,15 @@ export function QueueManagement() {
                             </Button>
                           </>
                         )}
-                        
-                        {(item.status === 'called' || item.status === 'in-progress') && (
+
+                        {(item.status === "called" ||
+                          item.status === "in-progress") && (
                           <Button
                             variant="ghost"
                             size="sm"
                             onClick={() => {
                               setSelectedItem(item);
-                              setConfirmAction('complete');
+                              setConfirmAction("complete");
                               setIsConfirmDialogOpen(true);
                             }}
                             className="text-green-600 hover:text-green-700"
@@ -683,15 +763,16 @@ export function QueueManagement() {
                             <CheckCircle className="w-4 h-4" />
                           </Button>
                         )}
-                        
-                        {item.status === 'waiting' || item.status === 'called' ? (
+
+                        {item.status === "waiting" ||
+                        item.status === "called" ? (
                           <>
                             <Button
                               variant="ghost"
                               size="sm"
                               onClick={() => {
                                 setSelectedItem(item);
-                                setConfirmAction('noshow');
+                                setConfirmAction("noshow");
                                 setIsConfirmDialogOpen(true);
                               }}
                               className="text-orange-600 hover:text-orange-700"
@@ -703,7 +784,7 @@ export function QueueManagement() {
                               size="sm"
                               onClick={() => {
                                 setSelectedItem(item);
-                                setConfirmAction('cancel');
+                                setConfirmAction("cancel");
                                 setIsConfirmDialogOpen(true);
                               }}
                               className="text-red-600 hover:text-red-700"
@@ -725,7 +806,9 @@ export function QueueManagement() {
         <Dialog open={isDetailDialogOpen} onOpenChange={setIsDetailDialogOpen}>
           <DialogContent className="max-w-2xl">
             <DialogHeader>
-              <DialogTitle>Chi tiết hàng đợi - Số {selectedItem?.queueNumber}</DialogTitle>
+              <DialogTitle>
+                Chi tiết hàng đợi - Số {selectedItem?.queueNumber}
+              </DialogTitle>
               <DialogDescription>
                 Thông tin chi tiết về bệnh nhân trong hàng đợi
               </DialogDescription>
@@ -736,38 +819,52 @@ export function QueueManagement() {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label>Tên bệnh nhân</Label>
-                    <p className="text-sm bg-gray-50 p-2 rounded">{selectedItem.patientName}</p>
+                    <p className="text-sm bg-gray-50 p-2 rounded">
+                      {selectedItem.patientName}
+                    </p>
                   </div>
                   <div>
                     <Label>Tuổi</Label>
-                    <p className="text-sm bg-gray-50 p-2 rounded">{selectedItem.patientAge} tuổi</p>
+                    <p className="text-sm bg-gray-50 p-2 rounded">
+                      {selectedItem.patientAge} tuổi
+                    </p>
                   </div>
                   <div>
                     <Label>Số điện thoại</Label>
-                    <p className="text-sm bg-gray-50 p-2 rounded">{selectedItem.patientPhone}</p>
+                    <p className="text-sm bg-gray-50 p-2 rounded">
+                      {selectedItem.patientPhone}
+                    </p>
                   </div>
                   <div>
                     <Label>Thời gian check-in</Label>
                     <p className="text-sm bg-gray-50 p-2 rounded">
-                      {new Date(selectedItem.checkedInAt).toLocaleString('vi-VN')}
+                      {new Date(selectedItem.checkedInAt).toLocaleString(
+                        "vi-VN"
+                      )}
                     </p>
                   </div>
                   <div>
                     <Label>Bác sĩ</Label>
-                    <p className="text-sm bg-gray-50 p-2 rounded">{selectedItem.doctorName}</p>
+                    <p className="text-sm bg-gray-50 p-2 rounded">
+                      {selectedItem.doctorName}
+                    </p>
                   </div>
                   <div>
                     <Label>Khoa</Label>
-                    <p className="text-sm bg-gray-50 p-2 rounded">{selectedItem.department}</p>
+                    <p className="text-sm bg-gray-50 p-2 rounded">
+                      {selectedItem.department}
+                    </p>
                   </div>
                   <div>
                     <Label>Phòng khám</Label>
-                    <p className="text-sm bg-gray-50 p-2 rounded">{selectedItem.room}</p>
+                    <p className="text-sm bg-gray-50 p-2 rounded">
+                      {selectedItem.room}
+                    </p>
                   </div>
                   <div>
                     <Label>Thời gian hẹn</Label>
                     <p className="text-sm bg-gray-50 p-2 rounded">
-                      {selectedItem.appointmentTime || 'Không có hẹn'}
+                      {selectedItem.appointmentTime || "Không có hẹn"}
                     </p>
                   </div>
                 </div>
@@ -775,22 +872,30 @@ export function QueueManagement() {
                 <div className="grid grid-cols-3 gap-4">
                   <div>
                     <Label>Loại khám</Label>
-                    <div className="mt-1">{getVisitTypeBadge(selectedItem.visitType)}</div>
+                    <div className="mt-1">
+                      {getVisitTypeBadge(selectedItem.visitType)}
+                    </div>
                   </div>
                   <div>
                     <Label>Ưu tiên</Label>
-                    <div className="mt-1">{getPriorityBadge(selectedItem.priority)}</div>
+                    <div className="mt-1">
+                      {getPriorityBadge(selectedItem.priority)}
+                    </div>
                   </div>
                   <div>
                     <Label>Trạng thái</Label>
-                    <div className="mt-1">{getStatusBadge(selectedItem.status)}</div>
+                    <div className="mt-1">
+                      {getStatusBadge(selectedItem.status)}
+                    </div>
                   </div>
                 </div>
 
                 {selectedItem.notes && (
                   <div>
                     <Label>Ghi chú</Label>
-                    <p className="text-sm bg-gray-50 p-3 rounded mt-1">{selectedItem.notes}</p>
+                    <p className="text-sm bg-gray-50 p-3 rounded mt-1">
+                      {selectedItem.notes}
+                    </p>
                   </div>
                 )}
 
@@ -798,7 +903,7 @@ export function QueueManagement() {
                   <div>
                     <Label>Thời gian gọi</Label>
                     <p className="text-sm bg-gray-50 p-2 rounded">
-                      {new Date(selectedItem.calledAt).toLocaleString('vi-VN')}
+                      {new Date(selectedItem.calledAt).toLocaleString("vi-VN")}
                     </p>
                   </div>
                 )}
@@ -825,7 +930,12 @@ export function QueueManagement() {
                     <Input
                       id="patientName"
                       value={editingItem.patientName}
-                      onChange={(e) => setEditingItem({ ...editingItem, patientName: e.target.value })}
+                      onChange={(e) =>
+                        setEditingItem({
+                          ...editingItem,
+                          patientName: e.target.value,
+                        })
+                      }
                       placeholder="Nhập tên bệnh nhân"
                     />
                   </div>
@@ -835,7 +945,12 @@ export function QueueManagement() {
                       id="patientAge"
                       type="number"
                       value={editingItem.patientAge}
-                      onChange={(e) => setEditingItem({ ...editingItem, patientAge: parseInt(e.target.value) })}
+                      onChange={(e) =>
+                        setEditingItem({
+                          ...editingItem,
+                          patientAge: parseInt(e.target.value),
+                        })
+                      }
                       placeholder="Nhập tuổi"
                     />
                   </div>
@@ -844,7 +959,12 @@ export function QueueManagement() {
                     <Input
                       id="patientPhone"
                       value={editingItem.patientPhone}
-                      onChange={(e) => setEditingItem({ ...editingItem, patientPhone: e.target.value })}
+                      onChange={(e) =>
+                        setEditingItem({
+                          ...editingItem,
+                          patientPhone: e.target.value,
+                        })
+                      }
                       placeholder="Nhập số điện thoại"
                     />
                   </div>
@@ -853,8 +973,13 @@ export function QueueManagement() {
                     <Input
                       id="appointmentTime"
                       type="time"
-                      value={editingItem.appointmentTime || ''}
-                      onChange={(e) => setEditingItem({ ...editingItem, appointmentTime: e.target.value })}
+                      value={editingItem.appointmentTime || ""}
+                      onChange={(e) =>
+                        setEditingItem({
+                          ...editingItem,
+                          appointmentTime: e.target.value,
+                        })
+                      }
                     />
                   </div>
                   <div>
@@ -862,7 +987,12 @@ export function QueueManagement() {
                     <Input
                       id="doctorName"
                       value={editingItem.doctorName}
-                      onChange={(e) => setEditingItem({ ...editingItem, doctorName: e.target.value })}
+                      onChange={(e) =>
+                        setEditingItem({
+                          ...editingItem,
+                          doctorName: e.target.value,
+                        })
+                      }
                       placeholder="Nhập tên bác sĩ"
                     />
                   </div>
@@ -870,7 +1000,9 @@ export function QueueManagement() {
                     <Label htmlFor="department">Khoa *</Label>
                     <Select
                       value={editingItem.department}
-                      onValueChange={(value) => setEditingItem({ ...editingItem, department: value })}
+                      onValueChange={(value) =>
+                        setEditingItem({ ...editingItem, department: value })
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Chọn khoa" />
@@ -878,7 +1010,9 @@ export function QueueManagement() {
                       <SelectContent>
                         <SelectItem value="Nội khoa">Nội khoa</SelectItem>
                         <SelectItem value="Tim mạch">Tim mạch</SelectItem>
-                        <SelectItem value="Sản phụ khoa">Sản phụ khoa</SelectItem>
+                        <SelectItem value="Sản phụ khoa">
+                          Sản phụ khoa
+                        </SelectItem>
                         <SelectItem value="Nhi khoa">Nhi khoa</SelectItem>
                         <SelectItem value="Thần kinh">Thần kinh</SelectItem>
                       </SelectContent>
@@ -889,7 +1023,9 @@ export function QueueManagement() {
                     <Input
                       id="room"
                       value={editingItem.room}
-                      onChange={(e) => setEditingItem({ ...editingItem, room: e.target.value })}
+                      onChange={(e) =>
+                        setEditingItem({ ...editingItem, room: e.target.value })
+                      }
                       placeholder="Nhập phòng khám"
                     />
                   </div>
@@ -897,7 +1033,9 @@ export function QueueManagement() {
                     <Label htmlFor="visitType">Loại khám</Label>
                     <Select
                       value={editingItem.visitType}
-                      onValueChange={(value: any) => setEditingItem({ ...editingItem, visitType: value })}
+                      onValueChange={(value: any) =>
+                        setEditingItem({ ...editingItem, visitType: value })
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Chọn loại khám" />
@@ -913,7 +1051,9 @@ export function QueueManagement() {
                     <Label htmlFor="priority">Mức ưu tiên</Label>
                     <Select
                       value={editingItem.priority}
-                      onValueChange={(value: any) => setEditingItem({ ...editingItem, priority: value })}
+                      onValueChange={(value: any) =>
+                        setEditingItem({ ...editingItem, priority: value })
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Chọn mức ưu tiên" />
@@ -927,12 +1067,19 @@ export function QueueManagement() {
                     </Select>
                   </div>
                   <div>
-                    <Label htmlFor="estimatedWaitTime">Thời gian chờ dự kiến (phút)</Label>
+                    <Label htmlFor="estimatedWaitTime">
+                      Thời gian chờ dự kiến (phút)
+                    </Label>
                     <Input
                       id="estimatedWaitTime"
                       type="number"
                       value={editingItem.estimatedWaitTime}
-                      onChange={(e) => setEditingItem({ ...editingItem, estimatedWaitTime: parseInt(e.target.value) })}
+                      onChange={(e) =>
+                        setEditingItem({
+                          ...editingItem,
+                          estimatedWaitTime: parseInt(e.target.value),
+                        })
+                      }
                       placeholder="0"
                     />
                   </div>
@@ -942,8 +1089,10 @@ export function QueueManagement() {
                   <Label htmlFor="notes">Ghi chú</Label>
                   <Textarea
                     id="notes"
-                    value={editingItem.notes || ''}
-                    onChange={(e) => setEditingItem({ ...editingItem, notes: e.target.value })}
+                    value={editingItem.notes || ""}
+                    onChange={(e) =>
+                      setEditingItem({ ...editingItem, notes: e.target.value })
+                    }
                     placeholder="Nhập ghi chú (tùy chọn)"
                     rows={3}
                   />
@@ -952,10 +1101,16 @@ export function QueueManagement() {
             )}
 
             <div className="flex justify-end gap-2 mt-6">
-              <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
+              <Button
+                variant="outline"
+                onClick={() => setIsAddDialogOpen(false)}
+              >
                 Hủy
               </Button>
-              <Button onClick={handleSaveQueueItem} className="bg-primary hover:bg-primary/90">
+              <Button
+                onClick={handleSaveQueueItem}
+                className="bg-primary hover:bg-primary/90"
+              >
                 Thêm vào hàng đợi
               </Button>
             </div>
@@ -963,25 +1118,35 @@ export function QueueManagement() {
         </Dialog>
 
         {/* Confirm Action Dialog */}
-        <AlertDialog open={isConfirmDialogOpen} onOpenChange={setIsConfirmDialogOpen}>
+        <AlertDialog
+          open={isConfirmDialogOpen}
+          onOpenChange={setIsConfirmDialogOpen}
+        >
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>
-                {confirmAction === 'call' && 'Gọi bệnh nhân'}
-                {confirmAction === 'complete' && 'Hoàn thành khám'}
-                {confirmAction === 'cancel' && 'Hủy lịch khám'}
-                {confirmAction === 'noshow' && 'Đánh dấu vắng mặt'}
+                {confirmAction === "call" && "Gọi bệnh nhân"}
+                {confirmAction === "complete" && "Hoàn thành khám"}
+                {confirmAction === "cancel" && "Hủy lịch khám"}
+                {confirmAction === "noshow" && "Đánh dấu vắng mặt"}
               </AlertDialogTitle>
               <AlertDialogDescription>
-                {confirmAction === 'call' && `Bạn có muốn gọi bệnh nhân ${selectedItem?.patientName} (số ${selectedItem?.queueNumber})?`}
-                {confirmAction === 'complete' && `Bạn có muốn đánh dấu hoàn thành khám cho bệnh nhân ${selectedItem?.patientName}?`}
-                {confirmAction === 'cancel' && `Bạn có muốn hủy lịch khám của bệnh nhân ${selectedItem?.patientName}?`}
-                {confirmAction === 'noshow' && `Bạn có muốn đánh dấu bệnh nhân ${selectedItem?.patientName} vắng mặt?`}
+                {confirmAction === "call" &&
+                  `Bạn có muốn gọi bệnh nhân ${selectedItem?.patientName} (số ${selectedItem?.queueNumber})?`}
+                {confirmAction === "complete" &&
+                  `Bạn có muốn đánh dấu hoàn thành khám cho bệnh nhân ${selectedItem?.patientName}?`}
+                {confirmAction === "cancel" &&
+                  `Bạn có muốn hủy lịch khám của bệnh nhân ${selectedItem?.patientName}?`}
+                {confirmAction === "noshow" &&
+                  `Bạn có muốn đánh dấu bệnh nhân ${selectedItem?.patientName} vắng mặt?`}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Hủy</AlertDialogCancel>
-              <AlertDialogAction onClick={confirmActionHandler} className="bg-primary hover:bg-primary/90">
+              <AlertDialogAction
+                onClick={confirmActionHandler}
+                className="bg-primary hover:bg-primary/90"
+              >
                 Xác nhận
               </AlertDialogAction>
             </AlertDialogFooter>

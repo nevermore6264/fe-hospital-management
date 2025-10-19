@@ -1,15 +1,27 @@
-import { useState } from 'react';
-import { Button } from './ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
-import { Switch } from './ui/switch';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
-import { Textarea } from './ui/textarea';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { Badge } from './ui/badge';
-import { 
+import { useState } from "react";
+import { Button } from "../ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Switch } from "../ui/switch";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { Textarea } from "../ui/textarea";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Badge } from "../ui/badge";
+import {
   Settings,
   User,
   Bell,
@@ -26,8 +38,8 @@ import {
   Key,
   Users,
   Calendar,
-  DollarSign
-} from 'lucide-react';
+  DollarSign,
+} from "lucide-react";
 
 export function SettingsManagement() {
   const [notifications, setNotifications] = useState({
@@ -36,29 +48,30 @@ export function SettingsManagement() {
     push: true,
     appointments: true,
     payments: true,
-    system: false
+    system: false,
   });
 
   const [hospitalInfo, setHospitalInfo] = useState({
-    name: 'Bệnh viện Đa khoa Quốc tế',
-    address: '123 Đường ABC, Quận 1, TP.HCM',
-    phone: '028 1234 5678',
-    email: 'info@hospital.com',
-    website: 'www.hospital.com',
-    logo: '',
-    description: 'Bệnh viện hàng đầu với đội ngũ bác sĩ giàu kinh nghiệm và trang thiết bị hiện đại.'
+    name: "Bệnh viện Đa khoa Quốc tế",
+    address: "123 Đường ABC, Quận 1, TP.HCM",
+    phone: "028 1234 5678",
+    email: "info@hospital.com",
+    website: "www.hospital.com",
+    logo: "",
+    description:
+      "Bệnh viện hàng đầu với đội ngũ bác sĩ giàu kinh nghiệm và trang thiết bị hiện đại.",
   });
 
   const [systemSettings, setSystemSettings] = useState({
-    timeZone: 'Asia/Ho_Chi_Minh',
-    language: 'vi',
-    currency: 'VND',
+    timeZone: "Asia/Ho_Chi_Minh",
+    language: "vi",
+    currency: "VND",
     appointmentDuration: 30,
     workingHours: {
-      start: '08:00',
-      end: '17:00'
+      start: "08:00",
+      end: "17:00",
     },
-    maxAppointmentsPerDay: 50
+    maxAppointmentsPerDay: 50,
   });
 
   return (
@@ -66,8 +79,12 @@ export function SettingsManagement() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-semibold text-gray-900">Cài đặt Hệ thống</h1>
-          <p className="text-gray-600 mt-1">Quản lý cấu hình và tùy chỉnh hệ thống</p>
+          <h1 className="text-3xl font-semibold text-gray-900">
+            Cài đặt Hệ thống
+          </h1>
+          <p className="text-gray-600 mt-1">
+            Quản lý cấu hình và tùy chỉnh hệ thống
+          </p>
         </div>
         <Button className="gap-2 bg-blue-600 hover:bg-blue-700">
           <Save className="h-4 w-4" />
@@ -101,61 +118,88 @@ export function SettingsManagement() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label htmlFor="hospitalName">Tên bệnh viện</Label>
-                  <Input 
+                  <Input
                     id="hospitalName"
                     value={hospitalInfo.name}
-                    onChange={(e) => setHospitalInfo({...hospitalInfo, name: e.target.value})}
+                    onChange={(e) =>
+                      setHospitalInfo({ ...hospitalInfo, name: e.target.value })
+                    }
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="hospitalPhone">Số điện thoại</Label>
-                  <Input 
+                  <Input
                     id="hospitalPhone"
                     value={hospitalInfo.phone}
-                    onChange={(e) => setHospitalInfo({...hospitalInfo, phone: e.target.value})}
+                    onChange={(e) =>
+                      setHospitalInfo({
+                        ...hospitalInfo,
+                        phone: e.target.value,
+                      })
+                    }
                   />
                 </div>
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="hospitalAddress">Địa chỉ</Label>
-                <Input 
+                <Input
                   id="hospitalAddress"
                   value={hospitalInfo.address}
-                  onChange={(e) => setHospitalInfo({...hospitalInfo, address: e.target.value})}
+                  onChange={(e) =>
+                    setHospitalInfo({
+                      ...hospitalInfo,
+                      address: e.target.value,
+                    })
+                  }
                 />
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label htmlFor="hospitalEmail">Email</Label>
-                  <Input 
+                  <Input
                     id="hospitalEmail"
                     type="email"
                     value={hospitalInfo.email}
-                    onChange={(e) => setHospitalInfo({...hospitalInfo, email: e.target.value})}
+                    onChange={(e) =>
+                      setHospitalInfo({
+                        ...hospitalInfo,
+                        email: e.target.value,
+                      })
+                    }
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="hospitalWebsite">Website</Label>
-                  <Input 
+                  <Input
                     id="hospitalWebsite"
                     value={hospitalInfo.website}
-                    onChange={(e) => setHospitalInfo({...hospitalInfo, website: e.target.value})}
+                    onChange={(e) =>
+                      setHospitalInfo({
+                        ...hospitalInfo,
+                        website: e.target.value,
+                      })
+                    }
                   />
                 </div>
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="hospitalDescription">Mô tả</Label>
-                <Textarea 
+                <Textarea
                   id="hospitalDescription"
                   value={hospitalInfo.description}
-                  onChange={(e) => setHospitalInfo({...hospitalInfo, description: e.target.value})}
+                  onChange={(e) =>
+                    setHospitalInfo({
+                      ...hospitalInfo,
+                      description: e.target.value,
+                    })
+                  }
                   rows={3}
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <Label>Logo bệnh viện</Label>
                 <div className="flex items-center gap-4">
@@ -203,7 +247,7 @@ export function SettingsManagement() {
                   <p className="text-sm text-gray-500">JPG, PNG tối đa 2MB</p>
                 </div>
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label htmlFor="firstName">Họ</Label>
@@ -214,23 +258,29 @@ export function SettingsManagement() {
                   <Input id="lastName" defaultValue="Văn A" />
                 </div>
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label htmlFor="userEmail">Email</Label>
-                  <Input id="userEmail" type="email" defaultValue="admin@hospital.com" />
+                  <Input
+                    id="userEmail"
+                    type="email"
+                    defaultValue="admin@hospital.com"
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="userPhone">Số điện thoại</Label>
                   <Input id="userPhone" defaultValue="0123456789" />
                 </div>
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="userRole">Vai trò</Label>
                 <div className="flex items-center gap-2">
                   <Badge className="bg-blue-100 text-blue-800">ADMIN</Badge>
-                  <span className="text-sm text-gray-500">Quản trị viên hệ thống</span>
+                  <span className="text-sm text-gray-500">
+                    Quản trị viên hệ thống
+                  </span>
                 </div>
               </div>
             </CardContent>
@@ -256,71 +306,101 @@ export function SettingsManagement() {
                   <div className="flex items-center justify-between">
                     <div className="space-y-0.5">
                       <Label>Email</Label>
-                      <p className="text-sm text-gray-500">Nhận thông báo qua email</p>
+                      <p className="text-sm text-gray-500">
+                        Nhận thông báo qua email
+                      </p>
                     </div>
-                    <Switch 
+                    <Switch
                       checked={notifications.email}
-                      onCheckedChange={(checked) => setNotifications({...notifications, email: checked})}
+                      onCheckedChange={(checked) =>
+                        setNotifications({ ...notifications, email: checked })
+                      }
                     />
                   </div>
-                  
+
                   <div className="flex items-center justify-between">
                     <div className="space-y-0.5">
                       <Label>SMS</Label>
-                      <p className="text-sm text-gray-500">Nhận thông báo qua tin nhắn</p>
+                      <p className="text-sm text-gray-500">
+                        Nhận thông báo qua tin nhắn
+                      </p>
                     </div>
-                    <Switch 
+                    <Switch
                       checked={notifications.sms}
-                      onCheckedChange={(checked) => setNotifications({...notifications, sms: checked})}
+                      onCheckedChange={(checked) =>
+                        setNotifications({ ...notifications, sms: checked })
+                      }
                     />
                   </div>
-                  
+
                   <div className="flex items-center justify-between">
                     <div className="space-y-0.5">
                       <Label>Push notification</Label>
-                      <p className="text-sm text-gray-500">Thông báo đẩy trên trình duyệt</p>
+                      <p className="text-sm text-gray-500">
+                        Thông báo đẩy trên trình duyệt
+                      </p>
                     </div>
-                    <Switch 
+                    <Switch
                       checked={notifications.push}
-                      onCheckedChange={(checked) => setNotifications({...notifications, push: checked})}
+                      onCheckedChange={(checked) =>
+                        setNotifications({ ...notifications, push: checked })
+                      }
                     />
                   </div>
                 </div>
               </div>
-              
+
               <div className="space-y-4">
                 <h4 className="font-medium">Loại thông báo</h4>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="space-y-0.5">
                       <Label>Lịch hẹn mới</Label>
-                      <p className="text-sm text-gray-500">Thông báo khi có lịch hẹn mới</p>
+                      <p className="text-sm text-gray-500">
+                        Thông báo khi có lịch hẹn mới
+                      </p>
                     </div>
-                    <Switch 
+                    <Switch
                       checked={notifications.appointments}
-                      onCheckedChange={(checked) => setNotifications({...notifications, appointments: checked})}
+                      onCheckedChange={(checked) =>
+                        setNotifications({
+                          ...notifications,
+                          appointments: checked,
+                        })
+                      }
                     />
                   </div>
-                  
+
                   <div className="flex items-center justify-between">
                     <div className="space-y-0.5">
                       <Label>Thanh toán</Label>
-                      <p className="text-sm text-gray-500">Thông báo về thanh toán và hóa đơn</p>
+                      <p className="text-sm text-gray-500">
+                        Thông báo về thanh toán và hóa đơn
+                      </p>
                     </div>
-                    <Switch 
+                    <Switch
                       checked={notifications.payments}
-                      onCheckedChange={(checked) => setNotifications({...notifications, payments: checked})}
+                      onCheckedChange={(checked) =>
+                        setNotifications({
+                          ...notifications,
+                          payments: checked,
+                        })
+                      }
                     />
                   </div>
-                  
+
                   <div className="flex items-center justify-between">
                     <div className="space-y-0.5">
                       <Label>Hệ thống</Label>
-                      <p className="text-sm text-gray-500">Cập nhật và bảo trì hệ thống</p>
+                      <p className="text-sm text-gray-500">
+                        Cập nhật và bảo trì hệ thống
+                      </p>
                     </div>
-                    <Switch 
+                    <Switch
                       checked={notifications.system}
-                      onCheckedChange={(checked) => setNotifications({...notifications, system: checked})}
+                      onCheckedChange={(checked) =>
+                        setNotifications({ ...notifications, system: checked })
+                      }
                     />
                   </div>
                 </div>
@@ -354,7 +434,9 @@ export function SettingsManagement() {
                     <Input id="newPassword" type="password" />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="confirmPassword">Xác nhận mật khẩu mới</Label>
+                    <Label htmlFor="confirmPassword">
+                      Xác nhận mật khẩu mới
+                    </Label>
                     <Input id="confirmPassword" type="password" />
                   </div>
                   <Button className="w-full md:w-auto">
@@ -362,34 +444,44 @@ export function SettingsManagement() {
                   </Button>
                 </div>
               </div>
-              
+
               <div className="space-y-4">
                 <h4 className="font-medium">Xác thực 2 lớp</h4>
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
                     <Label>Bật xác thực 2 lớp</Label>
-                    <p className="text-sm text-gray-500">Tăng cường bảo mật với OTP</p>
+                    <p className="text-sm text-gray-500">
+                      Tăng cường bảo mật với OTP
+                    </p>
                   </div>
                   <Switch />
                 </div>
               </div>
-              
+
               <div className="space-y-4">
                 <h4 className="font-medium">Phiên đăng nhập</h4>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                     <div>
                       <p className="font-medium">Chrome trên Windows</p>
-                      <p className="text-sm text-gray-500">IP: 192.168.1.100 • Hiện tại</p>
+                      <p className="text-sm text-gray-500">
+                        IP: 192.168.1.100 • Hiện tại
+                      </p>
                     </div>
-                    <Badge className="bg-green-100 text-green-800">Đang hoạt động</Badge>
+                    <Badge className="bg-green-100 text-green-800">
+                      Đang hoạt động
+                    </Badge>
                   </div>
                   <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                     <div>
                       <p className="font-medium">Mobile App</p>
-                      <p className="text-sm text-gray-500">IP: 192.168.1.101 • 2 giờ trước</p>
+                      <p className="text-sm text-gray-500">
+                        IP: 192.168.1.101 • 2 giờ trước
+                      </p>
                     </div>
-                    <Button variant="outline" size="sm">Đăng xuất</Button>
+                    <Button variant="outline" size="sm">
+                      Đăng xuất
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -410,25 +502,35 @@ export function SettingsManagement() {
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="timezone">Múi giờ</Label>
-                  <Select value={systemSettings.timeZone} onValueChange={(value) => 
-                    setSystemSettings({...systemSettings, timeZone: value})
-                  }>
+                  <Select
+                    value={systemSettings.timeZone}
+                    onValueChange={(value) =>
+                      setSystemSettings({ ...systemSettings, timeZone: value })
+                    }
+                  >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Asia/Ho_Chi_Minh">GMT+7 (Việt Nam)</SelectItem>
-                      <SelectItem value="Asia/Bangkok">GMT+7 (Bangkok)</SelectItem>
+                      <SelectItem value="Asia/Ho_Chi_Minh">
+                        GMT+7 (Việt Nam)
+                      </SelectItem>
+                      <SelectItem value="Asia/Bangkok">
+                        GMT+7 (Bangkok)
+                      </SelectItem>
                       <SelectItem value="UTC">UTC</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="language">Ngôn ngữ</Label>
-                  <Select value={systemSettings.language} onValueChange={(value) => 
-                    setSystemSettings({...systemSettings, language: value})
-                  }>
+                  <Select
+                    value={systemSettings.language}
+                    onValueChange={(value) =>
+                      setSystemSettings({ ...systemSettings, language: value })
+                    }
+                  >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
@@ -438,12 +540,15 @@ export function SettingsManagement() {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="currency">Đơn vị tiền tệ</Label>
-                  <Select value={systemSettings.currency} onValueChange={(value) => 
-                    setSystemSettings({...systemSettings, currency: value})
-                  }>
+                  <Select
+                    value={systemSettings.currency}
+                    onValueChange={(value) =>
+                      setSystemSettings({ ...systemSettings, currency: value })
+                    }
+                  >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
@@ -465,55 +570,73 @@ export function SettingsManagement() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="appointmentDuration">Thời gian khám (phút)</Label>
-                  <Input 
-                    id="appointmentDuration" 
+                  <Label htmlFor="appointmentDuration">
+                    Thời gian khám (phút)
+                  </Label>
+                  <Input
+                    id="appointmentDuration"
                     type="number"
                     value={systemSettings.appointmentDuration}
-                    onChange={(e) => setSystemSettings({
-                      ...systemSettings, 
-                      appointmentDuration: parseInt(e.target.value)
-                    })}
+                    onChange={(e) =>
+                      setSystemSettings({
+                        ...systemSettings,
+                        appointmentDuration: parseInt(e.target.value),
+                      })
+                    }
                   />
                 </div>
-                
+
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="workStart">Giờ bắt đầu</Label>
-                    <Input 
-                      id="workStart" 
+                    <Input
+                      id="workStart"
                       type="time"
                       value={systemSettings.workingHours.start}
-                      onChange={(e) => setSystemSettings({
-                        ...systemSettings, 
-                        workingHours: {...systemSettings.workingHours, start: e.target.value}
-                      })}
+                      onChange={(e) =>
+                        setSystemSettings({
+                          ...systemSettings,
+                          workingHours: {
+                            ...systemSettings.workingHours,
+                            start: e.target.value,
+                          },
+                        })
+                      }
                     />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="workEnd">Giờ kết thúc</Label>
-                    <Input 
-                      id="workEnd" 
+                    <Input
+                      id="workEnd"
                       type="time"
                       value={systemSettings.workingHours.end}
-                      onChange={(e) => setSystemSettings({
-                        ...systemSettings, 
-                        workingHours: {...systemSettings.workingHours, end: e.target.value}
-                      })}
+                      onChange={(e) =>
+                        setSystemSettings({
+                          ...systemSettings,
+                          workingHours: {
+                            ...systemSettings.workingHours,
+                            end: e.target.value,
+                          },
+                        })
+                      }
                     />
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
-                  <Label htmlFor="maxAppointments">Số lịch hẹn tối đa/ngày</Label>
-                  <Input 
-                    id="maxAppointments" 
+                  <Label htmlFor="maxAppointments">
+                    Số lịch hẹn tối đa/ngày
+                  </Label>
+                  <Input
+                    id="maxAppointments"
                     type="number"
                     value={systemSettings.maxAppointmentsPerDay}
-                    onChange={(e) => setSystemSettings({
-                      ...systemSettings, 
-                      maxAppointmentsPerDay: parseInt(e.target.value)
-                    })}
+                    onChange={(e) =>
+                      setSystemSettings({
+                        ...systemSettings,
+                        maxAppointmentsPerDay: parseInt(e.target.value),
+                      })
+                    }
                   />
                 </div>
               </CardContent>
@@ -538,16 +661,18 @@ export function SettingsManagement() {
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
                     <Label>Sao lưu tự động</Label>
-                    <p className="text-sm text-gray-500">Tự động sao lưu dữ liệu hàng ngày</p>
+                    <p className="text-sm text-gray-500">
+                      Tự động sao lưu dữ liệu hàng ngày
+                    </p>
                   </div>
                   <Switch defaultChecked />
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="backupTime">Thời gian sao lưu</Label>
                   <Input id="backupTime" type="time" defaultValue="02:00" />
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="retentionDays">Lưu trữ (ngày)</Label>
                   <Select defaultValue="30">
@@ -563,7 +688,7 @@ export function SettingsManagement() {
                   </Select>
                 </div>
               </div>
-              
+
               <div className="space-y-4">
                 <h4 className="font-medium">Sao lưu thủ công</h4>
                 <div className="flex gap-3">
@@ -577,28 +702,40 @@ export function SettingsManagement() {
                   </Button>
                 </div>
               </div>
-              
+
               <div className="space-y-4">
                 <h4 className="font-medium">Lịch sử sao lưu</h4>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                     <div>
                       <p className="font-medium">backup_2024_01_20.sql</p>
-                      <p className="text-sm text-gray-500">20/01/2024 02:00 • 156 MB</p>
+                      <p className="text-sm text-gray-500">
+                        20/01/2024 02:00 • 156 MB
+                      </p>
                     </div>
                     <div className="flex gap-2">
-                      <Button variant="outline" size="sm">Tải xuống</Button>
-                      <Button variant="outline" size="sm">Phục hồi</Button>
+                      <Button variant="outline" size="sm">
+                        Tải xuống
+                      </Button>
+                      <Button variant="outline" size="sm">
+                        Phục hồi
+                      </Button>
                     </div>
                   </div>
                   <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                     <div>
                       <p className="font-medium">backup_2024_01_19.sql</p>
-                      <p className="text-sm text-gray-500">19/01/2024 02:00 • 154 MB</p>
+                      <p className="text-sm text-gray-500">
+                        19/01/2024 02:00 • 154 MB
+                      </p>
                     </div>
                     <div className="flex gap-2">
-                      <Button variant="outline" size="sm">Tải xuống</Button>
-                      <Button variant="outline" size="sm">Phục hồi</Button>
+                      <Button variant="outline" size="sm">
+                        Tải xuống
+                      </Button>
+                      <Button variant="outline" size="sm">
+                        Phục hồi
+                      </Button>
                     </div>
                   </div>
                 </div>
