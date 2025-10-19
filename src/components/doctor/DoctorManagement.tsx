@@ -46,7 +46,7 @@ import {
   TableRow,
 } from "../ui/table";
 import { Textarea } from "../ui/textarea";
-import { useAuth } from "./AuthContext";
+import { useAuth } from "../auth/AuthContext";
 import {
   Search,
   Plus,

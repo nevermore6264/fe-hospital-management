@@ -8,10 +8,10 @@ import {
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { useAuth } from "./AuthContext";
-import { useNotifications } from "./NotificationSystem";
-import { usePWA, useNetworkStatus } from "./PWAHooks";
-import { StatusIndicator } from "./StatusIndicator";
+import { useAuth } from "../auth/AuthContext";
+import { useNotifications } from "../communication/NotificationSystem";
+import { usePWA, useNetworkStatus } from "../common/PWAHooks";
+import { StatusIndicator } from "../common/StatusIndicator";
 import {
   Users,
   Calendar,

@@ -61,8 +61,8 @@ import {
   CalendarDays,
   List,
 } from "lucide-react";
-import { Appointment } from "./types";
-import { useAuth } from "./AuthContext";
+import { Appointment } from "../types";
+import { useAuth } from "../auth/AuthContext";
 
 // Mock data
 const mockAppointments: Appointment[] = [
@@ -139,8 +139,12 @@ export function AppointmentManagement() {
     doctorName: "",
     date: "",
     time: "",
-    type: "",
-    status: "",
+    type: "consultation" as "consultation" | "follow-up" | "emergency",
+    status: "scheduled" as
+      | "scheduled"
+      | "in-progress"
+      | "completed"
+      | "cancelled",
     symptoms: "",
     fee: 0,
   });
@@ -231,7 +235,19 @@ export function AppointmentManagement() {
     if (selectedAppointment) {
       setAppointments(
         appointments.map((a) =>
-          a.id === selectedAppointment.id ? { ...a, ...editForm } : a
+          a.id === selectedAppointment.id
+            ? {
+                ...a,
+                patientName: editForm.patientName,
+                doctorName: editForm.doctorName,
+                date: editForm.date,
+                time: editForm.time,
+                type: editForm.type,
+                status: editForm.status,
+                symptoms: editForm.symptoms,
+                fee: editForm.fee,
+              }
+            : a
         )
       );
       setIsEditDialogOpen(false);
@@ -239,10 +255,13 @@ export function AppointmentManagement() {
     }
   };
 
-  const handleStatusChange = (appointmentId: string, newStatus: string) => {
+  const handleStatusChange = (
+    appointmentId: string,
+    newStatus: "scheduled" | "in-progress" | "completed" | "cancelled"
+  ) => {
     setAppointments((prev) =>
       prev.map((apt) =>
-        apt.id === appointmentId ? { ...apt, status: newStatus as any } : apt
+        apt.id === appointmentId ? { ...apt, status: newStatus } : apt
       )
     );
   };
@@ -633,7 +652,7 @@ export function AppointmentManagement() {
                           <AvatarFallback>
                             {appointment.patientName
                               .split(" ")
-                              .map((n) => n[0])
+                              .map((n: string) => n[0])
                               .join("")}
                           </AvatarFallback>
                         </Avatar>
@@ -760,7 +779,7 @@ export function AppointmentManagement() {
                       <AvatarFallback>
                         {selectedAppointment.patientName
                           .split(" ")
-                          .map((n) => n[0])
+                          .map((n: string) => n[0])
                           .join("")}
                       </AvatarFallback>
                     </Avatar>
