@@ -156,4 +156,11 @@ temp/
 .vercel
 
 # Supabase
-.supabase
+.supabase"backend/services-v2/*/node_modules/" 
+"backend/services-v2/*/.jest-cache/" 
+
+# Jest cache
+**/.jest-cache/
+**/node_modules/
+backend/services-v2/*/node_modules/
+backend/services-v2/*/.jest-cache/

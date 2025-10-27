@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -13,30 +13,24 @@ import {
 } from "../ui/card";
 import { Alert, AlertDescription } from "../ui/alert";
 import { Badge } from "../ui/badge";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "../ui/collapsible";
 import { useAuth } from "./AuthContext";
-import { motion, AnimatePresence } from "motion/react";
+import { authService } from "./services";
+import type { LoginRequest } from "./services";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Heart,
   AlertCircle,
   Shield,
   Users,
   Calendar,
-  Activity,
-  Stethoscope,
-  Monitor,
   Clock,
-  Zap,
   ArrowLeft,
   Eye,
   EyeOff,
   Sparkles,
   Lock,
   Mail,
+  Stethoscope,
 } from "lucide-react";
 
 export function LoginForm({
@@ -48,16 +42,64 @@ export function LoginForm({
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
-  const [loadingAccountEmail, setLoadingAccountEmail] = useState<string | null>(
-    null
-  );
   const [showPassword, setShowPassword] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const { login } = useAuth();
 
+  // Utility functions for error handling
+  const handleAuthError = (error: string, message?: string) => {
+    switch (error) {
+      case "INVALID_CREDENTIALS":
+        return "Sai thông tin đăng nhập. Vui lòng kiểm tra lại email và mật khẩu.";
+      case "EMAIL_NOT_VERIFIED":
+        return "Email chưa được xác thực. Vui lòng kiểm tra email và click vào link xác thực.";
+      case "ACCOUNT_LOCKED":
+        return "Tài khoản đã bị khóa. Vui lòng liên hệ quản trị viên.";
+      case "MFA_REQUIRED":
+        return "Cần xác thực 2 bước. Vui lòng nhập mã từ ứng dụng xác thực.";
+      case "TOKEN_EXPIRED":
+        return "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.";
+      case "PASSWORD_TOO_WEAK":
+        return "Mật khẩu quá yếu. Vui lòng chọn mật khẩu mạnh hơn.";
+      case "EMAIL_ALREADY_EXISTS":
+        return "Email đã được sử dụng. Vui lòng chọn email khác.";
+      default:
+        return message || "Đã xảy ra lỗi. Vui lòng thử lại sau.";
+    }
+  };
+
+  // Check authentication status
+  const checkAuthStatus = () => {
+    const isAuthenticated = authService.isAuthenticated();
+    const currentUser = authService.getCurrentUser();
+    const currentToken = authService.getCurrentToken();
+    const isMfaEnabled = authService.isMfaEnabled();
+
+    console.log("Auth Status:", {
+      isAuthenticated,
+      user: currentUser,
+      hasToken: !!currentToken,
+      mfaEnabled: isMfaEnabled,
+    });
+
+    return {
+      isAuthenticated,
+      user: currentUser,
+      hasToken: !!currentToken,
+      mfaEnabled: isMfaEnabled,
+    };
+  };
+
   useEffect(() => {
     setIsVisible(true);
+
+    // Check authentication status on mount
+    const authStatus = checkAuthStatus();
+    if (authStatus.isAuthenticated && authStatus.user) {
+      console.log(
+        `User ${authStatus.user.fullName} (${authStatus.user.email}) is already logged in`
+      );
+    }
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -66,86 +108,49 @@ export function LoginForm({
     setLoading(true);
 
     try {
-      const success = await login(email, password);
-      if (!success) {
-        setError("Email hoặc mật khẩu không đúng");
+      const loginData: LoginRequest = {
+        email,
+        password,
+        deviceInfo: {
+          platform: "web",
+          browser: navigator.userAgent.includes("Chrome") ? "Chrome" : "Other",
+          version: navigator.userAgent,
+        },
+      };
+
+      const response = await authService.login(loginData);
+
+      if (response.success && response.data) {
+        // Check if MFA is required
+        if (response.data.requiresMfa) {
+          setError(
+            `Cần xác thực 2 bước. Vui lòng kiểm tra ${
+              response.data.mfaMethod === "EMAIL"
+                ? "email"
+                : "ứng dụng xác thực"
+            }`
+          );
+          return;
+        }
+
+        // Login successful, update auth context
+        const success = await login(email, password);
+        if (!success) {
+          setError("Đăng nhập không thành công");
+        }
+      } else {
+        // Handle different error types
+        const errorMessage = handleAuthError(
+          response.error || "UNKNOWN_ERROR",
+          response.message
+        );
+        setError(errorMessage);
       }
     } catch (err) {
-      setError("Đã xảy ra lỗi khi đăng nhập");
+      console.error("Login error:", err);
+      setError("Lỗi kết nối mạng. Vui lòng thử lại sau.");
     } finally {
       setLoading(false);
-    }
-  };
-
-  const demoAccounts = [
-    {
-      role: "ADMIN",
-      email: "admin@hospital.com",
-      password: "admin123",
-      color: "bg-red-500",
-      icon: Shield,
-    },
-    {
-      role: "DOCTOR",
-      email: "doctor@hospital.com",
-      password: "doctor123",
-      color: "bg-blue-500",
-      icon: Stethoscope,
-    },
-    {
-      role: "PATIENT",
-      email: "patient@hospital.com",
-      password: "patient123",
-      color: "bg-green-500",
-      icon: Users,
-    },
-    {
-      role: "RECEPTIONIST",
-      email: "receptionist@hospital.com",
-      password: "receptionist123",
-      color: "bg-purple-500",
-      icon: Calendar,
-    },
-    {
-      role: "STAFF",
-      email: "staff@hospital.com",
-      password: "staff123",
-      color: "bg-orange-500",
-      icon: Activity,
-    },
-    {
-      role: "SUPERADMIN",
-      email: "superadmin@hospital.com",
-      password: "superadmin123",
-      color: "bg-gray-800",
-      icon: Monitor,
-    },
-  ];
-
-  const quickLogin = async (email: string, password: string) => {
-    setEmail(email);
-    setPassword(password);
-    setError("");
-    setLoading(true);
-    setLoadingAccountEmail(email);
-
-    try {
-      // Thêm một chút delay để user thấy loading state
-      await new Promise((resolve) => setTimeout(resolve, 800));
-
-      const success = await login(email, password);
-      if (!success) {
-        setError("Đăng nhập không thành công");
-        setLoading(false);
-        setLoadingAccountEmail(null);
-        setIsPopoverOpen(false); // Đóng collapsible khi có lỗi
-      }
-      // Nếu thành công thì sẽ redirect, không cần setLoading(false)
-    } catch (err) {
-      setError("Đã xảy ra lỗi khi đăng nhập");
-      setLoading(false);
-      setLoadingAccountEmail(null);
-      setIsPopoverOpen(false); // Đóng collapsible khi có lỗi
     }
   };
 
@@ -815,417 +820,7 @@ export function LoginForm({
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 1.4 }}
-                  >
-                    <motion.div
-                      className="relative"
-                      initial={{ opacity: 0, scaleX: 0 }}
-                      animate={{ opacity: 1, scaleX: 1 }}
-                      transition={{ delay: 1.5, duration: 0.5 }}
-                    >
-                      <div className="absolute inset-0 flex items-center">
-                        <motion.div
-                          className="w-full border-t border-gray-300"
-                          initial={{ scaleX: 0 }}
-                          animate={{ scaleX: 1 }}
-                          transition={{ delay: 1.5, duration: 0.5 }}
-                        />
-                      </div>
-                      <div className="relative flex justify-center text-sm">
-                        <motion.span
-                          className="px-3 bg-white text-gray-500"
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 1.6, duration: 0.3 }}
-                        >
-                          Hoặc
-                        </motion.span>
-                      </div>
-                    </motion.div>
-
-                    <Collapsible
-                      open={isPopoverOpen}
-                      onOpenChange={setIsPopoverOpen}
-                    >
-                      <motion.div
-                        className="flex justify-center"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 1.7 }}
-                      >
-                        <CollapsibleTrigger asChild>
-                          <motion.div
-                            whileHover={{ scale: 1.02, y: -2 }}
-                            whileTap={{ scale: 0.98 }}
-                          >
-                            <Button
-                              variant="outline"
-                              className="h-11 px-6 border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-all duration-300 hover:shadow-md group relative overflow-hidden"
-                              disabled={loading}
-                            >
-                              <motion.div
-                                className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-50/50 to-transparent"
-                                animate={{ x: [-100, 100] }}
-                                transition={{
-                                  duration: 2,
-                                  repeat: Infinity,
-                                  repeatDelay: 3,
-                                }}
-                                style={{
-                                  display: isPopoverOpen ? "none" : "block",
-                                }}
-                              />
-                              <div className="flex items-center space-x-2 relative">
-                                <motion.div
-                                  className="p-1 rounded-md transition-all duration-200 relative overflow-hidden"
-                                  style={{
-                                    background: loading
-                                      ? "linear-gradient(45deg, #6b7280, #9ca3af)"
-                                      : "linear-gradient(45deg, #3b82f6, #14b8a6)",
-                                  }}
-                                  whileHover={{
-                                    background:
-                                      "linear-gradient(45deg, #2563eb, #0d9488)",
-                                    boxShadow:
-                                      "0 0 15px rgba(59, 130, 246, 0.4)",
-                                  }}
-                                  animate={{
-                                    boxShadow: isPopoverOpen
-                                      ? [
-                                          "0 0 10px rgba(59, 130, 246, 0.3)",
-                                          "0 0 20px rgba(59, 130, 246, 0.5)",
-                                          "0 0 10px rgba(59, 130, 246, 0.3)",
-                                        ]
-                                      : "0 0 10px rgba(59, 130, 246, 0.2)",
-                                  }}
-                                  transition={{
-                                    duration: 2,
-                                    repeat: isPopoverOpen ? Infinity : 0,
-                                  }}
-                                >
-                                  {loading ? (
-                                    <motion.div
-                                      className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full"
-                                      animate={{ rotate: 360 }}
-                                      transition={{
-                                        duration: 1,
-                                        repeat: Infinity,
-                                        ease: "linear",
-                                      }}
-                                    />
-                                  ) : (
-                                    <motion.div
-                                      animate={{
-                                        scale: [1, 1.2, 1],
-                                        rotate: isPopoverOpen ? [0, 180] : 0,
-                                      }}
-                                      transition={{
-                                        duration: isPopoverOpen ? 0.3 : 1.5,
-                                        repeat: isPopoverOpen ? 0 : Infinity,
-                                      }}
-                                    >
-                                      <Zap className="h-4 w-4 text-white" />
-                                    </motion.div>
-                                  )}
-                                </motion.div>
-                                <motion.span
-                                  className="font-medium text-gray-700 group-hover:text-blue-700 transition-colors duration-200"
-                                  animate={{
-                                    scale: loading ? [1, 1.05, 1] : 1,
-                                  }}
-                                  transition={{
-                                    duration: 1,
-                                    repeat: loading ? Infinity : 0,
-                                  }}
-                                >
-                                  {loading
-                                    ? "Đang xử lý..."
-                                    : "Đăng nhập nhanh"}
-                                </motion.span>
-                              </div>
-                            </Button>
-                          </motion.div>
-                        </CollapsibleTrigger>
-                      </motion.div>
-
-                      <CollapsibleContent className="mt-4">
-                        <motion.div
-                          className="bg-gradient-to-br from-gray-50 to-blue-50/30 border border-gray-200 rounded-lg p-4 space-y-4 relative overflow-hidden"
-                          initial={{ opacity: 0, y: -10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.3 }}
-                        >
-                          {/* Background pattern */}
-                          <motion.div
-                            className="absolute inset-0 bg-gradient-to-r from-blue-100/20 via-transparent to-teal-100/20"
-                            animate={{ x: [-100, 100] }}
-                            transition={{
-                              duration: 8,
-                              repeat: Infinity,
-                              ease: "linear",
-                            }}
-                          />
-
-                          <motion.div
-                            className="text-center relative"
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.1 }}
-                          >
-                            <h3 className="font-semibold text-gray-900 mb-1 flex items-center justify-center gap-2">
-                              <motion.div
-                                animate={{ rotate: [0, 10, -10, 0] }}
-                                transition={{ duration: 2, repeat: Infinity }}
-                              >
-                                <Sparkles className="h-4 w-4 text-blue-600" />
-                              </motion.div>
-                              Chọn vai trò đăng nhập
-                            </h3>
-                            <p className="text-sm text-gray-500">
-                              Nhấp để đăng nhập nhanh với tài khoản demo
-                            </p>
-                          </motion.div>
-
-                          <motion.div
-                            className="grid grid-cols-2 gap-3"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.2 }}
-                          >
-                            {demoAccounts.map((account, index) => {
-                              const Icon = account.icon;
-                              return (
-                                <motion.div
-                                  key={index}
-                                  initial={{ opacity: 0, scale: 0.8, y: 20 }}
-                                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                                  transition={{
-                                    delay: 0.3 + index * 0.1,
-                                    type: "spring",
-                                    stiffness: 200,
-                                    damping: 20,
-                                  }}
-                                  whileHover={{
-                                    scale: 1.05,
-                                    y: -3,
-                                    transition: { duration: 0.2 },
-                                  }}
-                                  whileTap={{ scale: 0.95 }}
-                                >
-                                  <Button
-                                    variant="outline"
-                                    size="sm"
-                                    className="h-auto p-4 bg-white/80 backdrop-blur-sm border-gray-200 hover:border-blue-300 transition-all duration-300 hover:shadow-lg hover:bg-white/90 disabled:opacity-50 relative overflow-hidden group"
-                                    onClick={() =>
-                                      quickLogin(
-                                        account.email,
-                                        account.password
-                                      )
-                                    }
-                                    disabled={loading}
-                                  >
-                                    {/* Button shine effect */}
-                                    <motion.div
-                                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
-                                      animate={{ x: [-100, 100] }}
-                                      transition={{
-                                        duration: 2,
-                                        repeat: Infinity,
-                                        repeatDelay: 4,
-                                        delay: index * 0.5,
-                                      }}
-                                    />
-
-                                    <div className="flex flex-col items-center space-y-2 w-full relative">
-                                      <motion.div
-                                        className={`p-2 rounded-lg ${account.color} text-white shadow-sm relative overflow-hidden`}
-                                        whileHover={{
-                                          scale: 1.1,
-                                          boxShadow: `0 0 20px ${
-                                            account.color.includes("red")
-                                              ? "rgba(239, 68, 68, 0.4)"
-                                              : account.color.includes("blue")
-                                              ? "rgba(59, 130, 246, 0.4)"
-                                              : account.color.includes("green")
-                                              ? "rgba(34, 197, 94, 0.4)"
-                                              : account.color.includes("purple")
-                                              ? "rgba(168, 85, 247, 0.4)"
-                                              : account.color.includes("orange")
-                                              ? "rgba(249, 115, 22, 0.4)"
-                                              : "rgba(107, 114, 128, 0.4)"
-                                          }`,
-                                        }}
-                                        animate={{
-                                          boxShadow:
-                                            loadingAccountEmail ===
-                                            account.email
-                                              ? [
-                                                  `0 0 10px ${
-                                                    account.color.includes(
-                                                      "red"
-                                                    )
-                                                      ? "rgba(239, 68, 68, 0.3)"
-                                                      : account.color.includes(
-                                                          "blue"
-                                                        )
-                                                      ? "rgba(59, 130, 246, 0.3)"
-                                                      : account.color.includes(
-                                                          "green"
-                                                        )
-                                                      ? "rgba(34, 197, 94, 0.3)"
-                                                      : account.color.includes(
-                                                          "purple"
-                                                        )
-                                                      ? "rgba(168, 85, 247, 0.3)"
-                                                      : account.color.includes(
-                                                          "orange"
-                                                        )
-                                                      ? "rgba(249, 115, 22, 0.3)"
-                                                      : "rgba(107, 114, 128, 0.3)"
-                                                  }`,
-                                                  `0 0 20px ${
-                                                    account.color.includes(
-                                                      "red"
-                                                    )
-                                                      ? "rgba(239, 68, 68, 0.5)"
-                                                      : account.color.includes(
-                                                          "blue"
-                                                        )
-                                                      ? "rgba(59, 130, 246, 0.5)"
-                                                      : account.color.includes(
-                                                          "green"
-                                                        )
-                                                      ? "rgba(34, 197, 94, 0.5)"
-                                                      : account.color.includes(
-                                                          "purple"
-                                                        )
-                                                      ? "rgba(168, 85, 247, 0.5)"
-                                                      : account.color.includes(
-                                                          "orange"
-                                                        )
-                                                      ? "rgba(249, 115, 22, 0.5)"
-                                                      : "rgba(107, 114, 128, 0.5)"
-                                                  }`,
-                                                  `0 0 10px ${
-                                                    account.color.includes(
-                                                      "red"
-                                                    )
-                                                      ? "rgba(239, 68, 68, 0.3)"
-                                                      : account.color.includes(
-                                                          "blue"
-                                                        )
-                                                      ? "rgba(59, 130, 246, 0.3)"
-                                                      : account.color.includes(
-                                                          "green"
-                                                        )
-                                                      ? "rgba(34, 197, 94, 0.3)"
-                                                      : account.color.includes(
-                                                          "purple"
-                                                        )
-                                                      ? "rgba(168, 85, 247, 0.3)"
-                                                      : account.color.includes(
-                                                          "orange"
-                                                        )
-                                                      ? "rgba(249, 115, 22, 0.3)"
-                                                      : "rgba(107, 114, 128, 0.3)"
-                                                  }`,
-                                                ]
-                                              : "none",
-                                        }}
-                                        transition={{
-                                          duration: 1,
-                                          repeat:
-                                            loadingAccountEmail ===
-                                            account.email
-                                              ? Infinity
-                                              : 0,
-                                        }}
-                                      >
-                                        {loadingAccountEmail ===
-                                        account.email ? (
-                                          <motion.div
-                                            className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full"
-                                            animate={{ rotate: 360 }}
-                                            transition={{
-                                              duration: 1,
-                                              repeat: Infinity,
-                                              ease: "linear",
-                                            }}
-                                          />
-                                        ) : (
-                                          <motion.div
-                                            animate={{
-                                              rotate: [0, 5, -5, 0],
-                                              scale: [1, 1.1, 1],
-                                            }}
-                                            transition={{
-                                              duration: 2,
-                                              repeat: Infinity,
-                                              delay: index * 0.3,
-                                            }}
-                                          >
-                                            <Icon className="h-4 w-4" />
-                                          </motion.div>
-                                        )}
-                                      </motion.div>
-                                      <div className="text-center">
-                                        <motion.div
-                                          className="text-xs font-semibold text-gray-900"
-                                          animate={{
-                                            scale:
-                                              loadingAccountEmail ===
-                                              account.email
-                                                ? [1, 1.05, 1]
-                                                : 1,
-                                          }}
-                                          transition={{
-                                            duration: 0.8,
-                                            repeat:
-                                              loadingAccountEmail ===
-                                              account.email
-                                                ? Infinity
-                                                : 0,
-                                          }}
-                                        >
-                                          {account.role === "SUPERADMIN"
-                                            ? "SUPER ADMIN"
-                                            : account.role === "RECEPTIONIST"
-                                            ? "LỄ TÂN"
-                                            : account.role === "DOCTOR"
-                                            ? "BÁC SĨ"
-                                            : account.role === "PATIENT"
-                                            ? "BỆNH NHÂN"
-                                            : account.role === "STAFF"
-                                            ? "NHÂN VIÊN"
-                                            : account.role}
-                                        </motion.div>
-                                        <div className="text-xs text-gray-500 mt-1">
-                                          {loadingAccountEmail === account.email
-                                            ? "Đang đăng nhập..."
-                                            : account.email.split("@")[0]}
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </Button>
-                                </motion.div>
-                              );
-                            })}
-                          </motion.div>
-
-                          <motion.div
-                            className="text-center pt-2 border-t border-gray-200 relative"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.8 }}
-                          >
-                            <p className="text-xs text-gray-400 flex items-center justify-center gap-1">
-                              <Shield className="h-3 w-3" />
-                              Tài khoản demo - Mật khẩu tự động điền
-                            </p>
-                          </motion.div>
-                        </motion.div>
-                      </CollapsibleContent>
-                    </Collapsible>
-                  </motion.div>
+                  ></motion.div>
                 </CardContent>
               </Card>
             </motion.div>

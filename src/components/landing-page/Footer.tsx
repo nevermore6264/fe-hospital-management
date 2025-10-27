@@ -40,7 +40,7 @@ export function Footer() {
               <li className="flex items-center gap-3">
                 <Phone className="h-4 w-4 text-blue-400 flex-shrink-0" />
                 <div>
-                  <div className="font-medium text-white">1900-1234</div>
+                  <div className="font-medium text-white">077 8486 888</div>
                   <div className="text-sm">Tổng đài</div>
                 </div>
               </li>
@@ -55,9 +55,9 @@ export function Footer() {
                 <MapPin className="h-4 w-4 text-red-400 flex-shrink-0 mt-1" />
                 <div>
                   <div className="font-medium text-white">
-                    123 Đường ABC, Phường 1
+                    Số 10 ngõ 14 Pháo Đài Láng, Láng Thượng
                   </div>
-                  <div className="text-sm">Quận 1, TP. Hồ Chí Minh</div>
+                  <div className="text-sm">Đống Đa, Hà Nội</div>
                 </div>
               </li>
             </ul>
